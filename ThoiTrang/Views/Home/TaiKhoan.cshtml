@@ -1,0 +1,4233 @@
+﻿@{
+    ViewData["Title"] = "Tài khoản của tôi";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Tài khoản của tôi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ANIMATIONS */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.3);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            75% {
+                transform: scale(1.2);
+            }
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @@keyframes rotate {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes panelIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ANNOUNCEMENT */
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .announce::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                animation: shimmer 4s infinite;
+            }
+
+        /* HEADER */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .header.scrolled {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            transition: transform 0.3s;
+        }
+
+            .logo:hover {
+                transform: scale(1.05);
+            }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 480px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f3;
+            border-radius: 10px;
+            padding: 11px 16px;
+        }
+
+            .search-box i {
+                font-size: 18px;
+                color: #888;
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+                .header-icons a.active-page {
+                    color: #d4537e;
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+            animation: pulse 2s infinite;
+        }
+
+        .cart-badge {
+            background: #1a1a1a;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #1a1a1a;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a:hover {
+                    color: #1a1a1a;
+                }
+
+                    .nav a:hover::after {
+                        width: 100%;
+                    }
+
+        /* PROFILE HERO */
+        .profile-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2a 60%, #3a2a3a 100%);
+            color: #fff;
+            padding: 48px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .profile-hero::before {
+                content: '';
+                position: absolute;
+                top: -100px;
+                right: -50px;
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(circle, rgba(212,83,126,0.25), transparent 70%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+            .profile-hero::after {
+                content: '';
+                position: absolute;
+                bottom: -100px;
+                left: -50px;
+                width: 350px;
+                height: 350px;
+                background: radial-gradient(circle, rgba(226,133,107,0.2), transparent 70%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .profile-hero-inner {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 500;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(212,83,126,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            inset: -8px;
+            border: 2px dashed rgba(212,83,126,0.5);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            color: #1a1a1a;
+            border: 3px solid #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .avatar-edit:hover {
+                background: #d4537e;
+                color: #fff;
+            }
+
+        .profile-info {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .vip-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            letter-spacing: 1px;
+        }
+
+            .vip-badge i {
+                font-size: 13px;
+            }
+
+        .profile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+            .profile-meta span {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .profile-meta i {
+                font-size: 14px;
+            }
+
+        .profile-stats {
+            display: flex;
+            gap: 24px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-num {
+            font-size: 26px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff, #d4537e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-stat-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* MAIN LAYOUT */
+        .main-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 28px;
+            padding: 32px 60px 80px;
+            align-items: start;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 130px;
+            animation: slideInLeft 0.6s ease;
+        }
+
+        .menu-group {
+            margin-bottom: 18px;
+        }
+
+            .menu-group:last-child {
+                margin-bottom: 0;
+            }
+
+        .menu-group-title {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #aaa;
+            padding: 0 14px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            color: #1a1a1a;
+            user-select: none;
+        }
+
+            .menu-item:hover {
+                background: #f5f5f3;
+            }
+
+            .menu-item.active {
+                background: #1a1a1a;
+                color: #fff;
+            }
+
+                .menu-item.active .menu-badge {
+                    background: #d4537e;
+                    color: #fff;
+                }
+
+            .menu-item i {
+                font-size: 19px;
+                flex-shrink: 0;
+            }
+
+            .menu-item .menu-label {
+                flex: 1;
+            }
+
+        .menu-badge {
+            background: #f0f0f0;
+            color: #666;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .menu-item.logout {
+            color: #d4537e;
+            margin-top: 12px;
+            border-top: 1px solid #f0f0f0;
+            border-radius: 0;
+            padding-top: 16px;
+        }
+
+            .menu-item.logout:hover {
+                background: rgba(212,83,126,0.08);
+                border-radius: 0;
+            }
+
+            .menu-item.logout:hover {
+                border-radius: 12px;
+            }
+
+        .menu-item.logout {
+            border-radius: 12px;
+            margin-top: 4px;
+        }
+
+        .logout-divider {
+            border-top: 1px solid #f0f0f0;
+            margin: 12px 14px 4px;
+        }
+
+        /* CONTENT */
+        .content {
+            min-width: 0;
+        }
+
+        /* PANEL */
+        .panel {
+            display: none;
+            animation: panelIn 0.4s ease;
+        }
+
+            .panel.active {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+        /* PANEL HEADER (cho non-overview panels) */
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .panel-title {
+            font-size: 28px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+            .panel-title i {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+                color: #fff;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+            }
+
+        .panel-sub {
+            font-size: 14px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* CARD */
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .card-title i {
+                font-size: 20px;
+            }
+
+        .card-link {
+            color: #d4537e;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+            .card-link:hover {
+                opacity: 0.7;
+            }
+
+        /* MEMBERSHIP CARD (overview + hạng thành viên) */
+        .membership-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2a 60%, #3a2a3a 100%);
+            border-radius: 20px;
+            padding: 28px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .membership-card::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 320px;
+                height: 320px;
+                background: radial-gradient(circle, rgba(212,83,126,0.3), transparent 60%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .member-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .member-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .member-tier {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+            .member-tier i {
+                font-size: 14px;
+            }
+
+        .member-points-label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 4px;
+        }
+
+        .member-points-num {
+            font-size: 32px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff, #d4537e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .member-progress-wrap {
+            margin-bottom: 24px;
+        }
+
+        .member-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 8px;
+        }
+
+            .member-progress-text strong {
+                color: #fff;
+            }
+
+        .member-progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .member-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4537e, #e2856b);
+            border-radius: 999px;
+            width: 68%;
+            position: relative;
+        }
+
+            .member-progress-fill::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+                background-size: 200% 100%;
+                animation: shimmer 2s infinite;
+            }
+
+        .member-hint {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .member-perks {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .perk {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+            .perk:hover {
+                transform: translateY(-3px);
+                background: rgba(255,255,255,0.1);
+            }
+
+            .perk i {
+                font-size: 24px;
+                color: #d4537e;
+                margin-bottom: 6px;
+                display: block;
+            }
+
+        .perk-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* STATS */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-mini {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            transition: transform 0.3s;
+        }
+
+            .stat-mini:hover {
+                transform: translateY(-4px);
+            }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-1 .stat-icon {
+            background: #fbeaf0;
+            color: #d4537e;
+        }
+
+        .stat-2 .stat-icon {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .stat-3 .stat-icon {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .stat-4 .stat-icon {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .stat-text-num {
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .stat-text-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .stat-text-change {
+            font-size: 11px;
+            color: #2eb872;
+            margin-top: 3px;
+        }
+
+        /* ORDER LIST */
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+            .order-item:hover {
+                border-color: transparent;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            }
+
+        .order-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+            .order-img i {
+                font-size: 28px;
+                color: rgba(0,0,0,0.2);
+            }
+
+            .order-img.dark i {
+                color: rgba(255,255,255,0.25);
+            }
+
+        .bg-cream {
+            background: #f1efe8;
+        }
+
+        .bg-dark {
+            background: #2c2c2a;
+        }
+
+        .bg-gray {
+            background: #d3d1c7;
+        }
+
+        .bg-blue {
+            background: #2c3e5e;
+        }
+
+        .bg-brown {
+            background: #6b4423;
+        }
+
+        .order-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .order-id {
+            font-size: 12px;
+            color: #999;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 2px;
+        }
+
+        .order-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .order-meta {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .order-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .order-price {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .order-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+
+            .order-status i {
+                font-size: 13px;
+            }
+
+        .status-delivered {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .status-shipping {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .status-processing {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .status-cancel {
+            background: #fbeaea;
+            color: #d44;
+        }
+
+        /* VOUCHER CARDS */
+        .voucher-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .voucher-card {
+            background: #fff;
+            border: 1px solid #ffccd5;
+            border-radius: 14px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+            .voucher-card::before, .voucher-card::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                background: #f5f5f3;
+                border-radius: 50%;
+                left: 100px;
+                transform: translateX(-50%);
+            }
+
+            .voucher-card::before {
+                top: -8px;
+            }
+
+            .voucher-card::after {
+                bottom: -8px;
+            }
+
+            .voucher-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 28px rgba(212,83,126,0.12);
+            }
+
+        .v-left {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            padding: 18px 14px;
+            text-align: center;
+            min-width: 100px;
+            max-width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 2px dashed rgba(255,255,255,0.4);
+        }
+
+            .v-left .value {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1;
+            }
+
+            .v-left .unit {
+                font-size: 10px;
+                opacity: 0.95;
+                text-transform: uppercase;
+                margin-top: 4px;
+            }
+
+        .v-right {
+            padding: 14px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .v-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .v-desc {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .v-expire {
+            font-size: 11px;
+            color: #d4537e;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* WISHLIST GRID */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .wish-item {
+            background: #fff;
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+            .wish-item:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+                border-color: transparent;
+            }
+
+        .wish-img {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+            .wish-img i {
+                font-size: 48px;
+                color: rgba(0,0,0,0.18);
+            }
+
+            .wish-img.dark i {
+                color: rgba(255,255,255,0.2);
+            }
+
+        .wish-heart {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.95);
+            color: #d4537e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .wish-info {
+            padding: 12px;
+        }
+
+        .wish-name {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .wish-price {
+            font-size: 13px;
+            font-weight: 600;
+            color: #d4537e;
+        }
+
+        /* ADDRESS */
+        .address-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-card {
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            padding: 18px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+            .address-card:hover {
+                border-color: #1a1a1a;
+            }
+
+            .address-card.default {
+                border: 2px solid #d4537e;
+                background: #fffafb;
+            }
+
+        .address-row1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .address-name {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .address-default-badge {
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .address-phone {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .address-detail {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .address-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .address-action {
+            background: none;
+            border: 1px solid #ececec;
+            color: #666;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+            .address-action:hover {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+
+            .address-action.danger:hover {
+                color: #d44;
+                border-color: #d44;
+            }
+
+        .address-add {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border: 1.5px dashed #d0d0cc;
+            border-radius: 14px;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+            background: none;
+            transition: all 0.25s;
+            width: 100%;
+        }
+
+            .address-add:hover {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+                background: #fafaf8;
+            }
+
+            .address-add i {
+                font-size: 17px;
+            }
+
+        /* PAYMENT METHODS */
+        .payment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+            .payment-card:hover {
+                border-color: #1a1a1a;
+            }
+
+            .payment-card.default {
+                border: 2px solid #d4537e;
+                background: #fffafb;
+            }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+        }
+
+            .payment-icon.visa {
+                background: linear-gradient(135deg, #1a1f71, #4267b2);
+            }
+
+            .payment-icon.master {
+                background: linear-gradient(135deg, #eb001b, #f79e1b);
+            }
+
+            .payment-icon.momo {
+                background: linear-gradient(135deg, #a50064, #d82e7f);
+            }
+
+            .payment-icon.zalo {
+                background: linear-gradient(135deg, #0068ff, #4d9fff);
+            }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .payment-detail {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-grid-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-input {
+            padding: 12px 14px;
+            border: 1px solid #ececec;
+            background: #fff;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.25s;
+            font-family: inherit;
+            color: #1a1a1a;
+        }
+
+            .form-input:focus {
+                border-color: #1a1a1a;
+                box-shadow: 0 0 0 3px rgba(26,26,26,0.05);
+            }
+
+            .form-input:disabled {
+                background: #f5f5f3;
+                cursor: not-allowed;
+                color: #888;
+            }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: #000;
+                transform: translateY(-2px);
+            }
+
+        .btn-outline {
+            background: #fff;
+            color: #555;
+            border: 1px solid #ececec;
+        }
+
+            .btn-outline:hover {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+
+        .btn-danger {
+            background: #fff;
+            color: #d44;
+            border: 1px solid #d44;
+        }
+
+            .btn-danger:hover {
+                background: #d44;
+                color: #fff;
+            }
+
+        /* SECURITY ITEM */
+        .security-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f5f5f3;
+        }
+
+            .security-item:last-child {
+                border-bottom: none;
+            }
+
+        .security-icon {
+            width: 42px;
+            height: 42px;
+            background: #f5f5f3;
+            color: #1a1a1a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+            .security-icon.success {
+                background: #e6f7ef;
+                color: #2eb872;
+            }
+
+            .security-icon.warning {
+                background: #fff4e0;
+                color: #d18800;
+            }
+
+        .security-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .security-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .security-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+            .toggle input {
+                display: none;
+            }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #d0d0cc;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .toggle-slider::after {
+                content: '';
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 18px;
+                height: 18px;
+                background: #fff;
+                border-radius: 50%;
+                transition: transform 0.3s;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            }
+
+        .toggle input:checked ~ .toggle-slider {
+            background: #1a1a1a;
+        }
+
+            .toggle input:checked ~ .toggle-slider::after {
+                transform: translateX(18px);
+            }
+
+        /* NOTIFICATION ITEM */
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .notif-row {
+            display: flex;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.25s;
+            position: relative;
+        }
+
+            .notif-row:hover {
+                background: #fafaf8;
+            }
+
+            .notif-row.unread {
+                background: #fefaf5;
+            }
+
+                .notif-row.unread::before {
+                    content: '';
+                    position: absolute;
+                    left: 4px;
+                    top: 50%;
+                    width: 5px;
+                    height: 5px;
+                    background: #d4537e;
+                    border-radius: 50%;
+                    transform: translateY(-50%);
+                }
+
+        .notif-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+            .notif-icon.order {
+                background: #e6f7ef;
+                color: #2eb872;
+            }
+
+            .notif-icon.promo {
+                background: #fbeaf0;
+                color: #d4537e;
+            }
+
+            .notif-icon.system {
+                background: #f0f0ec;
+                color: #555;
+            }
+
+        .notif-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .notif-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .notif-time {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* HELP - FAQ */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-item {
+            border: 1px solid #f0f0ec;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+            .faq-item:hover {
+                border-color: #d0d0cc;
+            }
+
+        .faq-question {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: #1a1a1a;
+        }
+
+            .faq-question i {
+                font-size: 18px;
+                transition: transform 0.3s;
+                flex-shrink: 0;
+            }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 16px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding: 0 16px 14px;
+        }
+
+        .help-contacts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .help-contact-card {
+            padding: 18px;
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .help-contact-card:hover {
+                transform: translateY(-4px);
+                border-color: transparent;
+                box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+            }
+
+        .help-contact-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin: 0 auto 10px;
+        }
+
+        .help-contact-card:hover .help-contact-icon {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+        }
+
+        .help-contact-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .help-contact-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* POINTS PANEL */
+        .points-hero {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .points-hero::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 320px;
+                height: 320px;
+                background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 70%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .points-label {
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.85;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .points-value {
+            font-size: 56px;
+            font-weight: 600;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .points-desc {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .points-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .point-reward {
+            padding: 18px;
+            border: 1px solid #f0f0ec;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .point-reward:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+            }
+
+        .point-reward-icon {
+            width: 48px;
+            height: 48px;
+            background: #fbeaf0;
+            color: #d4537e;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin: 0 auto 10px;
+        }
+
+        .point-reward-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .point-reward-cost {
+            font-size: 12px;
+            color: #d4537e;
+            font-weight: 600;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 300px;
+            max-width: 380px;
+            border-left: 4px solid #1a1a1a;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.warning {
+                border-left-color: #d18800;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon-w {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon-w {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon-w {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast.warning .toast-icon-w {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* LOGOUT MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+            .modal-overlay.show {
+                display: flex;
+                animation: fadeIn 0.3s ease;
+            }
+
+        .modal {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: #fbeaea;
+            color: #d44;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+            .modal-actions .btn {
+                flex: 1;
+                max-width: 140px;
+                justify-content: center;
+            }
+
+        /* FOOTER */
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 0 0; /* Bỏ padding đáy để thanh marquee bám sát khít */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Dòng thông tin bản quyền ở giữa */
+        .footer-mid-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* ============ THANH MARQUEE ĐEN TUYỀN CHẠY ĐÁY TRANG (FULL-WIDTH) ============ */
+        .footer-bottom-marquee {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: #090909; /* Đen sẫm hơn hẳn tạo khối tương phản chân trang */
+            padding: 14px 0;
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            animation: footerMarqueeScroll 28s linear infinite;
+        }
+
+        .footer-bottom-marquee:hover .marquee-wrapper {
+            animation-play-state: paused; /* Rê chuột vào sẽ tạm dừng để đọc */
+        }
+
+        .marquee-text-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+            .marquee-text-item i {
+                color: #e2856b; /* Icon màu cam ấm tinh tế */
+                font-size: 13px;
+            }
+
+        @@keyframes footerMarqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-33.333%);
+            }
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding-top: 50px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-mid-row {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 1280px) {
+            .header-top, .nav, .profile-hero, .main-container, .footer {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .member-perks {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .voucher-list {
+                grid-template-columns: 1fr;
+            }
+
+            .help-contacts {
+                grid-template-columns: 1fr;
+            }
+
+            .points-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .profile-stats {
+                width: 100%;
+                margin-left: 0;
+                justify-content: space-around;
+                padding-top: 12px;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        @@media (max-width: 720px) {
+            .header-top, .nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .nav {
+                gap: 18px;
+                overflow-x: auto;
+            }
+
+            .profile-hero, .main-container, .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .profile-hero {
+                padding-top: 32px;
+                padding-bottom: 32px;
+            }
+
+            .profile-name {
+                font-size: 22px;
+            }
+
+            .avatar-wrap {
+                width: 90px;
+                height: 90px;
+            }
+
+            .avatar {
+                font-size: 36px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .member-perks {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-title {
+                font-size: 22px;
+            }
+
+                .panel-title i {
+                    width: 38px;
+                    height: 38px;
+                    font-size: 18px;
+                }
+
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - 32px);
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announce">Miễn phí vận chuyển cho đơn hàng từ 500.000₫ · Đổi trả trong 30 ngày</div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm sản phẩm..." />
+            </div>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+
+            <a asp-controller="Home" asp-action="Nam" asp-route-id="nam">Nam</a>
+
+            <a asp-controller="Home" asp-action="Nu" asp-route-id="nu">Nữ</a>
+
+            <a asp-controller="Home" asp-action="MoiVe">Mới về</a>
+
+            <a asp-controller="Home" asp-action="BoSuuTap">Bộ sưu tập</a>
+
+            <a asp-controller="Home" asp-action="Sale">Sale</a>
+
+            <a asp-controller="Home" asp-action="GioiThieu">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <!-- PROFILE HERO -->
+    <section class="profile-hero">
+        <div class="profile-hero-inner">
+            @{
+                var heroUser2 = ViewBag.CurrentUser as ThoiTrang.Models.Entities.User;
+                var avatarUrl = heroUser2?.AvatarUrl;
+                var initials = string.IsNullOrEmpty(User.Identity?.Name) ? "K" : User.Identity!.Name.Trim().Substring(0, 1).ToUpper();
+            }
+            <div class="avatar-wrap" id="avatarWrap">
+                <div class="avatar-ring"></div>
+                @if (!string.IsNullOrEmpty(avatarUrl))
+                {
+                    <div class="avatar" id="avatarDisplay" style="background:none;padding:0;overflow:hidden;">
+                        <img id="avatarImg" src="@avatarUrl" alt="Ảnh đại diện"
+                             style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="avatar" id="avatarDisplay">
+                        <span id="avatarInitials">@initials</span>
+                        <img id="avatarImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0;" />
+                    </div>
+                }
+                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp,image/gif"
+                       style="display:none;" onchange="handleAvatarChange(this)" />
+                <button class="avatar-edit" onclick="document.getElementById('avatarFileInput').click()"
+                        title="Thay đổi ảnh đại diện">
+                    <i class="ti ti-camera"></i>
+                </button>
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">
+                    @User.Identity?.Name
+                    <span class="vip-badge"><i class="ti ti-crown"></i>@(ViewBag.TierLabel ?? "THÀNH VIÊN")</span>
+                </div>
+                @{ var heroUser = ViewBag.CurrentUser as ThoiTrang.Models.Entities.User; }
+                <div class="profile-meta">
+                    <span><i class="ti ti-mail"></i>@(heroUser?.Email)</span>
+                    <span><i class="ti ti-phone"></i>@(string.IsNullOrEmpty(heroUser?.Phone) ? "Chưa cập nhật SĐT" : heroUser.Phone)</span>
+                    <span><i class="ti ti-calendar"></i>Tham gia @(heroUser?.CreatedAt.ToString("MM/yyyy"))</span>
+                </div>
+            </div>
+            @{
+                var myOrdersStat = ViewBag.MyOrders as List<ThoiTrang.Models.Entities.Order>;
+                var totalSpent = myOrdersStat?.Where(o => o.OrderStatus != "Cancelled").Sum(o => o.TotalAmount) ?? 0;
+            }
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-num">@(ViewBag.OrderCount ?? 0)</div>
+                    <div class="profile-stat-label">ĐƠN HÀNG</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-num">@(ViewBag.WishlistCount ?? 0)</div>
+                    <div class="profile-stat-label">YÊU THÍCH</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-num">@(ViewBag.CartCount ?? 0)</div>
+                    <div class="profile-stat-label">GIỎ HÀNG</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-num">@totalSpent.ToString("#,##0")₫</div>
+                    <div class="profile-stat-label">TỔNG CHI TIÊU</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN -->
+    <div class="main-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="menu-group">
+                <div class="menu-group-title">TÀI KHOẢN</div>
+                <div class="menu-item active" data-section="overview">
+                    <i class="ti ti-layout-dashboard"></i>
+                    <span class="menu-label">Tổng quan</span>
+                </div>
+                <div class="menu-item" data-section="profile">
+                    <i class="ti ti-user"></i>
+                    <span class="menu-label">Thông tin cá nhân</span>
+                </div>
+                <div class="menu-item" data-section="security">
+                    <i class="ti ti-lock"></i>
+                    <span class="menu-label">Bảo mật</span>
+                </div>
+            </div>
+
+            <div class="menu-group">
+                <div class="menu-group-title">MUA SẮM</div>
+                <div class="menu-item" data-section="orders">
+                    <i class="ti ti-package"></i>
+                    <span class="menu-label">Đơn hàng</span>
+                    <span class="menu-badge">@(ViewBag.OrderCount ?? 0)</span>
+                </div>
+                <div class="menu-item" data-section="wishlist">
+                    <i class="ti ti-heart"></i>
+                    <span class="menu-label">Yêu thích</span>
+                    <span class="menu-badge">@(ViewBag.WishlistCount ?? 0)</span>
+                </div>
+                <div class="menu-item" data-section="address">
+                    <i class="ti ti-map-pin"></i>
+                    <span class="menu-label">Địa chỉ giao hàng</span>
+                </div>
+                <div class="menu-item" data-section="payment">
+                    <i class="ti ti-credit-card"></i>
+                    <span class="menu-label">Phương thức thanh toán</span>
+                </div>
+            </div>
+
+            <div class="menu-group">
+                <div class="menu-group-title">ƯU ĐÃI</div>
+                <div class="menu-item" data-section="voucher">
+                    <i class="ti ti-ticket"></i>
+                    <span class="menu-label">Voucher của tôi</span>
+                    <span class="menu-badge">@(((ViewBag.MyVouchers as List<ThoiTrang.Models.Entities.UserVoucher>)?.Count(x => !x.IsUsed) ?? 0))</span>
+                </div>
+                <div class="menu-item" data-section="membership">
+                    <i class="ti ti-crown"></i>
+                    <span class="menu-label">Hạng thành viên</span>
+                </div>
+                <div class="menu-item" data-section="points">
+                    <i class="ti ti-gift"></i>
+                    <span class="menu-label">Điểm thưởng</span>
+                </div>
+            </div>
+
+            <div class="menu-group">
+                <div class="menu-group-title">KHÁC</div>
+                <div class="menu-item" data-section="notifications">
+                    <i class="ti ti-bell"></i>
+                    <span class="menu-label">Thông báo</span>
+                    <span class="menu-badge">3</span>
+                </div>
+                <div class="menu-item" data-section="help">
+                    <i class="ti ti-help"></i>
+                    <span class="menu-label">Trợ giúp</span>
+                </div>
+                <div class="logout-divider"></div>
+                <div class="menu-item logout" id="logoutBtn">
+                    <i class="ti ti-logout"></i>
+                    <span class="menu-label">Đăng xuất</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENT - các panel -->
+        <main class="content">
+
+            <!-- PANEL: TỔNG QUAN -->
+            <div class="panel active" data-panel="overview">
+
+                <div class="membership-card">
+                    <div class="member-content">
+                        <div class="member-top">
+                            <div>
+                                <span class="member-tier"><i class="ti ti-crown"></i>@(ViewBag.TierLabel ?? "THÀNH VIÊN")</span>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="member-points-label">ĐIỂM TÍCH LŨY</div>
+                                <div class="member-points-num">@(((int)(ViewBag.Points ?? 0)).ToString("#,##0"))</div>
+                            </div>
+                        </div>
+                        <div class="member-progress-wrap">
+                            <div class="member-progress-text">
+                                @if (!string.IsNullOrEmpty((string)ViewBag.NextTier))
+                                {
+                                    <span>Còn @(((int)(ViewBag.PointsToNext ?? 0)).ToString("#,##0")) điểm để lên hạng @ViewBag.NextTier</span>
+                                    <strong>@(ViewBag.TierPercent ?? 0)%</strong>
+                                }
+                                else
+                                {
+                                    <span>Bạn đang ở hạng cao nhất 💎</span>
+                                    <strong>100%</strong>
+                                }
+                            </div>
+                            <div class="member-progress-bar">
+                                <div class="member-progress-fill" style="width:@(ViewBag.TierPercent ?? 0)%;"></div>
+                            </div>
+                        </div>
+                        <div class="member-perks">
+                            <div class="perk">
+                                <i class="ti ti-truck-delivery"></i>
+                                <div class="perk-label">Freeship toàn quốc</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-discount-2"></i>
+                                <div class="perk-label">Giảm 15% đơn hàng</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-gift"></i>
+                                <div class="perk-label">Quà sinh nhật</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-clock"></i>
+                                <div class="perk-label">Ưu tiên hỗ trợ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @{
+                    var statOrders = ViewBag.MyOrders as List<ThoiTrang.Models.Entities.Order> ?? new List<ThoiTrang.Models.Entities.Order>();
+                    int statOrderCount = ViewBag.OrderCount ?? statOrders.Count;
+                    decimal statSpent = statOrders.Where(o => o.OrderStatus != "Cancelled").Sum(o => o.TotalAmount);
+                    string statSpentFmt = statSpent >= 1000000 ? $"{(statSpent / 1000000m):0.#}M" : (statSpent >= 1000 ? $"{(statSpent / 1000m):0}K" : statSpent.ToString("#,##0"));
+                    int statWishlist = ViewBag.WishlistCount ?? 0;
+                    var statVouchers = ViewBag.MyVouchers as List<ThoiTrang.Models.Entities.UserVoucher> ?? new List<ThoiTrang.Models.Entities.UserVoucher>();
+                    int statVoucherCount = statVouchers.Count(v => !v.IsUsed);
+                }
+                <div class="stats-row">
+                    <div class="stat-mini stat-1">
+                        <div class="stat-icon"><i class="ti ti-package"></i></div>
+                        <div>
+                            <div class="stat-text-num">@statOrderCount</div>
+                            <div class="stat-text-label">Tổng đơn hàng</div>
+                            <div class="stat-text-change">@(statOrderCount > 0 ? "Đơn đã đặt" : "Chưa có đơn")</div>
+                        </div>
+                    </div>
+                    <div class="stat-mini stat-2">
+                        <div class="stat-icon"><i class="ti ti-wallet"></i></div>
+                        <div>
+                            <div class="stat-text-num">@statSpentFmt</div>
+                            <div class="stat-text-label">Tổng chi tiêu</div>
+                            <div class="stat-text-change">@(statSpent > 0 ? "₫ đã chi" : "Chưa chi tiêu")</div>
+                        </div>
+                    </div>
+                    <div class="stat-mini stat-3">
+                        <div class="stat-icon"><i class="ti ti-heart"></i></div>
+                        <div>
+                            <div class="stat-text-num">@statWishlist</div>
+                            <div class="stat-text-label">Yêu thích</div>
+                            <div class="stat-text-change">@(statWishlist > 0 ? "Sản phẩm đã lưu" : "Chưa có")</div>
+                        </div>
+                    </div>
+                    <div class="stat-mini stat-4">
+                        <div class="stat-icon"><i class="ti ti-ticket"></i></div>
+                        <div>
+                            <div class="stat-text-num">@statVoucherCount</div>
+                            <div class="stat-text-label">Voucher</div>
+                            <div class="stat-text-change">@(statVoucherCount > 0 ? "Có thể dùng" : "Chưa có")</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-package"></i>Đơn hàng gần đây</div>
+                        <a class="card-link" onclick="switchPanel('orders')">Xem tất cả <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                    <div class="order-list">
+                        @{
+                            var recentOrders = (ViewBag.MyOrders as List<ThoiTrang.Models.Entities.Order>)?.Take(3).ToList();
+                            string[] rbgsR = { "bg-cream", "bg-dark dark", "bg-blue dark", "bg-brown dark", "bg-gray" };
+                        }
+                        @if (recentOrders != null && recentOrders.Count > 0)
+                        {
+                            int ridx = 0;
+                            foreach (var ro in recentOrders)
+                            {
+                                var (rcls, ric, rtxt) = ro.OrderStatus switch
+                                {
+                                    "Completed" => ("status-delivered", "ti-circle-check", "Hoàn tất"),
+                                    "Shipping" => ("status-shipping", "ti-truck", "Đang giao"),
+                                    "Confirmed" => ("status-shipping", "ti-circle-check", "Đã xác nhận"),
+                                    "Cancelled" => ("status-cancel", "ti-x", "Đã hủy"),
+                                    _ => ("status-processing", "ti-clock", "Đang xử lý")
+                                };
+                                var rfirst = ro.OrderDetails.FirstOrDefault();
+                                var rname2 = rfirst?.ProductName ?? "Đơn hàng";
+                                <div class="order-item" style="cursor:pointer;" onclick="viewOrderDetail(@ro.OrderId)">
+                                    <div class="order-img @rbgsR[ridx % 5]"><i class="ti ti-package"></i></div>
+                                    <div class="order-info">
+                                        <div class="order-id">#@ro.OrderCode</div>
+                                        <div class="order-name">@rname2 · @ro.OrderDetails.Count sản phẩm</div>
+                                        <div class="order-meta">@ro.CreatedAt.ToString("dd/MM/yyyy") · @ro.PaymentMethod.ToUpper()</div>
+                                    </div>
+                                    <div class="order-right">
+                                        <div class="order-price">@ro.TotalAmount.ToString("#,##0")₫</div>
+                                        <span class="order-status @rcls"><i class="ti @ric"></i>@rtxt</span>
+                                    </div>
+                                </div>
+                                ridx++;
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:30px;text-align:center;color:#999;">
+                                <i class="ti ti-package-off" style="font-size:36px;color:#ccc;"></i>
+                                <div style="margin-top:8px;">Chưa có đơn hàng nào</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PANEL: THÔNG TIN CÁ NHÂN -->
+            <div class="panel" data-panel="profile">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-user"></i>Thông tin cá nhân</div>
+                        <div class="panel-sub">Cập nhật thông tin tài khoản của bạn</div>
+                    </div>
+                </div>
+
+                <!-- Card ảnh đại diện -->
+                <div class="card" style="margin-bottom:16px;">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-user-circle"></i>Ảnh đại diện</div>
+                    </div>
+                    @{
+                        var cuAvatar = ViewBag.CurrentUser as ThoiTrang.Models.Entities.User;
+                    }
+                    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+                        <!-- Preview avatar trong panel -->
+                        <div id="panelAvatarWrap" style="width:100px;height:100px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#d4537e,#e2856b);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 16px rgba(212,83,126,0.3);">
+                            @if (!string.IsNullOrEmpty(cuAvatar?.AvatarUrl))
+                            {
+                                <img id="panelAvatarImg" src="@cuAvatar!.AvatarUrl" style="width:100%;height:100%;object-fit:cover;" alt="Avatar" />
+                            }
+                            else
+                            {
+                                <span id="panelAvatarInitials" style="font-size:40px;font-weight:500;color:#fff;">@(cuAvatar?.FullName?.Substring(0,1).ToUpper() ?? "K")</span>
+                                <img id="panelAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;" alt="Avatar" />
+                            }
+                        </div>
+                        <div style="flex:1;min-width:200px;">
+                            <div style="font-weight:600;margin-bottom:6px;">Chọn ảnh mới</div>
+                            <div style="font-size:13px;color:#888;margin-bottom:14px;">Hỗ trợ JPG, PNG, WebP, GIF · Tối đa 5MB</div>
+                            <label id="avatarUploadLabel" style="display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s;">
+                                <i class="ti ti-upload"></i>Tải ảnh lên
+                                <input type="file" id="panelAvatarInput" accept="image/jpeg,image/png,image/webp,image/gif"
+                                       style="display:none;" onchange="handleAvatarChange(this)" />
+                            </label>
+                            <span id="avatarUploadStatus" style="margin-left:10px;font-size:13px;color:#10b981;display:none;"><i class="ti ti-check"></i> Đã cập nhật</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-id"></i>Thông tin cơ bản</div>
+                    </div>
+                    @{
+                        var cu = ViewBag.CurrentUser as ThoiTrang.Models.Entities.User;
+                        var bd = cu?.BirthDate?.ToString("yyyy-MM-dd") ?? "";
+                        var gd = cu?.Gender ?? "";
+                    }
+                    <form class="form-grid" onsubmit="return saveProfile(event);">
+                        <div class="form-group form-grid-full">
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" class="form-input" id="pf-name" value="@(cu?.FullName)" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="@(cu?.Email)" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-input" id="pf-phone" value="@(cu?.Phone)" placeholder="Chưa cập nhật" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="date" class="form-input" id="pf-birth" value="@bd" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-input" id="pf-gender">
+                                <option value="" selected="@(string.IsNullOrEmpty(gd))">-- Chọn --</option>
+                                <option value="Nam" selected="@(gd == "Nam")">Nam</option>
+                                <option value="Nữ" selected="@(gd == "Nữ")">Nữ</option>
+                                <option value="Khác" selected="@(gd == "Khác")">Khác</option>
+                            </select>
+                        </div>
+                        <div class="form-actions form-grid-full">
+                            <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i>Lưu thay đổi</button>
+                        </div>
+                    </form>
+                    <script>
+                        function saveProfile(e) {
+                            e.preventDefault();
+                            const fd = new FormData();
+                            fd.append('fullName', document.getElementById('pf-name').value);
+                            fd.append('phone', document.getElementById('pf-phone').value);
+                            fd.append('gender', document.getElementById('pf-gender').value);
+                            fd.append('birthDate', document.getElementById('pf-birth').value);
+                            fetch('/Home/UpdateProfile', { method: 'POST', body: fd })
+                                .then(r => r.ok ? r.json() : Promise.reject(r))
+                                .then(() => { showToast('success', 'Đã lưu thay đổi', 'Thông tin cá nhân đã được cập nhật'); setTimeout(() => location.reload(), 800); })
+                                .catch(() => showToast('error', 'Lỗi', 'Không lưu được, thử lại sau'));
+                            return false;
+                        }
+                    </script>
+                </div>
+            </div>
+
+            <!-- PANEL: BẢO MẬT -->
+            <div class="panel" data-panel="security">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-lock"></i>Bảo mật</div>
+                        <div class="panel-sub">Quản lý mật khẩu và bảo mật tài khoản</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-key"></i>Đổi mật khẩu</div>
+                    </div>
+                    <form class="form-grid" onsubmit="return changePassword(event);">
+                        <div class="form-group form-grid-full">
+                            <label class="form-label">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-input" id="cp-current" placeholder="Nhập mật khẩu hiện tại" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-input" id="cp-new" placeholder="Tối thiểu 8 ký tự" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-input" id="cp-confirm" placeholder="Nhập lại mật khẩu mới" />
+                        </div>
+                        <div class="form-actions form-grid-full">
+                            <button type="submit" class="btn btn-primary"><i class="ti ti-shield-lock"></i>Cập nhật mật khẩu</button>
+                        </div>
+                    </form>
+                    <script>
+                        function changePassword(e) {
+                            e.preventDefault();
+                            const cur = document.getElementById('cp-current').value;
+                            const nw  = document.getElementById('cp-new').value;
+                            const cf  = document.getElementById('cp-confirm').value;
+                            if (!cur || !nw) { showToast('warning','Thiếu thông tin','Vui lòng nhập đầy đủ mật khẩu'); return false; }
+                            if (nw.length < 8) { showToast('warning','Mật khẩu yếu','Mật khẩu mới phải có ít nhất 8 ký tự'); return false; }
+                            if (nw !== cf) { showToast('error','Không khớp','Xác nhận mật khẩu không trùng khớp'); return false; }
+                            const fd = new FormData();
+                            fd.append('currentPassword', cur);
+                            fd.append('newPassword', nw);
+                            fetch('/Home/ChangePassword', { method:'POST', body: fd })
+                                .then(async r => {
+                                    if (r.ok) {
+                                        showToast('success','Đổi mật khẩu thành công','Mật khẩu mới đã được lưu');
+                                        document.getElementById('cp-current').value='';
+                                        document.getElementById('cp-new').value='';
+                                        document.getElementById('cp-confirm').value='';
+                                    } else if (r.status === 401) {
+                                        showToast('info','Cần đăng nhập','Vui lòng đăng nhập lại');
+                                    } else {
+                                        const d = await r.json().catch(()=>({}));
+                                        showToast('error','Lỗi', d.message || 'Không đổi được mật khẩu');
+                                    }
+                                })
+                                .catch(() => showToast('error','Lỗi','Thử lại sau'));
+                            return false;
+                        }
+                    </script>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-shield-check"></i>Tùy chọn bảo mật</div>
+                    </div>
+                    <div class="security-list">
+                        <div class="security-item">
+                            <div class="security-icon success"><i class="ti ti-mail"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Xác thực 2 bước qua email</div>
+                                <div class="security-desc">Nhận mã xác thực vào email mỗi khi đăng nhập từ thiết bị lạ</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-icon warning"><i class="ti ti-device-mobile"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Xác thực qua SMS</div>
+                                <div class="security-desc">Nhận mã xác thực qua số điện thoại 0901 234 567</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-icon"><i class="ti ti-fingerprint"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Đăng nhập bằng vân tay / Face ID</div>
+                                <div class="security-desc">Sử dụng sinh trắc học trên thiết bị di động</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-icon"><i class="ti ti-bell-ringing"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Thông báo đăng nhập</div>
+                                <div class="security-desc">Cảnh báo khi tài khoản đăng nhập từ thiết bị mới</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-devices"></i>Phiên đăng nhập gần đây</div>
+                    </div>
+                    <div class="security-list">
+                        <div class="security-item">
+                            <div class="security-icon success"><i class="ti ti-brand-chrome"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Chrome trên Windows · TP. Hồ Chí Minh <span style="color:#2eb872; font-size:11px; font-weight:600; margin-left:6px;">● Hiện tại</span></div>
+                                <div class="security-desc">Đăng nhập 2 giờ trước · IP 113.161.xx.xxx</div>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-icon"><i class="ti ti-brand-safari"></i></div>
+                            <div class="security-content">
+                                <div class="security-title">Safari trên iPhone · TP. Hồ Chí Minh</div>
+                                <div class="security-desc">Đăng nhập hôm qua, 18:30</div>
+                            </div>
+                            <button class="btn btn-outline" style="font-size:12px; padding:6px 12px;">Đăng xuất</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: ĐƠN HÀNG -->
+            <div class="panel" data-panel="orders">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-package"></i>Đơn hàng của tôi</div>
+                        <div class="panel-sub">Tổng cộng @(ViewBag.OrderCount ?? 0) đơn hàng từ trước đến nay</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-list"></i>Tất cả đơn hàng</div>
+                        <select class="form-input" style="width: auto; padding: 8px 14px; font-size: 13px;">
+                            <option>Tất cả trạng thái</option>
+                            <option>Chờ xử lý</option>
+                            <option>Đang giao</option>
+                            <option>Đã giao</option>
+                            <option>Đã hủy</option>
+                        </select>
+                    </div>
+                    <div class="order-list">
+                        @{
+                            var myOrders = ViewBag.MyOrders as List<ThoiTrang.Models.Entities.Order>;
+                            string[] obgs = { "bg-cream", "bg-dark dark", "bg-blue dark", "bg-brown dark", "bg-gray" };
+                        }
+                        @if (myOrders != null && myOrders.Count > 0)
+                        {
+                            int oj = 0;
+                            foreach (var o in myOrders)
+                            {
+                                var (ocls, oic, otxt) = o.OrderStatus switch
+                                {
+                                    "Completed" => ("status-delivered", "ti-circle-check", "Hoàn tất"),
+                                    "Shipping" => ("status-shipping", "ti-truck", "Đang giao"),
+                                    "Confirmed" => ("status-shipping", "ti-circle-check", "Đã xác nhận"),
+                                    "Cancelled" => ("status-cancel", "ti-x", "Đã hủy"),
+                                    _ => ("status-processing", "ti-clock", "Đang xử lý")
+                                };
+                                var firstItem = o.OrderDetails.FirstOrDefault();
+                                var pname = firstItem?.ProductName ?? "Đơn hàng";
+                                <div class="order-item" title="Đơn @o.OrderCode" style="cursor:pointer;" onclick="viewOrderDetail(@o.OrderId)">
+                                    <div class="order-img @obgs[oj % 5]"><i class="ti ti-package"></i></div>
+                                    <div class="order-info">
+                                        <div class="order-id">#@o.OrderCode</div>
+                                        <div class="order-name">@pname · @o.OrderDetails.Count sản phẩm</div>
+                                        <div class="order-meta">@o.CreatedAt.ToString("dd/MM/yyyy") · @o.PaymentMethod.ToUpper()</div>
+                                    </div>
+                                    <div class="order-right">
+                                        <div class="order-price">@o.TotalAmount.ToString("#,##0")₫</div>
+                                        <span class="order-status @ocls"><i class="ti @oic"></i>@otxt</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:40px;text-align:center;color:#999;">
+                                <i class="ti ti-package-off" style="font-size:42px;color:#ccc;"></i>
+                                <div style="margin-top:10px;">Bạn chưa có đơn hàng nào</div>
+                                <a href="/" style="display:inline-block;margin-top:12px;color:#d4537e;">Mua sắm ngay →</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: YÊU THÍCH -->
+            <div class="panel" data-panel="wishlist">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-heart"></i>Sản phẩm yêu thích</div>
+                        <div class="panel-sub">Bạn đang có @(ViewBag.WishlistCount ?? 0) sản phẩm trong danh sách yêu thích</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="wishlist-grid">
+                        @{
+                            var myWish = ViewBag.MyWishlist as List<ThoiTrang.Models.Entities.Product>;
+                            string[] wbgs2 = { "bg-cream", "bg-dark dark", "bg-gray", "bg-blue dark", "bg-brown dark" };
+                        }
+                        @if (myWish != null && myWish.Count > 0)
+                        {
+                            foreach (var wp in myWish)
+                            {
+                                var wnm = (wp.Name ?? "").ToLower();
+                                var wic = "ti-shirt";
+                                if (wnm.Contains("giày") || wnm.Contains("sneaker")) { wic = "ti-shoe"; }
+                                else if (wnm.Contains("quần") || wnm.Contains("kaki") || wnm.Contains("jean") || wnm.Contains("váy")) { wic = "ti-hanger"; }
+                                else if (wnm.Contains("túi")) { wic = "ti-shopping-bag"; }
+                                <div class="wish-item" style="cursor:pointer;" onclick="location.href='/Home/CTSP/@wp.ProductId'">
+                                    <div class="wish-img @wbgs2[wp.ProductId % 5]">
+                                        <button class="wish-heart" onclick="event.stopPropagation();removeWish(@wp.ProductId, this)"><i class="ti ti-heart-filled"></i></button>
+                                        <i class="ti @wic"></i>
+                                    </div>
+                                    <div class="wish-info">
+                                        <div class="wish-name">@wp.Name</div>
+                                        <div class="wish-price">@wp.Price.ToString("#,##0")₫</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:40px;text-align:center;color:#999;grid-column:1/-1;">
+                                <i class="ti ti-heart-off" style="font-size:42px;color:#ccc;"></i>
+                                <div style="margin-top:10px;">Chưa có sản phẩm yêu thích</div>
+                            </div>
+                        }
+                        @*
+                        <div class="wish-item">
+                            <div class="wish-img bg-cream">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shirt"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Áo sơ mi linen oversize</div>
+                                <div class="wish-price">525.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-dark dark">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shoe"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Sneakers minimal</div>
+                                <div class="wish-price">1.150.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-gray">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shirt-sport"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Áo blazer wool</div>
+                                <div class="wish-price">975.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-blue dark">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-hanger"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Quần jeans slim-fit</div>
+                                <div class="wish-price">685.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-brown dark">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shopping-bag"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Túi tote canvas</div>
+                                <div class="wish-price">295.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-cream">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shirt"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Váy maxi linen</div>
+                                <div class="wish-price">580.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-gray">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-sunglasses"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Kính mát classic</div>
+                                <div class="wish-price">385.000₫</div>
+                            </div>
+                        </div>
+                        <div class="wish-item">
+                            <div class="wish-img bg-dark dark">
+                                <button class="wish-heart"><i class="ti ti-heart-filled"></i></button>
+                                <i class="ti ti-shirt"></i>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name">Áo hoodie oversize</div>
+                                <div class="wish-price">520.000₫</div>
+                            </div>
+                        </div>
+                        *@
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: ĐỊA CHỈ -->
+            <div class="panel" data-panel="address">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-map-pin"></i>Địa chỉ giao hàng</div>
+                        <div class="panel-sub">Quản lý địa chỉ nhận hàng của bạn</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="address-list">
+                        @{
+                            var myAddrs = ViewBag.MyAddresses as List<ThoiTrang.Models.Entities.Address>;
+                        }
+                        @if (myAddrs != null && myAddrs.Count > 0)
+                        {
+                            foreach (var a in myAddrs)
+                            {
+                                var full = $"{a.AddressLine}, {a.Ward}, {a.District}, {a.Province}".Replace(", ,", ",");
+                                <div class="address-card @(a.IsDefault ? "default" : "")">
+                                    <div class="address-actions">
+                                        @if (!a.IsDefault)
+                                        {
+                                            <button class="address-action" onclick="setDefaultAddr(@a.AddressId)">Đặt mặc định</button>
+                                            <button class="address-action danger" onclick="deleteAddr(@a.AddressId, this)">Xóa</button>
+                                        }
+                                    </div>
+                                    <div class="address-row1">
+                                        <span class="address-name">@a.ReceiverName</span>
+                                        @if (a.IsDefault) { <span class="address-default-badge">MẶC ĐỊNH</span> }
+                                    </div>
+                                    <div class="address-phone">@a.Phone</div>
+                                    <div class="address-detail">@full</div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:20px;color:#999;text-align:center;">Bạn chưa có địa chỉ nào.</div>
+                        }
+
+                        <button class="address-add" onclick="document.getElementById('addAddrForm').style.display='block';this.style.display='none';">
+                            <i class="ti ti-plus"></i>Thêm địa chỉ mới
+                        </button>
+
+                        <div id="addAddrForm" style="display:none;margin-top:14px;border:1px solid #eee;border-radius:12px;padding:16px;">
+                            <div style="font-weight:600;margin-bottom:12px;">Thêm địa chỉ mới</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <input id="a-name" placeholder="Họ tên người nhận" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="a-phone" placeholder="Số điện thoại" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="a-province" placeholder="Tỉnh/Thành phố" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="a-district" placeholder="Quận/Huyện" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="a-ward" placeholder="Phường/Xã" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="a-line" placeholder="Số nhà, tên đường" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <label style="grid-column:1/-1;display:flex;align-items:center;gap:8px;font-size:13px;"><input type="checkbox" id="a-default" /> Đặt làm địa chỉ mặc định</label>
+                            </div>
+                            <button onclick="saveAddr()" style="margin-top:12px;padding:10px 22px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;">Lưu địa chỉ</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function saveAddr() {
+                        const fd = new FormData();
+                        fd.append('receiverName', document.getElementById('a-name').value);
+                        fd.append('phone', document.getElementById('a-phone').value);
+                        fd.append('province', document.getElementById('a-province').value);
+                        fd.append('district', document.getElementById('a-district').value);
+                        fd.append('ward', document.getElementById('a-ward').value);
+                        fd.append('addressLine', document.getElementById('a-line').value);
+                        fd.append('isDefault', document.getElementById('a-default').checked);
+                        fetch('/Home/AddAddress', { method: 'POST', body: fd })
+                            .then(r => r.ok ? r.json() : Promise.reject(r))
+                            .then(() => { showToast('success', 'Đã thêm địa chỉ', 'Địa chỉ đã được lưu'); setTimeout(() => location.reload(), 700); })
+                            .catch(() => showToast('error', 'Lỗi', 'Vui lòng nhập đủ họ tên, SĐT, địa chỉ'));
+                    }
+                    function setDefaultAddr(id) {
+                        const fd = new FormData(); fd.append('addressId', id);
+                        fetch('/Home/SetDefaultAddress', { method: 'POST', body: fd }).then(() => location.reload());
+                    }
+                    function deleteAddr(id, btn) {
+                        if (!confirm('Xóa địa chỉ này?')) return;
+                        const fd = new FormData(); fd.append('addressId', id);
+                        fetch('/Home/DeleteAddress', { method: 'POST', body: fd }).then(() => btn.closest('.address-card').remove());
+                    }
+                </script>
+            </div>
+
+            <!-- PANEL: PHƯƠNG THỨC THANH TOÁN -->
+            <div class="panel" data-panel="payment">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-credit-card"></i>Phương thức thanh toán</div>
+                        <div class="panel-sub">Quản lý các phương thức thanh toán đã lưu</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="payment-list">
+                        @{
+                            var myPays = ViewBag.MyPayments as List<ThoiTrang.Models.Entities.PaymentMethod>;
+                        }
+                        @if (myPays != null && myPays.Count > 0)
+                        {
+                            foreach (var pm in myPays)
+                            {
+                                var picon = pm.Type switch { "momo" => "ti-wallet", "visa" => "ti-credit-card", "bank" => "ti-building-bank", _ => "ti-cash" };
+                                <div class="payment-card @(pm.IsDefault ? "default" : "")">
+                                    <div class="payment-icon @pm.Type"><i class="ti @picon"></i></div>
+                                    <div class="payment-info">
+                                        <div class="payment-name">@pm.Label @(pm.IsDefault ? Html.Raw("<span class=\"address-default-badge\">MẶC ĐỊNH</span>") : null)</div>
+                                        <div class="payment-detail">@pm.Detail</div>
+                                    </div>
+                                    <div class="payment-actions">
+                                        @if (!pm.IsDefault)
+                                        {
+                                            <button class="address-action" onclick="setDefaultPay(@pm.PaymentMethodId)">Đặt mặc định</button>
+                                            <button class="address-action danger" onclick="deletePay(@pm.PaymentMethodId, this)">Xóa</button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:20px;color:#999;text-align:center;">Bạn chưa lưu phương thức thanh toán nào.</div>
+                        }
+
+                        <button class="address-add" onclick="document.getElementById('addPayForm').style.display='block';this.style.display='none';">
+                            <i class="ti ti-plus"></i>Thêm phương thức mới
+                        </button>
+
+                        <div id="addPayForm" style="display:none;margin-top:14px;border:1px solid #eee;border-radius:12px;padding:16px;">
+                            <div style="font-weight:600;margin-bottom:12px;">Thêm phương thức thanh toán</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <select id="pm-type" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;">
+                                    <option value="momo">Ví Momo</option>
+                                    <option value="visa">Thẻ Visa/Mastercard</option>
+                                    <option value="bank">Ngân hàng</option>
+                                </select>
+                                <input id="pm-label" placeholder="Tên (VD: Momo của tôi)" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;" />
+                                <input id="pm-detail" placeholder="Số thẻ / SĐT ví / số TK" style="padding:10px 12px;border:1px solid #e0e0db;border-radius:8px;grid-column:1/-1;" />
+                                <label style="grid-column:1/-1;display:flex;align-items:center;gap:8px;font-size:13px;"><input type="checkbox" id="pm-default" /> Đặt làm mặc định</label>
+                            </div>
+                            <button onclick="savePay()" style="margin-top:12px;padding:10px 22px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function savePay() {
+                        const fd = new FormData();
+                        fd.append('type', document.getElementById('pm-type').value);
+                        fd.append('label', document.getElementById('pm-label').value);
+                        fd.append('detail', document.getElementById('pm-detail').value);
+                        fd.append('isDefault', document.getElementById('pm-default').checked);
+                        fetch('/Home/AddPaymentMethod', { method: 'POST', body: fd })
+                            .then(r => r.ok ? r.json() : Promise.reject(r))
+                            .then(() => { showToast('success', 'Đã thêm', 'Phương thức thanh toán đã lưu'); setTimeout(() => location.reload(), 700); })
+                            .catch(() => showToast('error', 'Lỗi', 'Vui lòng nhập tên phương thức'));
+                    }
+                    function setDefaultPay(id) { const fd = new FormData(); fd.append('paymentMethodId', id); fetch('/Home/SetDefaultPaymentMethod', { method: 'POST', body: fd }).then(() => location.reload()); }
+                    function deletePay(id, btn) { if (!confirm('Xóa phương thức này?')) return; const fd = new FormData(); fd.append('paymentMethodId', id); fetch('/Home/DeletePaymentMethod', { method: 'POST', body: fd }).then(() => btn.closest('.payment-card').remove()); }
+                    function removeWish(productId, btn) {
+                        const fd = new FormData(); fd.append('productId', productId);
+                        fetch('/Home/ToggleWishlist', { method: 'POST', body: fd })
+                            .then(r => r.ok ? r.json() : Promise.reject(r))
+                            .then(d => { if (!d.added) { btn.closest('.wish-item').remove(); showToast('info', 'Đã bỏ yêu thích', ''); } })
+                            .catch(() => {});
+                    }
+                </script>
+            </div>
+
+            <!-- PANEL: VOUCHER -->
+            <div class="panel" data-panel="voucher">
+                <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-ticket"></i>Voucher của tôi</div>
+                        <div class="panel-sub">Bạn có @(((ViewBag.MyVouchers as List<ThoiTrang.Models.Entities.UserVoucher>)?.Count(x => !x.IsUsed) ?? 0)) voucher khả dụng</div>
+                    </div>
+                    <a href="/Home/Sale" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,#d4537e,#e2856b);color:#fff;border-radius:10px;font-weight:500;font-size:14px;">
+                        <i class="ti ti-gift"></i>Săn voucher
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="voucher-list">
+                        @{
+                            var myVouchers = ViewBag.MyVouchers as List<ThoiTrang.Models.Entities.UserVoucher>;
+                        }
+                        @if (myVouchers != null && myVouchers.Count > 0)
+                        {
+                            foreach (var uv in myVouchers)
+                            {
+                                var v = uv.Voucher;
+                                if (v == null) { continue; }
+                                var vval = v.DiscountType == "percent" ? $"{v.DiscountValue:#,##0}%" : (v.DiscountValue >= 1000 ? $"{v.DiscountValue / 1000:#,##0}K" : $"{v.DiscountValue:#,##0}");
+                                <div class="voucher-card" style="@(uv.IsUsed ? "opacity:.5;" : "")">
+                                    <div class="v-left">
+                                        <div class="value">@vval</div>
+                                        <div class="unit">@(v.DiscountType == "percent" ? "GIẢM" : "GIẢM")</div>
+                                    </div>
+                                    <div class="v-right">
+                                        <div class="v-title">@v.Code @(uv.IsUsed ? "(Đã dùng)" : "")</div>
+                                        <div class="v-desc">@(v.Description ?? $"Đơn từ {v.MinOrder:#,##0}₫")</div>
+                                        <div class="v-expire"><i class="ti ti-clock"></i> @(v.EndDate.HasValue ? "HSD: " + v.EndDate.Value.ToString("dd/MM/yyyy") : "Không giới hạn")</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:30px;text-align:center;color:#999;">
+                                <i class="ti ti-ticket-off" style="font-size:40px;color:#ccc;"></i>
+                                <div style="margin-top:10px;">Bạn chưa lưu voucher nào.</div>
+                                <a href="/Home/GioHang" style="display:inline-block;margin-top:12px;color:#d4537e;">Lưu voucher ở trang giỏ hàng →</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: HẠNG THÀNH VIÊN -->
+            <div class="panel" data-panel="membership">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-crown"></i>Hạng thành viên</div>
+                        <div class="panel-sub">Hạng hiện tại của bạn: @(ViewBag.TierLabel ?? "THÀNH VIÊN")</div>
+                    </div>
+                </div>
+
+                <div class="membership-card">
+                    <div class="member-content">
+                        <div class="member-top">
+                            <div>
+                                <span class="member-tier"><i class="ti ti-crown"></i>@(ViewBag.TierLabel ?? "THÀNH VIÊN")</span>
+                                <div style="margin-top: 10px; font-size: 13px; color: rgba(255,255,255,0.7);">
+                                    Tích lũy từ tổng chi tiêu các đơn đã đặt
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="member-points-label">ĐIỂM TÍCH LŨY</div>
+                                <div class="member-points-num">@(((int)(ViewBag.Points ?? 0)).ToString("#,##0"))</div>
+                            </div>
+                        </div>
+                        <div class="member-progress-wrap">
+                            <div class="member-progress-text">
+                                @if (!string.IsNullOrEmpty((string)ViewBag.NextTier))
+                                {
+                                    <span>Còn @(((int)(ViewBag.PointsToNext ?? 0)).ToString("#,##0")) điểm để lên @ViewBag.NextTier</span>
+                                    <strong>@(ViewBag.TierPercent ?? 0)%</strong>
+                                }
+                                else
+                                {
+                                    <span>Bạn đang ở hạng cao nhất 💎</span>
+                                    <strong>100%</strong>
+                                }
+                            </div>
+                            <div class="member-progress-bar">
+                                <div class="member-progress-fill" style="width:@(ViewBag.TierPercent ?? 0)%;"></div>
+                            </div>
+                        </div>
+                        <div class="member-perks">
+                            <div class="perk">
+                                <i class="ti ti-truck-delivery"></i>
+                                <div class="perk-label">Freeship toàn quốc</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-discount-2"></i>
+                                <div class="perk-label">Giảm 15% đơn hàng</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-gift"></i>
+                                <div class="perk-label">Quà sinh nhật</div>
+                            </div>
+                            <div class="perk">
+                                <i class="ti ti-clock"></i>
+                                <div class="perk-label">Ưu tiên hỗ trợ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-stairs"></i>Các hạng thành viên</div>
+                    </div>
+                    <div class="address-list">
+                        <div class="address-card @((string)ViewBag.TierKey == "bronze" ? "default" : "")">
+                            <div class="address-row1">
+                                <span class="address-name" style="@((string)ViewBag.TierKey == "bronze" ? "" : "color:#888;")">🥉 Bronze · Mới đăng ký</span>
+                                @if ((string)ViewBag.TierKey == "bronze") { <span class="address-default-badge">HẠNG HIỆN TẠI</span> }
+                            </div>
+                            <div class="address-detail">Mọi thành viên đăng ký mới · Tích lũy 0 - 999 điểm</div>
+                        </div>
+                        <div class="address-card @((string)ViewBag.TierKey == "silver" ? "default" : "")">
+                            <div class="address-row1">
+                                <span class="address-name" style="@((string)ViewBag.TierKey == "silver" ? "" : "color:#888;")">🥈 Silver · Tích lũy 1.000 điểm</span>
+                                @if ((string)ViewBag.TierKey == "silver") { <span class="address-default-badge">HẠNG HIỆN TẠI</span> }
+                            </div>
+                            <div class="address-detail">Giảm 5% đơn hàng · Freeship đơn từ 300K · Sinh nhật giảm 10%</div>
+                        </div>
+                        <div class="address-card @((string)ViewBag.TierKey == "gold" ? "default" : "")">
+                            <div class="address-row1">
+                                <span class="address-name" style="@((string)ViewBag.TierKey == "gold" ? "" : "color:#888;")">🥇 Gold · Tích lũy 3.000 điểm</span>
+                                @if ((string)ViewBag.TierKey == "gold") { <span class="address-default-badge">HẠNG HIỆN TẠI</span> }
+                            </div>
+                            <div class="address-detail">Giảm 15% đơn hàng · Freeship toàn quốc · Quà sinh nhật · Ưu tiên hỗ trợ</div>
+                        </div>
+                        <div class="address-card @((string)ViewBag.TierKey == "platinum" ? "default" : "")">
+                            <div class="address-row1">
+                                <span class="address-name" style="@((string)ViewBag.TierKey == "platinum" ? "" : "color:#888;")">💎 Platinum · Tích lũy 5.000 điểm</span>
+                                @if ((string)ViewBag.TierKey == "platinum") { <span class="address-default-badge">HẠNG HIỆN TẠI</span> }
+                            </div>
+                            <div class="address-detail">Giảm 25% đơn hàng · Quà tặng riêng · Tư vấn cá nhân · Ưu tiên VIP cao nhất</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: ĐIỂM THƯỞNG -->
+            <div class="panel" data-panel="points">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-gift"></i>Điểm thưởng</div>
+                        <div class="panel-sub">Tích điểm — đổi quà — nhận voucher độc quyền</div>
+                    </div>
+                </div>
+
+                <div class="points-hero">
+                    <div class="points-label">ĐIỂM HIỆN CÓ</div>
+                    <div class="points-value">@(((int)(ViewBag.Points ?? 0)).ToString("#,##0"))</div>
+                    <div class="points-desc">≈ @(((int)(ViewBag.Points ?? 0) * 100).ToString("#,##0"))₫ giá trị quy đổi</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-gift"></i>Đổi quà với điểm thưởng</div>
+                    </div>
+                    <div class="points-actions">
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-ticket"></i></div>
+                            <div class="point-reward-name">Voucher giảm 50K</div>
+                            <div class="point-reward-cost">500 điểm</div>
+                        </div>
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-truck-delivery"></i></div>
+                            <div class="point-reward-name">Mã freeship 100K</div>
+                            <div class="point-reward-cost">800 điểm</div>
+                        </div>
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-ticket"></i></div>
+                            <div class="point-reward-name">Voucher 100K</div>
+                            <div class="point-reward-cost">1.000 điểm</div>
+                        </div>
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-shirt"></i></div>
+                            <div class="point-reward-name">Áo thun limited</div>
+                            <div class="point-reward-cost">2.500 điểm</div>
+                        </div>
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-shopping-bag"></i></div>
+                            <div class="point-reward-name">Túi tote MONO</div>
+                            <div class="point-reward-cost">1.800 điểm</div>
+                        </div>
+                        <div class="point-reward">
+                            <div class="point-reward-icon"><i class="ti ti-discount-2"></i></div>
+                            <div class="point-reward-name">Voucher 300K VIP</div>
+                            <div class="point-reward-cost">3.000 điểm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-history"></i>Lịch sử điểm thưởng</div>
+                    </div>
+                    <div class="security-list">
+                        @{
+                            var pointOrders = (ViewBag.MyOrders as List<ThoiTrang.Models.Entities.Order>)?
+                                .Where(o => o.OrderStatus != "Cancelled")
+                                .OrderByDescending(o => o.OrderId).ToList()
+                                ?? new List<ThoiTrang.Models.Entities.Order>();
+                        }
+                        @if (pointOrders.Count > 0)
+                        {
+                            foreach (var po in pointOrders)
+                            {
+                                var pts = (int)(po.TotalAmount / 1000);
+                                var firstP = po.OrderDetails.FirstOrDefault()?.ProductName ?? "Đơn hàng";
+                                <div class="security-item">
+                                    <div class="security-icon success"><i class="ti ti-plus"></i></div>
+                                    <div class="security-content">
+                                        <div class="security-title">+@pts.ToString("#,##0") điểm · Mua hàng #@po.OrderCode</div>
+                                        <div class="security-desc">@po.CreatedAt.ToString("dd/MM/yyyy") · @firstP</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:30px;text-align:center;color:#999;">
+                                <i class="ti ti-history" style="font-size:36px;color:#ccc;"></i>
+                                <div style="margin-top:8px;">Chưa có lịch sử điểm. Mua hàng để tích điểm!</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: THÔNG BÁO -->
+            <div class="panel" data-panel="notifications">
+                @{
+                    var notifs = ViewBag.Notifications as List<ThoiTrang.Models.Entities.Notification> ?? new List<ThoiTrang.Models.Entities.Notification>();
+                    int unreadNotif = ViewBag.UnreadNotifCount ?? 0;
+                    string NotifAgo(DateTime t)
+                    {
+                        var sp = DateTime.Now - t;
+                        if (sp.TotalMinutes < 1) return "Vừa xong";
+                        if (sp.TotalMinutes < 60) return $"{(int)sp.TotalMinutes} phút trước";
+                        if (sp.TotalHours < 24) return $"{(int)sp.TotalHours} giờ trước";
+                        if (sp.TotalDays < 30) return $"{(int)sp.TotalDays} ngày trước";
+                        return t.ToString("dd/MM/yyyy");
+                    }
+                    (string, string) NotifIcon(string? type) => type switch
+                    {
+                        "order" => ("order", "ti-circle-check"),
+                        "promo" => ("promo", "ti-gift"),
+                        "system" => ("system", "ti-shield-check"),
+                        _ => ("system", "ti-bell")
+                    };
+                }
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-bell"></i>Thông báo</div>
+                        <div class="panel-sub">@(unreadNotif > 0 ? $"Bạn có {unreadNotif} thông báo chưa đọc" : "Bạn đã đọc hết thông báo")</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-inbox"></i>Tất cả thông báo</div>
+                        @if (unreadNotif > 0)
+                        {
+                            <a class="card-link" onclick="markAllNotifRead(this)">Đánh dấu đã đọc</a>
+                        }
+                    </div>
+                    <div class="notif-list">
+                        @if (notifs.Count > 0)
+                        {
+                            foreach (var n in notifs)
+                            {
+                                var (ncls, nic) = NotifIcon(n.Type);
+                                <div class="notif-row @(n.IsRead ? "" : "unread")">
+                                    <div class="notif-icon @ncls"><i class="ti @nic"></i></div>
+                                    <div class="notif-content">
+                                        <div class="notif-title">@n.Title</div>
+                                        <div class="notif-desc">@n.Content</div>
+                                        <div class="notif-time">@NotifAgo(n.CreatedAt)</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="padding:40px;text-align:center;color:#999;">
+                                <i class="ti ti-bell-off" style="font-size:42px;color:#ccc;"></i>
+                                <div style="margin-top:10px;">Chưa có thông báo nào</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <script>
+                    async function markAllNotifRead(link) {
+                        const r = await fetch('/Home/MarkNotificationsRead', { method:'POST' });
+                        if (r.ok) {
+                            document.querySelectorAll('.notif-row.unread').forEach(el => el.classList.remove('unread'));
+                            if (link) link.style.display = 'none';
+                            document.querySelector('[data-panel="notifications"] .panel-sub').textContent = 'Bạn đã đọc hết thông báo';
+                            showToast('success','Đã đánh dấu','Tất cả thông báo đã được đánh dấu đã đọc');
+                            if (typeof monoUpdateBadges === 'function') monoUpdateBadges();
+                        } else showToast('error','Lỗi','Thử lại sau');
+                    }
+                </script>
+            </div>
+
+            <!-- PANEL: TRỢ GIÚP -->
+            <div class="panel" data-panel="help">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title"><i class="ti ti-help"></i>Trung tâm trợ giúp</div>
+                        <div class="panel-sub">Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-message-circle"></i>Liên hệ hỗ trợ</div>
+                    </div>
+                    <div class="help-contacts">
+                        <div class="help-contact-card" onclick="showToast('info','Hotline 24/7','Đang gọi 1900 6868...')">
+                            <div class="help-contact-icon"><i class="ti ti-phone"></i></div>
+                            <div class="help-contact-title">Hotline 24/7</div>
+                            <div class="help-contact-desc">1900 6868</div>
+                        </div>
+                        <div class="help-contact-card" onclick="showToast('info','Email hỗ trợ','support@monowear.vn')">
+                            <div class="help-contact-icon"><i class="ti ti-mail"></i></div>
+                            <div class="help-contact-title">Email</div>
+                            <div class="help-contact-desc">support@monowear.vn</div>
+                        </div>
+                        <div class="help-contact-card" onclick="showToast('info','Chat trực tuyến','Đang kết nối với trợ lý...')">
+                            <div class="help-contact-icon"><i class="ti ti-message-2"></i></div>
+                            <div class="help-contact-title">Chat trực tuyến</div>
+                            <div class="help-contact-desc">Phản hồi trong 1 phút</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="ti ti-question-mark"></i>Câu hỏi thường gặp</div>
+                    </div>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question">Làm sao để theo dõi đơn hàng?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">Bạn có thể xem trạng thái đơn hàng trong mục <strong>"Đơn hàng"</strong> của tài khoản. Mỗi đơn sẽ có status tương ứng (Đang xử lý / Đang giao / Đã giao). Ngoài ra, bạn sẽ nhận được thông báo qua email và app khi đơn hàng có cập nhật mới.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Chính sách đổi trả như thế nào?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">MONO.WEAR hỗ trợ đổi trả trong vòng <strong>30 ngày</strong> kể từ khi nhận hàng, không cần lý do. Sản phẩm phải còn nguyên tem mác và chưa qua sử dụng. Phí vận chuyển đổi trả được miễn phí cho thành viên VIP.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Khi nào tôi nhận được hàng?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">Thời gian giao hàng: nội thành HCM/HN <strong>1-2 ngày</strong>, toàn quốc <strong>2-3 ngày</strong> làm việc. Đơn từ 500K được miễn phí vận chuyển toàn quốc.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Làm sao để tích điểm thưởng?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">Với mỗi <strong>10.000₫ mua hàng</strong>, bạn sẽ tích lũy <strong>1 điểm thưởng</strong>. Điểm có thể đổi voucher, freeship, quà tặng độc quyền. Sinh nhật được tặng thêm 200 điểm. Đánh giá sản phẩm nhận thêm 50 điểm/đánh giá.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Tôi có thể hủy đơn hàng không?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">Bạn có thể hủy đơn miễn phí khi đơn còn ở trạng thái <strong>"Đang xử lý"</strong>. Khi đơn đã chuyển sang trạng thái "Đang giao", vui lòng liên hệ hotline 1900 6868 để được hỗ trợ.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Làm sao lên hạng VIP?<i class="ti ti-chevron-down"></i></button>
+                            <div class="faq-answer">Hạng thành viên dựa trên <strong>tổng điểm tích lũy</strong>: Bronze (mới đăng ký), Silver (1.000đ), Gold (3.000đ), Platinum (5.000đ). Mỗi hạng có quyền lợi riêng — xem chi tiết tại mục <strong>"Hạng thành viên"</strong>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="/Products">Tất cả sản phẩm</a></li>
+                        <li><a href="#">Bộ sưu tập mới</a></li>
+                        <li><a href="#">Áo thun & Polo</a></li>
+                        <li><a href="#">Quần & Accessories</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-mid-row">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD"></i>
+                    <i class="ti ti-shield-check" title="Bảo mật"></i>
+                </div>
+            </div>
+        </div>
+
+
+    </footer>
+
+    <!-- LOGOUT MODAL -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal">
+            <div class="modal-icon"><i class="ti ti-logout"></i></div>
+            <div class="modal-title">Đăng xuất tài khoản?</div>
+            <div class="modal-desc">Bạn có chắc muốn đăng xuất khỏi MONO.WEAR? Bạn sẽ cần đăng nhập lại để truy cập tài khoản.</div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeLogoutModal()">Hủy</button>
+                <button class="btn btn-primary" style="background:#d44;" onclick="confirmLogout()">
+                    <i class="ti ti-logout"></i>Đăng xuất
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ===== Switch panel =====
+        const panelTitles = {
+            overview: 'Tổng quan',
+            profile: 'Thông tin cá nhân',
+            security: 'Bảo mật',
+            orders: 'Đơn hàng',
+            wishlist: 'Yêu thích',
+            address: 'Địa chỉ giao hàng',
+            payment: 'Phương thức thanh toán',
+            voucher: 'Voucher của tôi',
+            membership: 'Hạng thành viên',
+            points: 'Điểm thưởng',
+            notifications: 'Thông báo',
+            help: 'Trợ giúp'
+        };
+
+        function switchPanel(section) {
+            const targetPanel = document.querySelector(`[data-panel="${section}"]`);
+            if (!targetPanel) return;
+
+            // Update sidebar active
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === section);
+            });
+
+            // Hide all panels
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            // Show target
+            targetPanel.classList.add('active');
+
+            // Smooth scroll to top of content area
+            const mainContainer = document.querySelector('.main-container');
+            const offset = mainContainer.offsetTop - 110;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+
+            // Toast feedback
+            showToast('info', panelTitles[section] || 'Chuyển trang', 'Đang xem mục: ' + (panelTitles[section] || section));
+        }
+
+        document.querySelectorAll('.menu-item[data-section]').forEach(item => {
+            item.addEventListener('click', () => {
+                switchPanel(item.dataset.section);
+            });
+        });
+
+        // ===== Logout =====
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+
+        logoutBtn.addEventListener('click', () => {
+            logoutModal.classList.add('show');
+        });
+
+        function closeLogoutModal() {
+            logoutModal.classList.remove('show');
+        }
+
+        function confirmLogout() {
+            closeLogoutModal();
+            showToast('success', 'Đã đăng xuất', 'Đang chuyển về trang đăng nhập...');
+            setTimeout(() => {
+                window.location.href = '/Home/Logout';
+            }, 1200);
+        }
+
+        logoutModal.addEventListener('click', (e) => {
+            if (e.target === logoutModal) closeLogoutModal();
+        });
+
+        // ===== FAQ accordion =====
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.faq-item');
+                item.classList.toggle('open');
+            });
+        });
+
+        // ===== Wishlist heart toggle =====
+        document.querySelectorAll('.wish-heart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const icon = btn.querySelector('i');
+                icon.classList.toggle('ti-heart-filled');
+                icon.classList.toggle('ti-heart');
+                if (!icon.classList.contains('ti-heart-filled')) {
+                    btn.closest('.wish-item').style.opacity = '0';
+                    btn.closest('.wish-item').style.transition = 'opacity 0.4s';
+                    setTimeout(() => btn.closest('.wish-item').remove(), 400);
+                    showToast('info', 'Đã xóa khỏi yêu thích', 'Sản phẩm đã được loại bỏ');
+                }
+            });
+        });
+
+        // ===== Notif click marks as read =====
+        document.querySelectorAll('.notif-row').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.remove('unread');
+            });
+        });
+
+        // ===== Point reward click =====
+        document.querySelectorAll('.point-reward').forEach(card => {
+            card.addEventListener('click', () => {
+                const name = card.querySelector('.point-reward-name').textContent;
+                const cost = card.querySelector('.point-reward-cost').textContent;
+                showToast('success', 'Đổi quà thành công', `${name} · Trừ ${cost}`);
+            });
+        });
+
+        // ===== Voucher card click =====
+        document.querySelectorAll('.voucher-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const code = card.querySelector('.v-title').textContent;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(code).then(() => {
+                        showToast('success', 'Đã copy mã', `Mã ${code} đã được sao chép`);
+                    }).catch(() => {
+                        showToast('info', 'Mã voucher', code);
+                    });
+                } else {
+                    showToast('info', 'Mã voucher', code);
+                }
+            });
+        });
+
+        // ===== Header scroll shadow =====
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // ===== Toast =====
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type || ''}`;
+            const icons = {
+                success: 'ti-circle-check',
+                info: 'ti-info-circle',
+                warning: 'ti-alert-circle'
+            };
+            toast.innerHTML = `
+                <div class="toast-icon-w"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Welcome
+        setTimeout(() => {
+            showToast('success', 'Chào mừng trở lại', 'Khôi Trần · VIP GOLD');
+        }, 600);
+
+        // ===== ẢNH ĐẠI DIỆN =====
+        async function handleAvatarChange(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+
+            // Validate client-side
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('error', 'Ảnh quá lớn', 'Vui lòng chọn ảnh nhỏ hơn 5MB');
+                return;
+            }
+            const allowed = ['image/jpeg','image/png','image/webp','image/gif'];
+            if (!allowed.includes(file.type)) {
+                showToast('error', 'Định dạng không hỗ trợ', 'Chỉ hỗ trợ JPG, PNG, WebP, GIF');
+                return;
+            }
+
+            // Preview ngay lập tức (local blob URL)
+            const blobUrl = URL.createObjectURL(file);
+            applyAvatarPreview(blobUrl);
+
+            // Upload lên server
+            const fd = new FormData();
+            fd.append('avatar', file);
+            try {
+                const res = await fetch('/Home/UpdateAvatar', { method: 'POST', body: fd });
+                if (res.status === 401) {
+                    showToast('info', 'Cần đăng nhập', 'Vui lòng đăng nhập lại');
+                    return;
+                }
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    showToast('error', 'Lỗi upload', err.message || 'Không thể tải ảnh lên');
+                    return;
+                }
+                const d = await res.json();
+                // Thay blob bằng URL thật từ server (để không bị mất khi reload)
+                applyAvatarPreview(d.avatarUrl);
+                showToast('success', 'Đã cập nhật ảnh', 'Ảnh đại diện mới đã được lưu ✅');
+                // Hiện status trong panel
+                const st = document.getElementById('avatarUploadStatus');
+                if (st) { st.style.display = 'inline'; setTimeout(() => st.style.display = 'none', 3000); }
+            } catch (e) {
+                showToast('error', 'Lỗi kết nối', 'Thử lại sau');
+            }
+        }
+
+        function applyAvatarPreview(src) {
+            // Cập nhật hero avatar
+            const heroImg = document.getElementById('avatarImg');
+            const heroInit = document.getElementById('avatarInitials');
+            const heroDisplay = document.getElementById('avatarDisplay');
+            if (heroImg) {
+                heroImg.src = src;
+                heroImg.style.display = 'block';
+                if (heroInit) heroInit.style.display = 'none';
+                if (heroDisplay) {
+                    heroDisplay.style.background = 'none';
+                    heroDisplay.style.padding = '0';
+                    heroDisplay.style.overflow = 'hidden';
+                }
+            }
+            // Cập nhật panel avatar
+            const panelImg = document.getElementById('panelAvatarImg');
+            const panelInit = document.getElementById('panelAvatarInitials');
+            if (panelImg) {
+                panelImg.src = src;
+                panelImg.style.display = 'block';
+                if (panelInit) panelInit.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script src="/js/search.js"></script>
+
+    <!-- Modal chi tiết đơn hàng -->
+    <div id="orderDetailModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:18px;padding:32px;width:min(560px,95vw);max-height:90vh;overflow-y:auto;position:relative;">
+            <button onclick="closeOrderModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#666;"><i class="ti ti-x"></i></button>
+            <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="odCode">—</div>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:20px;">
+                <span id="odStatus" style="font-size:12px;padding:4px 12px;border-radius:999px;background:#f0f0ec;font-weight:600;"></span>
+                <span id="odDate" style="color:#888;font-size:13px;"></span>
+            </div>
+
+            <div style="font-size:13px;color:#888;margin-bottom:6px;">Thông tin giao hàng</div>
+            <div style="background:#fafafa;border-radius:10px;padding:14px;margin-bottom:18px;font-size:14px;line-height:1.6;">
+                <div><strong id="odName">—</strong> · <span id="odPhone">—</span></div>
+                <div id="odAddr" style="color:#666;margin-top:2px;"></div>
+                <div id="odNote" style="color:#888;font-size:12px;margin-top:4px;font-style:italic;"></div>
+            </div>
+
+            <div style="font-size:13px;color:#888;margin-bottom:6px;">Sản phẩm</div>
+            <div id="odItems" style="margin-bottom:18px;"></div>
+
+            <div style="border-top:1px solid #f0f0ec;padding-top:14px;font-size:14px;display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;"><span style="color:#888;">Tạm tính</span><span id="odSubtotal">—</span></div>
+                <div id="odVoucherRow" style="display:flex;justify-content:space-between;"><span style="color:#888;">Giảm voucher</span><span id="odVoucherDiscount" style="color:#d4537e;">—</span></div>
+                <div style="display:flex;justify-content:space-between;"><span style="color:#888;">Phí vận chuyển</span><span id="odShipping">—</span></div>
+                <div style="display:flex;justify-content:space-between;font-weight:700;font-size:16px;border-top:1px solid #f0f0ec;padding-top:10px;margin-top:4px;">
+                    <span>Tổng cộng</span><span id="odTotal" style="color:#d4537e;">—</span>
+                </div>
+            </div>
+
+            <div id="odCancelWrap" style="display:none;margin-top:18px;">
+                <button id="odCancelBtn" onclick="cancelOrderFromModal()" style="width:100%;background:#fff;color:#ef4444;border:1.5px solid #ef4444;padding:11px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;">
+                    <i class="ti ti-x"></i> Hủy đơn hàng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentOrderId = null;
+        async function viewOrderDetail(orderId) {
+            currentOrderId = orderId;
+            const modal = document.getElementById('orderDetailModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('odCancelWrap').style.display = 'none';
+            // Reset
+            ['odCode','odStatus','odDate','odName','odPhone','odAddr','odNote','odSubtotal','odVoucherDiscount','odShipping','odTotal'].forEach(id => document.getElementById(id).textContent = '...');
+            document.getElementById('odItems').innerHTML = '<div style="padding:16px;text-align:center;color:#bbb;">Đang tải...</div>';
+
+            try {
+                const r = await fetch(`/Home/GetOrderDetail?orderId=${orderId}`);
+                if (!r.ok) { document.getElementById('odItems').innerHTML = '<div style="padding:16px;text-align:center;color:#e55;">Không thể tải đơn hàng</div>'; return; }
+                const d = await r.json();
+
+                const statusMap = {
+                    'Pending': ['Đang xử lý','#f59e0b','#fffbeb'],
+                    'Confirmed': ['Đã xác nhận','#3b82f6','#eff6ff'],
+                    'Shipping': ['Đang giao','#8b5cf6','#f5f3ff'],
+                    'Completed': ['Hoàn tất','#10b981','#ecfdf5'],
+                    'Cancelled': ['Đã hủy','#ef4444','#fef2f2']
+                };
+                const [stxt, scolor, sbg] = statusMap[d.status] || [d.status,'#888','#f5f5f5'];
+                const stEl = document.getElementById('odStatus');
+                stEl.textContent = stxt; stEl.style.color = scolor; stEl.style.background = sbg;
+
+                // Cho phép hủy khi đơn chưa giao
+                document.getElementById('odCancelWrap').style.display = (d.status === 'Pending' || d.status === 'Confirmed') ? 'block' : 'none';
+
+                document.getElementById('odCode').textContent = '#' + d.orderCode;
+                document.getElementById('odDate').textContent = d.createdAt;
+                document.getElementById('odName').textContent = d.receiverName;
+                document.getElementById('odPhone').textContent = d.receiverPhone;
+                document.getElementById('odAddr').textContent = d.shippingAddress;
+                document.getElementById('odNote').textContent = d.note ? '📝 ' + d.note : '';
+
+                const fmt = v => Number(v).toLocaleString('vi-VN') + '₫';
+                document.getElementById('odSubtotal').textContent = fmt(d.subtotal);
+                document.getElementById('odShipping').textContent = d.shippingFee > 0 ? fmt(d.shippingFee) : 'Miễn phí';
+                document.getElementById('odTotal').textContent = fmt(d.totalAmount);
+                const vRow = document.getElementById('odVoucherRow');
+                if (d.voucherDiscount > 0) {
+                    document.getElementById('odVoucherDiscount').textContent = '-' + fmt(d.voucherDiscount);
+                    vRow.style.display = 'flex';
+                } else { vRow.style.display = 'none'; }
+
+                const itemsEl = document.getElementById('odItems');
+                if (!d.items || d.items.length === 0) { itemsEl.innerHTML = '<div style="color:#999;padding:10px;">Không có sản phẩm</div>'; return; }
+                itemsEl.innerHTML = d.items.map(it => `
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f5f5f5;">
+                        <div style="flex:1;">
+                            <div style="font-weight:600;font-size:14px;">${it.productName}</div>
+                            ${it.variantInfo ? `<div style="color:#888;font-size:12px;margin-top:2px;">${it.variantInfo}</div>` : ''}
+                        </div>
+                        <div style="text-align:right;min-width:140px;">
+                            <div style="font-size:13px;color:#888;">${Number(it.unitPrice).toLocaleString('vi-VN')}₫ × ${it.quantity}</div>
+                            <div style="font-weight:600;color:#1a1a1a;">${Number(it.lineTotal).toLocaleString('vi-VN')}₫</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                document.getElementById('odItems').innerHTML = '<div style="padding:16px;text-align:center;color:#e55;">Lỗi kết nối</div>';
+            }
+        }
+        function closeOrderModal() {
+            document.getElementById('orderDetailModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        async function cancelOrderFromModal() {
+            if (!currentOrderId) return;
+            if (!confirm('Bạn có chắc muốn hủy đơn hàng này?')) return;
+            const btn = document.getElementById('odCancelBtn');
+            btn.disabled = true; btn.textContent = 'Đang hủy...';
+            const fd = new FormData(); fd.append('orderId', currentOrderId);
+            try {
+                const r = await fetch('/Home/CancelOrder', { method:'POST', body: fd });
+                if (r.ok) {
+                    showToast('success','Đã hủy đơn','Đơn hàng đã được hủy thành công');
+                    closeOrderModal();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    const d = await r.json().catch(()=>({}));
+                    showToast('error','Không hủy được', d.message || 'Thử lại sau');
+                    btn.disabled = false; btn.innerHTML = '<i class="ti ti-x"></i> Hủy đơn hàng';
+                }
+            } catch {
+                showToast('error','Lỗi','Thử lại sau');
+                btn.disabled = false; btn.innerHTML = '<i class="ti ti-x"></i> Hủy đơn hàng';
+            }
+        }
+        document.getElementById('orderDetailModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('orderDetailModal')) closeOrderModal();
+        });
+    </script>
+
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

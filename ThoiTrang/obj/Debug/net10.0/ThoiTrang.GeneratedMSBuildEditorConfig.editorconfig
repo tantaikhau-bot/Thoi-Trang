@@ -1,0 +1,143 @@
+is_global = true
+build_property.TargetFramework = net10.0
+build_property.TargetFramework = net10.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.RootNamespace = ThoiTrang
+build_property.RootNamespace = ThoiTrang
+build_property.ProjectDir = D:\CV\ThoiTrang\ThoiTrang\ThoiTrang\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\CV\ThoiTrang\ThoiTrang\ThoiTrang
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/BankTransfer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCYW5rVHJhbnNmZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/BoSuuTap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCb1N1dVRhcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/CampaignAutumn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW1wYWlnbkF1dHVtbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Checkout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDaGVja291dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/CTSP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDVFNQLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/DangNhap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEYW5nTmhhcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/EditorialCapsule.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxFZGl0b3JpYWxDYXBzdWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/GioHang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHaW9IYW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/GioiThieu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHaW9pVGhpZXUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/LimitedEdition.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaW1pdGVkRWRpdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/MoiVe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2lWZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Nam.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxOYW0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Nu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxOdS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/OrderSuccess.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxPcmRlclN1Y2Nlc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/RawMaterials.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSYXdNYXRlcmlhbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Sale.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTYWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/Search.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTZWFyY2guY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/TaiKhoan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUYWlLaG9hbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/ThongBao.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUaG9uZ0Jhby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/ThongTinCN.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUaG9uZ1RpbkNOLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/YeuThich.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxZZXVUaGljaC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/_ChatWidget.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfQ2hhdFdpZGdldC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Home/_ProductCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfUHJvZHVjdENhcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/CV/ThoiTrang/ThoiTrang/ThoiTrang/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-vdswd1ngvy

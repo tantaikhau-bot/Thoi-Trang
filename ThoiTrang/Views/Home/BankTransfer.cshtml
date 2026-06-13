@@ -1,0 +1,1602 @@
+﻿@{
+    ViewData["Title"] = "Thanh toán chuyển khoản";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Chuyển khoản</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes spin {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @@keyframes scanline {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+        }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .header-back {
+            font-size: 13px;
+            color: #888;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
+        }
+
+            .header-back:hover {
+                color: #1a1a1a;
+            }
+
+        /* STEPS */
+        .page-header {
+            padding: 28px 60px 0;
+        }
+
+        .steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .step-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e8e8e4;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .step.active {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+            .step.active .step-num {
+                background: #1a1a1a;
+                color: #fff;
+            }
+
+        .step.done .step-num {
+            background: #2eb872;
+            color: #fff;
+        }
+
+        .step.done {
+            color: #2eb872;
+        }
+
+        .step-divider {
+            width: 60px;
+            height: 2px;
+            background: #e8e8e4;
+            margin: 0 16px;
+        }
+
+            .step-divider.done {
+                background: #2eb872;
+            }
+
+        /* MAIN */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 28px;
+            padding: 32px 60px 80px;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        /* COUNTDOWN BANNER */
+        .countdown-banner {
+            background: linear-gradient(135deg, #fff4e0, #ffe8cc);
+            border: 1px solid #ffd699;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .countdown-icon {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            color: #d18800;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .countdown-content {
+            flex: 1;
+        }
+
+        .countdown-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #92600a;
+            margin-bottom: 2px;
+        }
+
+        .countdown-desc {
+            font-size: 12px;
+            color: #b8860b;
+        }
+
+        .countdown-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: #d18800;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+
+        .pay-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .pay-title i {
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+                color: #fff;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
+
+        .pay-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 24px;
+            padding-left: 50px;
+        }
+
+        /* QR + BANK INFO LAYOUT */
+        .transfer-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* QR */
+        .qr-box {
+            text-align: center;
+        }
+
+        .qr-frame {
+            width: 220px;
+            height: 220px;
+            background: #fff;
+            border: 2px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 12px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 14px;
+        }
+
+        .qr-scanline {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4537e, transparent);
+            animation: scanline 2.5s linear infinite;
+            z-index: 3;
+        }
+
+        .qr-img {
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(0deg, #1a1a1a 0 4px, transparent 4px 8px), repeating-linear-gradient(90deg, #1a1a1a 0 4px, transparent 4px 8px);
+            background-size: 8px 8px;
+            border-radius: 6px;
+            position: relative;
+            opacity: 0.85;
+        }
+        /* Tạo các góc QR đặc trưng */
+        .qr-corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 6px solid #1a1a1a;
+            background: #fff;
+        }
+
+            .qr-corner.tl {
+                top: 8px;
+                left: 8px;
+                border-radius: 8px 0 0 0;
+                border-right: none;
+                border-bottom: none;
+            }
+
+            .qr-corner.tr {
+                top: 8px;
+                right: 8px;
+                border-radius: 0 8px 0 0;
+                border-left: none;
+                border-bottom: none;
+            }
+
+            .qr-corner.bl {
+                bottom: 8px;
+                left: 8px;
+                border-radius: 0 0 0 8px;
+                border-right: none;
+                border-top: none;
+            }
+
+            .qr-corner.center {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 44px;
+                height: 44px;
+                border: none;
+                background: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+            }
+
+                .qr-corner.center i {
+                    font-size: 24px;
+                    color: #d4537e;
+                }
+
+        .qr-logo-badge {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 8px 0 12px 0;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .qr-hint {
+            font-size: 13px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+            .qr-hint i {
+                color: #d4537e;
+                font-size: 16px;
+            }
+
+        .qr-apps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .qr-app {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: #f5f5f3;
+            border-radius: 6px;
+            color: #888;
+        }
+
+        /* BANK INFO */
+        .bank-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .bank-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f0f0ec;
+        }
+
+        .bank-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .bank-name-main {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .bank-name-sub {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px dashed #ececec;
+            gap: 12px;
+        }
+
+            .info-row:last-child {
+                border-bottom: none;
+            }
+
+        .info-label {
+            font-size: 13px;
+            color: #888;
+            flex-shrink: 0;
+        }
+
+        .info-value-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: right;
+            word-break: break-word;
+        }
+
+            .info-value.highlight {
+                color: #d4537e;
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+            .info-value.mono {
+                font-family: 'Courier New', monospace;
+                letter-spacing: 0.5px;
+            }
+
+        .copy-btn {
+            width: 30px;
+            height: 30px;
+            background: #f5f5f3;
+            border: none;
+            border-radius: 8px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            flex-shrink: 0;
+        }
+
+            .copy-btn:hover {
+                background: #1a1a1a;
+                color: #fff;
+            }
+
+            .copy-btn.copied {
+                background: #2eb872;
+                color: #fff;
+            }
+
+        /* WARNING NOTE */
+        .transfer-note {
+            background: #fbeaf0;
+            border: 1px solid #f5c6d8;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+            .transfer-note i {
+                color: #d4537e;
+                font-size: 20px;
+                flex-shrink: 0;
+                margin-top: 1px;
+            }
+
+        .transfer-note-text {
+            font-size: 13px;
+            color: #a02f5a;
+            line-height: 1.6;
+        }
+
+            .transfer-note-text strong {
+                font-weight: 600;
+            }
+
+        /* CONFIRM BUTTONS */
+        .confirm-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn {
+            padding: 15px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-confirm {
+            flex: 1;
+            background: linear-gradient(135deg, #2eb872, #4ad295);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-confirm::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                transition: left 0.6s;
+            }
+
+            .btn-confirm:hover::before {
+                left: 100%;
+            }
+
+            .btn-confirm:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(46,184,114,0.3);
+            }
+
+            .btn-confirm i {
+                font-size: 18px;
+            }
+
+        .btn-cancel {
+            background: #fff;
+            color: #888;
+            border: 1px solid #e0e0db;
+        }
+
+            .btn-cancel:hover {
+                border-color: #e63946;
+                color: #e63946;
+            }
+
+        /* RIGHT SUMMARY */
+        .summary-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 110px;
+            animation: fadeInUp 0.5s ease 0.1s both;
+        }
+
+        .summary-title {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+
+        .order-id-box {
+            background: #f9f8f4;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .order-id-label {
+            font-size: 11px;
+            color: #999;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .order-id-value {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .mini-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0ec;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .mini-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mini-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .mini-img i {
+                font-size: 20px;
+                color: rgba(0,0,0,0.2);
+            }
+
+            .mini-img.dark i {
+                color: rgba(255,255,255,0.25);
+            }
+
+        .mini-qty {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 9px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .bg-cream {
+            background: #f1efe8;
+        }
+
+        .bg-dark {
+            background: #2c2c2a;
+        }
+
+        .bg-gray {
+            background: #d3d1c7;
+        }
+
+        .bg-blue {
+            background: #2c3e5e;
+        }
+
+        .bg-brown {
+            background: #6b4423;
+        }
+
+        .bg-green {
+            background: #4a5d3a;
+        }
+
+        .mini-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .mini-name {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-variant {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .mini-price {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+            .summary-row .label {
+                color: #888;
+            }
+
+            .summary-row.discount .value {
+                color: #d4537e;
+            }
+
+            .summary-row.total {
+                font-size: 16px;
+                font-weight: 600;
+                padding-top: 14px;
+                border-top: 1px solid #f0f0ec;
+                margin-top: 14px;
+                margin-bottom: 0;
+            }
+
+                .summary-row.total .value {
+                    color: #d4537e;
+                    font-size: 22px;
+                }
+
+        .summary-receiver {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #f0f0ec;
+            font-size: 13px;
+        }
+
+        .summary-receiver-title {
+            font-size: 12px;
+            color: #999;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .summary-receiver-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .summary-receiver-detail {
+            color: #888;
+            line-height: 1.5;
+            font-size: 12px;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 300px;
+            max-width: 360px;
+            border-left: 4px solid #1a1a1a;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.warning {
+                border-left-color: #d18800;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast.warning .toast-icon {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* PROCESSING MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+        .modal {
+            background: #fff;
+            border-radius: 20px;
+            padding: 36px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .modal-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f0f0ec;
+            border-top-color: #2eb872;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 0 0; /* Bỏ padding đáy để thanh marquee bám sát khít */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Dòng thông tin bản quyền ở giữa */
+        .footer-mid-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* ============ THANH MARQUEE ĐEN TUYỀN CHẠY ĐÁY TRANG (FULL-WIDTH) ============ */
+        .footer-bottom-marquee {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: #090909; /* Đen sẫm hơn hẳn tạo khối tương phản chân trang */
+            padding: 14px 0;
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            animation: footerMarqueeScroll 28s linear infinite;
+        }
+
+        .footer-bottom-marquee:hover .marquee-wrapper {
+            animation-play-state: paused; /* Rê chuột vào sẽ tạm dừng để đọc */
+        }
+
+        .marquee-text-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+            .marquee-text-item i {
+                color: #e2856b; /* Icon màu cam ấm tinh tế */
+                font-size: 13px;
+            }
+
+        @@keyframes footerMarqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-33.333%);
+            }
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding-top: 50px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-mid-row {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announce">Vui lòng hoàn tất chuyển khoản trong thời gian quy định để đơn hàng được xử lý nhanh nhất</div>
+
+    <header class="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <a href="/Home/Checkout" class="header-back"><i class="ti ti-arrow-left"></i>Quay lại</a>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="steps">
+            <div class="step done">
+                <span class="step-num"><i class="ti ti-check"></i></span>
+                <span>Giỏ hàng</span>
+            </div>
+            <div class="step-divider done"></div>
+            <div class="step active">
+                <span class="step-num">2</span>
+                <span>Thanh toán</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <span>Hoàn tất</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-container">
+
+        <!-- LEFT: TRANSFER INFO -->
+        <div>
+            <!-- Countdown -->
+            <div class="countdown-banner">
+                <div class="countdown-icon"><i class="ti ti-clock-hour-4"></i></div>
+                <div class="countdown-content">
+                    <div class="countdown-title">Đơn hàng sẽ được giữ trong</div>
+                    <div class="countdown-desc">Vui lòng chuyển khoản trước khi hết thời gian</div>
+                </div>
+                <div class="countdown-time" id="countdown">15:00</div>
+            </div>
+
+            <div class="card">
+                <div class="pay-title">
+                    <i class="ti ti-building-bank"></i>Chuyển khoản ngân hàng
+                </div>
+                <div class="pay-subtitle">Quét mã QR hoặc chuyển khoản theo thông tin bên dưới</div>
+
+                <div class="transfer-layout">
+                    <!-- QR -->
+                    <div class="qr-box">
+                        <div class="qr-frame">
+                            <div class="qr-scanline"></div>
+                            <div class="qr-img"></div>
+                            <div class="qr-corner tl"></div>
+                            <div class="qr-corner tr"></div>
+                            <div class="qr-corner bl"></div>
+                            <div class="qr-corner center"><i class="ti ti-shirt"></i></div>
+                            <div class="qr-logo-badge">MONO</div>
+                        </div>
+                        <div class="qr-hint"><i class="ti ti-device-mobile"></i>Quét mã bằng app ngân hàng</div>
+                        <div class="qr-apps">
+                            <span class="qr-app">VietQR</span>
+                            <span class="qr-app">Momo</span>
+                            <span class="qr-app">ZaloPay</span>
+                        </div>
+                    </div>
+
+                    <!-- Bank info -->
+                    <div class="bank-info">
+                        <div class="bank-header">
+                            <div class="bank-logo"><i class="ti ti-building-bank"></i></div>
+                            <div>
+                                <div class="bank-name-main">Vietcombank</div>
+                                <div class="bank-name-sub">Ngân hàng TMCP Ngoại thương VN</div>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Chủ tài khoản</span>
+                            <div class="info-value-wrap">
+                                <span class="info-value">CONG TY MONO WEAR</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Số tài khoản</span>
+                            <div class="info-value-wrap">
+                                <span class="info-value mono" id="accountNum">0071 0009 88888</span>
+                                <button class="copy-btn" onclick="copyText('0071000988888', this)"><i class="ti ti-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Số tiền</span>
+                            <div class="info-value-wrap">
+                                <span class="info-value highlight" id="transferAmount">0₫</span>
+                                <button class="copy-btn" onclick="copyAmount(this)"><i class="ti ti-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Nội dung CK</span>
+                            <div class="info-value-wrap">
+                                <span class="info-value mono" id="transferContent">MNW0000000000</span>
+                                <button class="copy-btn" onclick="copyContent(this)"><i class="ti ti-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transfer-note">
+                    <i class="ti ti-alert-triangle"></i>
+                    <div class="transfer-note-text">
+                        <strong>Lưu ý quan trọng:</strong> Vui lòng chuyển <strong>chính xác số tiền</strong> và ghi đúng <strong>nội dung chuyển khoản</strong> để hệ thống tự động xác nhận đơn hàng. Sai nội dung có thể làm chậm quá trình xử lý.
+                    </div>
+                </div>
+
+                <div class="confirm-actions">
+                    <button class="btn btn-cancel" onclick="cancelOrder()">
+                        <i class="ti ti-x"></i>Hủy đơn
+                    </button>
+                    <button class="btn btn-confirm" onclick="confirmPayment()">
+                        <i class="ti ti-check"></i>Tôi đã chuyển khoản
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: SUMMARY -->
+        <aside>
+            <div class="summary-card">
+                <div class="summary-title">Chi tiết đơn hàng</div>
+
+                <div class="order-id-box">
+                    <div class="order-id-label">MÃ ĐƠN HÀNG</div>
+                    <div class="order-id-value" id="orderIdDisplay">#MNW0000000000</div>
+                </div>
+
+                <div class="mini-items" id="miniItems"></div>
+
+                <div class="summary-row">
+                    <span class="label">Tạm tính</span>
+                    <span class="value" id="sumSubtotal">0₫</span>
+                </div>
+                <div class="summary-row discount">
+                    <span class="label">Giảm giá</span>
+                    <span class="value" id="sumDiscount">0₫</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Vận chuyển</span>
+                    <span class="value" id="sumShipping">0₫</span>
+                </div>
+                <div class="summary-row total">
+                    <span class="label">Tổng cộng</span>
+                    <span class="value" id="sumTotal">0₫</span>
+                </div>
+
+                <div class="summary-receiver">
+                    <div class="summary-receiver-title">GIAO ĐẾN</div>
+                    <div class="summary-receiver-name" id="recvName">Trần Minh Khôi</div>
+                    <div class="summary-receiver-detail" id="recvPhone">0901 234 567</div>
+                    <div class="summary-receiver-detail" id="recvAddress">123 Nguyễn Huệ, Q1, TP.HCM</div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="/Products">Tất cả sản phẩm</a></li>
+                        <li><a href="#">Bộ sưu tập mới</a></li>
+                        <li><a href="#">Áo thun & Polo</a></li>
+                        <li><a href="#">Quần & Accessories</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-mid-row">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD"></i>
+                    <i class="ti ti-shield-check" title="Bảo mật"></i>
+                </div>
+            </div>
+        </div>
+
+
+    </footer>
+
+    <!-- PROCESSING MODAL -->
+    <div class="modal-overlay" id="processModal">
+        <div class="modal">
+            <div class="modal-spinner"></div>
+            <div class="modal-title">Đang xác nhận thanh toán...</div>
+            <div class="modal-desc">Vui lòng đợi trong giây lát</div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ===== Đọc order =====
+        let order = null;
+        try { order = JSON.parse(sessionStorage.getItem('monoOrder')); } catch (e) {}
+        if (!order || !order.items) {
+            order = {
+                items: [{ name: 'Áo sơ mi linen oversize', variant: 'Kem · Size M', unit: 525000, qty: 2, bgClass: 'bg-cream', icon: 'ti-shirt' }],
+                subtotal: 1050000, productDiscount: 0, voucherDiscount: 0, shipFee: 30000,
+                finalTotal: 1080000,
+                orderId: 'MNW' + Date.now().toString().slice(-10),
+                receiver: { name: 'Trần Minh Khôi', phone: '0901 234 567', address: '123 Nguyễn Huệ, Q1, TP.HCM' }
+            };
+        }
+
+        const finalTotal = order.finalTotal || (order.subtotal - (order.productDiscount||0) - (order.voucherDiscount||0) + (order.shipFee || order.shipping || 0));
+        const orderId = order.orderId || ('MNW' + Date.now().toString().slice(-10));
+
+        // ===== Render =====
+        document.getElementById('orderIdDisplay').textContent = '#' + orderId;
+        document.getElementById('transferContent').textContent = orderId;
+        document.getElementById('transferAmount').textContent = finalTotal.toLocaleString('vi-VN') + '₫';
+        document.getElementById('sumSubtotal').textContent = order.subtotal.toLocaleString('vi-VN') + '₫';
+        const totalDiscount = (order.productDiscount || 0) + (order.voucherDiscount || 0);
+        document.getElementById('sumDiscount').textContent = '-' + totalDiscount.toLocaleString('vi-VN') + '₫';
+        const shipFee = order.shipFee != null ? order.shipFee : (order.shipping || 0);
+        document.getElementById('sumShipping').textContent = shipFee === 0 ? 'Miễn phí' : shipFee.toLocaleString('vi-VN') + '₫';
+        document.getElementById('sumTotal').textContent = finalTotal.toLocaleString('vi-VN') + '₫';
+
+        if (order.receiver) {
+            document.getElementById('recvName').textContent = order.receiver.name;
+            document.getElementById('recvPhone').textContent = order.receiver.phone;
+            document.getElementById('recvAddress').textContent = order.receiver.address;
+        }
+
+        // Mini items
+        const miniContainer = document.getElementById('miniItems');
+        order.items.forEach(it => {
+            const isDark = ['bg-dark','bg-blue','bg-brown','bg-green'].includes(it.bgClass);
+            const div = document.createElement('div');
+            div.className = 'mini-item';
+            div.innerHTML = `
+                <div class="mini-img ${it.bgClass || 'bg-cream'} ${isDark ? 'dark' : ''}">
+                    <i class="ti ${it.icon || 'ti-shirt'}"></i>
+                    <span class="mini-qty">${it.qty}</span>
+                </div>
+                <div class="mini-info">
+                    <div class="mini-name">${it.name}</div>
+                    <div class="mini-variant">${it.variant || ''}</div>
+                </div>
+                <div class="mini-price">${(it.unit * it.qty).toLocaleString('vi-VN')}₫</div>
+            `;
+            miniContainer.appendChild(div);
+        });
+
+        // ===== Countdown 15 phút =====
+        let timeLeft = 15 * 60;
+        const countdownEl = document.getElementById('countdown');
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                countdownEl.textContent = '00:00';
+                showToast('warning', 'Hết thời gian giữ đơn', 'Đơn hàng có thể đã bị hủy. Vui lòng đặt lại.');
+                return;
+            }
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            countdownEl.textContent = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+            if (timeLeft <= 60) countdownEl.style.animation = 'blink 1s infinite';
+        }, 1000);
+
+        // ===== Copy functions =====
+        function copyText(text, btn) {
+            doCopy(text, btn);
+        }
+        function copyAmount(btn) {
+            doCopy(String(finalTotal), btn);
+        }
+        function copyContent(btn) {
+            doCopy(orderId, btn);
+        }
+        function doCopy(text, btn) {
+            const success = () => {
+                btn.classList.add('copied');
+                btn.innerHTML = '<i class="ti ti-check"></i>';
+                showToast('success', 'Đã sao chép', 'Nội dung đã được copy vào clipboard');
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<i class="ti ti-copy"></i>';
+                }, 2000);
+            };
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(success).catch(success);
+            } else {
+                success();
+            }
+        }
+
+        // ===== Confirm payment =====
+        function confirmPayment() {
+            document.getElementById('processModal').classList.add('show');
+            // Mô phỏng xác nhận thanh toán
+            setTimeout(() => {
+                order.status = 'paid';
+                order.payMethodLabel = 'Chuyển khoản ngân hàng';
+                try { sessionStorage.setItem('monoOrder', JSON.stringify(order)); } catch (e) {}
+                window.location.href = '/Home/OrderSuccess';
+            }, 2500);
+        }
+
+        // ===== Cancel =====
+        function cancelOrder() {
+            if (confirm('Bạn có chắc muốn hủy đơn hàng này?')) {
+                showToast('info', 'Đã hủy đơn hàng', 'Đang quay lại giỏ hàng...');
+                setTimeout(() => { window.location.href = '/Home/Cart'; }, 1000);
+            }
+        }
+
+        // ===== Toast =====
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: 'ti-circle-check', info: 'ti-info-circle', warning: 'ti-alert-circle' };
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+    </script>
+
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

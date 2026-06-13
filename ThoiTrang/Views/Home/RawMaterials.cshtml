@@ -1,0 +1,1694 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Raw Materials - Bản Giao Hưởng Của Sợi Tự Nhiên";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR · Bản Giao Hưởng Của Sợi Tự Nhiên</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #2a2820;
+            background: #e8e4d8;
+            line-height: 1.6;
+            overflow-x: clip;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes drift {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(8px, -10px);
+            }
+        }
+
+        @@keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes pulseDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.4);
+                opacity: 0.5;
+            }
+        }
+
+        @@keyframes growLine {
+            from {
+                transform: scaleX(0);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        @@keyframes scrollHint {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes floatLeaf {
+            0%, 100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 22px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(232,228,216,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: padding 0.3s;
+        }
+
+            .top-bar.scrolled {
+                padding: 14px 60px;
+            }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+            .back-link:hover {
+                opacity: 0.5;
+            }
+
+            .back-link i {
+                font-size: 16px;
+            }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+        }
+
+            .logo span {
+                font-weight: 200;
+            }
+
+        .top-actions {
+            display: flex;
+            gap: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+            .top-actions a {
+                transition: opacity 0.3s;
+            }
+
+                .top-actions a:hover {
+                    opacity: 0.5;
+                }
+
+        /* HERO - organic curves */
+        .hero {
+            min-height: 100vh;
+            background: #e8e4d8;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 60px 60px;
+        }
+
+        .hero-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            min-height: calc(100vh - 180px);
+            align-items: center;
+        }
+
+        .hero-left {
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #5a6e4e;
+            margin-bottom: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+            .hero-eyebrow::before {
+                content: '';
+                width: 32px;
+                height: 1px;
+                background: #5a6e4e;
+                transform-origin: left;
+                animation: growLine 1s ease 0.3s both;
+            }
+
+        .hero-title {
+            font-size: clamp(48px, 7.5vw, 108px);
+            font-weight: 400;
+            line-height: 1.02;
+            letter-spacing: -2.5px;
+            margin-bottom: 32px;
+        }
+
+            .hero-title em {
+                font-style: italic;
+                color: #5a6e4e;
+            }
+
+        .hero-desc {
+            font-size: 16px;
+            line-height: 1.85;
+            color: #4a4838;
+            max-width: 460px;
+            margin-bottom: 36px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 36px;
+            padding-top: 28px;
+            border-top: 1.5px solid rgba(90,110,78,0.3);
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #5a6e4e;
+            font-weight: 600;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+            .hero-meta strong {
+                display: block;
+                color: #2a2820;
+                font-size: 14px;
+                margin-bottom: 4px;
+                letter-spacing: 1px;
+                font-weight: 500;
+            }
+
+        .hero-right {
+            position: relative;
+            aspect-ratio: 1/1.1;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-photo {
+            position: absolute;
+            inset: 0;
+            background: #b8c5a8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            .hero-photo i {
+                font-size: 200px;
+                color: rgba(90,110,78,0.5);
+                animation: floatLeaf 5s ease-in-out infinite;
+            }
+
+        .hero-photo-tag {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.85);
+            text-transform: uppercase;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-photo-info {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            color: #fff;
+        }
+
+            .hero-photo-info .label {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                opacity: 0.8;
+                margin-bottom: 6px;
+            }
+
+            .hero-photo-info .name {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 22px;
+                font-weight: 400;
+            }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #5a6e4e;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+            .hero-scroll-hint i {
+                font-size: 18px;
+                animation: scrollHint 1.8s ease infinite;
+            }
+
+        /* QUOTE BAND */
+        .quote-band {
+            padding: 80px 60px;
+            background: #5a6e4e;
+            color: #e8e4d8;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .quote-band::before {
+                content: '"';
+                position: absolute;
+                top: -40px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: 'Playfair Display', serif;
+                font-size: 280px;
+                color: rgba(255,255,255,0.08);
+                line-height: 1;
+                pointer-events: none;
+            }
+
+        .quote-band-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 3vw, 38px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.5;
+            letter-spacing: -0.5px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote-band-author {
+            margin-top: 28px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #c5cdba;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* MATERIALS GRID - 4 sợi đặc trưng */
+        .materials {
+            padding: 130px 60px;
+        }
+
+        .sec-head {
+            max-width: 1400px;
+            margin: 0 auto 70px;
+        }
+
+        .sec-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #5a6e4e;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .sec-title {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            font-family: 'Playfair Display', Georgia, serif;
+            max-width: 900px;
+        }
+
+            .sec-title em {
+                font-style: italic;
+                color: #5a6e4e;
+            }
+
+        .sec-desc {
+            font-size: 15px;
+            color: #4a4838;
+            line-height: 1.85;
+            max-width: 600px;
+            margin-top: 24px;
+        }
+
+        .materials-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px 50px;
+        }
+
+        .material-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+            .material-card.reverse .material-img-wrap {
+                order: 2;
+            }
+
+        .material-img-wrap {
+            aspect-ratio: 3/4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .material-img {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+            .material-img:hover {
+                transform: scale(1.03);
+            }
+
+            .material-img i {
+                font-size: 100px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.6s;
+            }
+
+            .material-img.dark i {
+                color: rgba(255,255,255,0.25);
+            }
+
+            .material-img:hover i {
+                transform: rotate(8deg) scale(1.1);
+            }
+
+        .mat-bg-1 {
+            background: #d4cdb6;
+        }
+
+        .mat-bg-2 {
+            background: #6a5a42;
+        }
+
+        .mat-bg-3 {
+            background: #b8c5a8;
+        }
+
+        .mat-bg-4 {
+            background: #2c2c28;
+        }
+
+        .mat-tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.85);
+            background: rgba(0,0,0,0.4);
+            padding: 5px 10px;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .mat-bg-1 .mat-tag, .mat-bg-3 .mat-tag {
+            background: rgba(255,255,255,0.85);
+            color: #2a2820;
+        }
+
+        .material-info {
+            padding-top: 8px;
+        }
+
+        .material-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #8a8470;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .material-num::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(90,110,78,0.3);
+            }
+
+        .material-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+            .material-info h3 em {
+                font-style: italic;
+                color: #5a6e4e;
+            }
+
+        .material-info p {
+            font-size: 14px;
+            color: #4a4838;
+            line-height: 1.85;
+            margin-bottom: 22px;
+        }
+
+        .material-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #5a6e4e;
+            padding-top: 16px;
+            border-top: 1px solid rgba(90,110,78,0.25);
+        }
+
+            .material-specs .spec {
+                display: flex;
+                justify-content: space-between;
+            }
+
+                .material-specs .spec span:last-child {
+                    color: #2a2820;
+                    font-weight: 500;
+                }
+
+        /* PROCESS - 5 bước nhuộm tự nhiên */
+        .process {
+            padding: 130px 60px;
+            background: #d4cdb6;
+        }
+
+        .process-list {
+            max-width: 1000px;
+            margin: 60px auto 0;
+            position: relative;
+        }
+
+            .process-list::before {
+                content: '';
+                position: absolute;
+                left: 38px;
+                top: 0;
+                bottom: 0;
+                width: 1.5px;
+                background: rgba(90,110,78,0.3);
+            }
+
+        .process-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 200px;
+            gap: 40px;
+            padding: 28px 0;
+            align-items: start;
+            position: relative;
+        }
+
+        .process-num {
+            width: 76px;
+            height: 76px;
+            background: #e8e4d8;
+            border: 1.5px solid #5a6e4e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-style: italic;
+            color: #5a6e4e;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .process-content h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+            .process-content h4 em {
+                font-style: italic;
+                color: #5a6e4e;
+            }
+
+        .process-content p {
+            font-size: 14px;
+            color: #4a4838;
+            line-height: 1.85;
+        }
+
+        .process-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #5a6e4e;
+            font-weight: 600;
+            padding-top: 8px;
+            text-align: right;
+        }
+
+            .process-time strong {
+                display: block;
+                font-size: 16px;
+                color: #2a2820;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                margin-bottom: 2px;
+            }
+
+        /* COMPARISON - tự nhiên vs công nghiệp */
+        .comparison {
+            padding: 130px 60px;
+            background: #e8e4d8;
+        }
+
+        .comp-grid {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            border: 1.5px solid #5a6e4e;
+        }
+
+        .comp-col {
+            padding: 40px 36px;
+        }
+
+            .comp-col.natural {
+                background: #5a6e4e;
+                color: #e8e4d8;
+            }
+
+            .comp-col.synthetic {
+                background: #e8e4d8;
+                color: #2a2820;
+            }
+
+        .comp-col-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .comp-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 28px;
+            letter-spacing: -0.5px;
+        }
+
+            .comp-col h3 em {
+                font-style: italic;
+            }
+
+        .comp-col.natural h3 em {
+            color: #c5cdba;
+        }
+
+        .comp-col.synthetic h3 em {
+            color: #8a8470;
+        }
+
+        .comp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .comp-item {
+            display: flex;
+            gap: 12px;
+            align-items: start;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+            .comp-item i {
+                font-size: 18px;
+                flex-shrink: 0;
+                margin-top: 1px;
+            }
+
+        .comp-col.natural .comp-item i {
+            color: #b8c5a8;
+        }
+
+        .comp-col.synthetic .comp-item i {
+            color: #8a8470;
+        }
+
+        /* CINEMA - phong cảnh sợi */
+        .cinema-strip {
+            height: 65vh;
+            background: #6a5a42;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .cinema-strip i {
+                font-size: 320px;
+                color: rgba(255,255,255,0.08);
+                animation: drift 8s ease-in-out infinite;
+            }
+
+        .cinema-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #e8e4d8;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            z-index: 2;
+        }
+
+            .cinema-text small {
+                display: block;
+                font-family: 'JetBrains Mono', monospace;
+                font-style: normal;
+                font-size: 11px;
+                letter-spacing: 5px;
+                color: rgba(232,228,216,0.5);
+                margin-top: 24px;
+                text-transform: uppercase;
+            }
+
+        /* CERTIFICATIONS */
+        .certs {
+            padding: 130px 60px;
+            background: #d4cdb6;
+            text-align: center;
+        }
+
+        .certs-grid {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .cert-card {
+            background: #e8e4d8;
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid rgba(90,110,78,0.2);
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+            .cert-card:hover {
+                transform: translateY(-6px);
+                border-color: #5a6e4e;
+                box-shadow: 0 12px 30px rgba(90,110,78,0.12);
+            }
+
+        .cert-icon {
+            width: 60px;
+            height: 60px;
+            background: #5a6e4e;
+            color: #e8e4d8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 20px;
+        }
+
+        .cert-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .cert-desc {
+            font-size: 12px;
+            color: #5a6e4e;
+            line-height: 1.7;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        /* STORY - origin của sợi */
+        .origins {
+            padding: 130px 60px;
+            background: #e8e4d8;
+        }
+
+        .origins-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .origins-map {
+            aspect-ratio: 1;
+            background: #b8c5a8;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            .origins-map i {
+                font-size: 180px;
+                color: rgba(90,110,78,0.4);
+            }
+
+        .origins-pin {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .origins-pin .dot {
+                width: 14px;
+                height: 14px;
+                background: #5a6e4e;
+                border: 3px solid #e8e4d8;
+                border-radius: 50%;
+                animation: pulseDot 1.8s ease infinite;
+            }
+
+            .origins-pin .label {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                letter-spacing: 2px;
+                background: #2a2820;
+                color: #e8e4d8;
+                padding: 4px 8px;
+                text-transform: uppercase;
+            }
+
+        .pin-1 {
+            top: 25%;
+            left: 18%;
+        }
+
+        .pin-2 {
+            top: 40%;
+            left: 55%;
+        }
+
+        .pin-3 {
+            top: 60%;
+            left: 30%;
+        }
+
+        .pin-4 {
+            top: 70%;
+            left: 65%;
+        }
+
+        .origins-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 4.5vw, 56px);
+            font-weight: 400;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+            .origins-text h2 em {
+                font-style: italic;
+                color: #5a6e4e;
+            }
+
+        .origins-text p {
+            font-size: 15px;
+            color: #4a4838;
+            line-height: 1.85;
+            margin-bottom: 16px;
+        }
+
+        .origins-pins-list {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .pin-list-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(90,110,78,0.2);
+            letter-spacing: 0.5px;
+        }
+
+            .pin-list-row strong {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 16px;
+                font-weight: 500;
+                color: #2a2820;
+                letter-spacing: 0;
+            }
+
+            .pin-list-row span {
+                color: #5a6e4e;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+        /* CTA */
+        .cta {
+            padding: 140px 60px;
+            text-align: center;
+            background: #5a6e4e;
+            color: #e8e4d8;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .cta::before {
+                content: '';
+                position: absolute;
+                top: -100px;
+                left: -100px;
+                width: 300px;
+                height: 300px;
+                background: radial-gradient(circle, rgba(232,228,216,0.15), transparent 70%);
+                filter: blur(30px);
+                pointer-events: none;
+            }
+
+            .cta::after {
+                content: '';
+                position: absolute;
+                bottom: -100px;
+                right: -100px;
+                width: 350px;
+                height: 350px;
+                background: radial-gradient(circle, rgba(232,228,216,0.1), transparent 70%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .cta-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #c5cdba;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 6vw, 88px);
+            font-weight: 400;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            max-width: 1000px;
+            margin: 0 auto 28px;
+            position: relative;
+            z-index: 2;
+        }
+
+            .cta h2 em {
+                font-style: italic;
+                color: #c5cdba;
+            }
+
+        .cta-desc {
+            font-size: 15px;
+            color: rgba(232,228,216,0.75);
+            max-width: 540px;
+            margin: 0 auto 40px;
+            line-height: 1.85;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-buttons {
+            display: inline-flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1.5px solid #e8e4d8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #e8e4d8;
+            color: #5a6e4e;
+        }
+
+            .btn-primary:hover {
+                background: transparent;
+                color: #e8e4d8;
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: #e8e4d8;
+        }
+
+            .btn-outline:hover {
+                background: #e8e4d8;
+                color: #5a6e4e;
+            }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+        .editorial-footer {
+            background: #2a2820;
+            color: #c5cdba;
+            padding: 50px 60px 30px;
+            text-align: center;
+        }
+
+        .ef-marquee {
+            overflow: hidden;
+            padding-bottom: 36px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 36px;
+        }
+
+        .ef-marquee-track {
+            display: inline-flex;
+            gap: 50px;
+            white-space: nowrap;
+            animation: ticker 22s linear infinite;
+        }
+
+            .ef-marquee-track span {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 22px;
+                color: rgba(197, 205, 186, 0.7);
+            }
+
+        .ef-bottom {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #5a6e4e;
+            color: #e8e4d8;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+            }
+
+        @@media (max-width: 1024px) {
+            .top-bar, .top-bar.scrolled {
+                padding: 16px 20px;
+            }
+
+            .top-actions {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-inner, .materials-grid, .comp-grid, .origins-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-scroll-hint {
+                left: 20px;
+            }
+
+            .quote-band, .materials, .process, .comparison, .certs, .origins, .cta, .editorial-footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .material-card {
+                grid-template-columns: 1fr;
+            }
+
+                .material-card.reverse .material-img-wrap {
+                    order: 0;
+                }
+
+            .process-row {
+                grid-template-columns: 60px 1fr;
+                gap: 20px;
+            }
+
+            .process-time {
+                grid-column: 1 / -1;
+                text-align: left;
+                padding-top: 0;
+            }
+
+            .process-num {
+                width: 60px;
+                height: 60px;
+                font-size: 22px;
+            }
+
+            .process-list::before {
+                left: 30px;
+            }
+
+            .certs-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .certs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-meta {
+                gap: 20px;
+            }
+
+            .comp-col {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar" id="topBar">
+        <a href="/" class="back-link"><i class="ti ti-arrow-left"></i><span>Quay lại</span></a>
+        <a href="/" class="logo">MONO<span>.WEAR</span></a>
+        <div class="top-actions">
+            <a href="#">Sustainability</a>
+            <a href="#">Shop</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-eyebrow">RAW MATERIALS FOCUS</div>
+                <h1 class="hero-title serif">Bản Giao Hưởng<br />Của <em>Sợi Tự Nhiên</em></h1>
+                <p class="hero-desc">Nâng niu làn da bằng nguồn sợi thô thượng hạng từ <strong>sợi lanh dệt tay</strong> phối lụa tơ tằm nguyên bản. Sự cân bằng hoàn hảo giữa tính thô mộc và tinh tế cao cấp.</p>
+                <div class="hero-meta">
+                    <div>
+                        <strong>4 Sợi</strong>
+                        Chính trong BST
+                    </div>
+                    <div>
+                        <strong>100%</strong>
+                        Tự nhiên · Hữu cơ
+                    </div>
+                    <div>
+                        <strong>5 Quốc gia</strong>
+                        Nguồn nguyên liệu
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-photo">
+                    <span class="hero-photo-tag">FIBER STUDY · 001</span>
+                    <i class="ti ti-feather"></i>
+                    <div class="hero-photo-info">
+                        <div class="label">— PRIMARY FIBER</div>
+                        <div class="name serif">Sợi Lanh Dệt Tay</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <i class="ti ti-chevron-down"></i>
+            <span>KHÁM PHÁ CHẤT LIỆU</span>
+        </div>
+    </section>
+
+    <!-- QUOTE BAND -->
+    <section class="quote-band">
+        <div class="quote-band-text serif">
+            Chất liệu tốt không cần <em>tô vẽ</em>.<br />
+            Nó chỉ cần được để cho <em>tỏa sáng</em><br />
+            theo cách tự nhiên nhất.
+        </div>
+        <div class="quote-band-author">— MONO.WEAR DESIGN PHILOSOPHY</div>
+    </section>
+
+    <!-- MATERIALS GRID -->
+    <section class="materials">
+        <div class="sec-head">
+            <div class="sec-label">— THE FIBERS</div>
+            <h2 class="sec-title serif">Bốn loại sợi —<br /><em>bốn câu chuyện</em></h2>
+            <p class="sec-desc">Mỗi loại sợi được tuyển chọn từ một vùng đất riêng, mang theo đặc tính khí hậu và kỹ thuật canh tác của vùng đó.</p>
+        </div>
+
+        <div class="materials-grid">
+
+            <!-- Sợi 1: Lanh -->
+            <div class="material-card">
+                <div class="material-img-wrap">
+                    <div class="material-img mat-bg-1">
+                        <span class="mat-tag">FIBER 01 · LINEN</span>
+                        <i class="ti ti-feather"></i>
+                    </div>
+                </div>
+                <div class="material-info">
+                    <div class="material-num">N° 01 / 04</div>
+                    <h3>Sợi <em>lanh</em> Bỉ</h3>
+                    <p>Lanh được trồng tại vùng Flanders, Bỉ — vùng đất có khí hậu lý tưởng cho cây lanh phát triển. Sợi được kéo bằng phương pháp dew retting, dệt thủ công trên khung gỗ truyền thống.</p>
+                    <div class="material-specs">
+                        <div class="spec"><span>Xuất xứ</span><span>Flanders, Bỉ</span></div>
+                        <div class="spec"><span>Density</span><span>180 - 220 GSM</span></div>
+                        <div class="spec"><span>Kỹ thuật</span><span>Dệt tay 4 trục</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sợi 2: Tơ tằm -->
+            <div class="material-card reverse">
+                <div class="material-img-wrap">
+                    <div class="material-img mat-bg-2 dark">
+                        <span class="mat-tag">FIBER 02 · SILK</span>
+                        <i class="ti ti-droplet"></i>
+                    </div>
+                </div>
+                <div class="material-info">
+                    <div class="material-num">N° 02 / 04</div>
+                    <h3>Tơ <em>tằm</em> Bảo Lộc</h3>
+                    <p>Tơ tằm thuần Việt nguyên bản từ Bảo Lộc, Lâm Đồng. Tằm được nuôi bằng lá dâu trồng hữu cơ, kén được kéo thủ công bởi nghệ nhân với 30 năm kinh nghiệm.</p>
+                    <div class="material-specs">
+                        <div class="spec"><span>Xuất xứ</span><span>Bảo Lộc, Việt Nam</span></div>
+                        <div class="spec"><span>Density</span><span>16 - 22 momme</span></div>
+                        <div class="spec"><span>Kỹ thuật</span><span>Kéo kén thủ công</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sợi 3: Cotton -->
+            <div class="material-card">
+                <div class="material-img-wrap">
+                    <div class="material-img mat-bg-3">
+                        <span class="mat-tag">FIBER 03 · COTTON</span>
+                        <i class="ti ti-leaf"></i>
+                    </div>
+                </div>
+                <div class="material-info">
+                    <div class="material-num">N° 03 / 04</div>
+                    <h3>Bông <em>Pima</em> Peru</h3>
+                    <p>Loại bông cao cấp nhất thế giới, sợi dài 3.5cm — gấp đôi cotton thường. Trồng tại thung lũng Piura, Peru, hái thủ công để giữ sợi nguyên vẹn không gãy.</p>
+                    <div class="material-specs">
+                        <div class="spec"><span>Xuất xứ</span><span>Piura, Peru</span></div>
+                        <div class="spec"><span>Độ dài sợi</span><span>34 - 36 mm</span></div>
+                        <div class="spec"><span>Hand-pick</span><span>100% thủ công</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sợi 4: Wool -->
+            <div class="material-card reverse">
+                <div class="material-img-wrap">
+                    <div class="material-img mat-bg-4 dark">
+                        <span class="mat-tag">FIBER 04 · WOOL</span>
+                        <i class="ti ti-snowflake"></i>
+                    </div>
+                </div>
+                <div class="material-info">
+                    <div class="material-num">N° 04 / 04</div>
+                    <h3>Len <em>Merino</em> Úc</h3>
+                    <p>Len Merino từ vùng New South Wales, Úc — nơi cừu được nuôi tự do trên đồng cỏ rộng. Sợi siêu mịn 17.5 micron, không gây ngứa, ấm áp tự nhiên không cần xử lý hóa học.</p>
+                    <div class="material-specs">
+                        <div class="spec"><span>Xuất xứ</span><span>NSW, Australia</span></div>
+                        <div class="spec"><span>Độ mịn</span><span>17.5 micron</span></div>
+                        <div class="spec"><span>Animal welfare</span><span>Mulesing-free</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PROCESS - quy trình nhuộm tự nhiên -->
+    <section class="process">
+        <div class="sec-head">
+            <div class="sec-label">— NATURAL DYE PROCESS</div>
+            <h2 class="sec-title serif">Quy trình <em>nhuộm</em><br />từ thiên nhiên</h2>
+            <p class="sec-desc">Không hóa chất tổng hợp. Mỗi sắc màu đến từ một loài cây, một loại đất, một câu chuyện riêng.</p>
+        </div>
+
+        <div class="process-list">
+            <div class="process-row">
+                <div class="process-num serif">I</div>
+                <div class="process-content">
+                    <h4>Thu hái <em>nguyên liệu</em></h4>
+                    <p>Vỏ óc chó, lá chè xanh, rễ cây madder, đất sét đỏ Phú Yên... được thu hái bởi nông dân địa phương, đúng mùa, không sử dụng máy móc lớn.</p>
+                </div>
+                <div class="process-time"><strong>3-7 ngày</strong>theo mùa</div>
+            </div>
+
+            <div class="process-row">
+                <div class="process-num serif">II</div>
+                <div class="process-content">
+                    <h4>Ninh <em>chiết xuất</em></h4>
+                    <p>Nguyên liệu được ninh trong nồi đồng truyền thống với nhiệt độ kiểm soát chính xác, kéo dài 8-24 giờ để chiết hết sắc tố tự nhiên.</p>
+                </div>
+                <div class="process-time"><strong>24 giờ</strong>ninh kỹ</div>
+            </div>
+
+            <div class="process-row">
+                <div class="process-num serif">III</div>
+                <div class="process-content">
+                    <h4>Mordant <em>cố định màu</em></h4>
+                    <p>Sử dụng phèn nhôm thiên nhiên và oxide sắt làm chất gắn màu — hoàn toàn không độc hại, an toàn cho da nhạy cảm và trẻ em.</p>
+                </div>
+                <div class="process-time"><strong>6 giờ</strong>cố định</div>
+            </div>
+
+            <div class="process-row">
+                <div class="process-num serif">IV</div>
+                <div class="process-content">
+                    <h4>Nhúng <em>nhuộm sợi</em></h4>
+                    <p>Vải được nhúng 3-5 lần để đạt độ đậm mong muốn. Giữa mỗi lần nhúng là 4 giờ phơi nắng nhẹ — nắng giúp màu thấm sâu vào sợi.</p>
+                </div>
+                <div class="process-time"><strong>2-3 ngày</strong>nhuộm sâu</div>
+            </div>
+
+            <div class="process-row">
+                <div class="process-num serif">V</div>
+                <div class="process-content">
+                    <h4>Phơi <em>và hoàn thiện</em></h4>
+                    <p>Phơi trong bóng râm thoáng gió 5-7 ngày, không phơi nắng gắt. Mỗi mảnh vải đạt chuẩn sau khi giặt thử 3 lần — không phai, không bạc.</p>
+                </div>
+                <div class="process-time"><strong>1 tuần</strong>hoàn thiện</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="comparison">
+        <div class="sec-head">
+            <div class="sec-label">— THE DIFFERENCE</div>
+            <h2 class="sec-title serif">Sợi tự nhiên <em>vs</em><br />sợi tổng hợp</h2>
+        </div>
+
+        <div class="comp-grid">
+            <div class="comp-col natural">
+                <div class="comp-col-label">— OUR CHOICE</div>
+                <h3 class="serif">Sợi <em>tự nhiên</em></h3>
+                <div class="comp-list">
+                    <div class="comp-item">
+                        <i class="ti ti-check"></i>
+                        <span>Phân hủy sinh học 100% trong vòng 6 tháng</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-check"></i>
+                        <span>Thoáng khí — điều chỉnh nhiệt độ cơ thể tự nhiên</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-check"></i>
+                        <span>An toàn cho da nhạy cảm, không gây dị ứng</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-check"></i>
+                        <span>Càng giặt càng mềm, độ bền cao 10+ năm</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-check"></i>
+                        <span>Không phát thải vi nhựa khi giặt</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-col synthetic">
+                <div class="comp-col-label">— INDUSTRY STANDARD</div>
+                <h3 class="serif">Sợi <em>tổng hợp</em></h3>
+                <div class="comp-list">
+                    <div class="comp-item">
+                        <i class="ti ti-x"></i>
+                        <span>Cần 200+ năm để phân hủy, ô nhiễm môi trường</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-x"></i>
+                        <span>Bí hơi, giữ ẩm — gây khó chịu khi mặc lâu</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-x"></i>
+                        <span>Có thể gây kích ứng với da nhạy cảm</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-x"></i>
+                        <span>Mau xù, bạc màu sau 1-2 năm sử dụng</span>
+                    </div>
+                    <div class="comp-item">
+                        <i class="ti ti-x"></i>
+                        <span>Thải 700,000 vi nhựa mỗi lần giặt máy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMA -->
+    <section class="cinema-strip">
+        <i class="ti ti-leaf"></i>
+        <div class="cinema-text serif">
+            Tự Nhiên
+            <small>NATURE WEAVES THE BEST DESIGNS</small>
+        </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="certs">
+        <div class="sec-head" style="text-align: center;">
+            <div class="sec-label">— CERTIFIED &amp; VERIFIED</div>
+            <h2 class="sec-title serif" style="margin: 0 auto;">Chứng nhận <em>toàn cầu</em></h2>
+            <p class="sec-desc" style="margin-left: auto; margin-right: auto;">Mỗi mảnh vải MONO.WEAR sử dụng đều có chứng nhận từ các tổ chức uy tín quốc tế.</p>
+        </div>
+
+        <div class="certs-grid">
+            <div class="cert-card">
+                <div class="cert-icon"><i class="ti ti-leaf"></i></div>
+                <div class="cert-name serif">GOTS</div>
+                <div class="cert-desc">Global Organic<br />Textile Standard</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon"><i class="ti ti-recycle"></i></div>
+                <div class="cert-name serif">OEKO-TEX 100</div>
+                <div class="cert-desc">Standard 100<br />Class I (Baby Safe)</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon"><i class="ti ti-heart-handshake"></i></div>
+                <div class="cert-name serif">Fairtrade</div>
+                <div class="cert-desc">Ethical Labor<br />&amp; Fair Wages</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-icon"><i class="ti ti-droplet"></i></div>
+                <div class="cert-name serif">Bluesign®</div>
+                <div class="cert-desc">Sustainable Water<br />&amp; Chemical Use</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ORIGINS -->
+    <section class="origins">
+        <div class="origins-inner">
+            <div class="origins-map">
+                <i class="ti ti-world"></i>
+                <div class="origins-pin pin-1">
+                    <span class="dot"></span>
+                    <span class="label">BỈ</span>
+                </div>
+                <div class="origins-pin pin-2">
+                    <span class="dot"></span>
+                    <span class="label">VN</span>
+                </div>
+                <div class="origins-pin pin-3">
+                    <span class="dot"></span>
+                    <span class="label">PERU</span>
+                </div>
+                <div class="origins-pin pin-4">
+                    <span class="dot"></span>
+                    <span class="label">ÚC</span>
+                </div>
+            </div>
+
+            <div class="origins-text">
+                <div class="sec-label">— GLOBAL ORIGINS</div>
+                <h2 class="serif">Năm châu lục —<br /><em>một bộ sưu tập</em></h2>
+                <p>Để có được những mảnh vải đẹp nhất, chúng tôi đi đến tận nơi — nơi cây lanh được trồng, nơi tằm được nuôi, nơi cừu được chăm sóc. Chỉ những nông dân và nghệ nhân lành nghề nhất mới được chọn làm đối tác.</p>
+                <p>Mỗi chuyến đi là một câu chuyện. Mỗi câu chuyện là một mảnh trong bản giao hưởng dệt nên thương hiệu MONO.WEAR.</p>
+
+                <div class="origins-pins-list">
+                    <div class="pin-list-row">
+                        <strong>Flanders, Bỉ</strong>
+                        <span>SỢI LANH</span>
+                    </div>
+                    <div class="pin-list-row">
+                        <strong>Bảo Lộc, Việt Nam</strong>
+                        <span>TƠ TẰM</span>
+                    </div>
+                    <div class="pin-list-row">
+                        <strong>Piura, Peru</strong>
+                        <span>BÔNG PIMA</span>
+                    </div>
+                    <div class="pin-list-row">
+                        <strong>NSW, Australia</strong>
+                        <span>LEN MERINO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-label">— EXPERIENCE THE FIBERS</div>
+        <h2 class="serif">Chạm vào <em>nguồn cội</em><br />của thời trang bền vững</h2>
+        <p class="cta-desc">Xem các sản phẩm sử dụng những sợi này, hoặc đặt lịch trải nghiệm chất liệu thật tại showroom Sài Gòn.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">
+                Xem bộ sưu tập <i class="ti ti-arrow-right"></i>
+            </a>
+            <a href="#" class="btn btn-outline">
+                Đặt lịch showroom
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="editorial-footer">
+        <div class="ef-marquee">
+            <div class="ef-marquee-track">
+                <span>Raw Materials Focus</span><span>·</span>
+                <span>Bản Giao Hưởng</span><span>·</span>
+                <span>Của Sợi Tự Nhiên</span><span>·</span>
+                <span>4 Fibers · 5 Origins</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+                <span>Raw Materials Focus</span><span>·</span>
+                <span>Bản Giao Hưởng</span><span>·</span>
+                <span>Của Sợi Tự Nhiên</span><span>·</span>
+                <span>4 Fibers · 5 Origins</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+            </div>
+        </div>
+        <div class="ef-bottom">© 2026 MONO.WEAR · NATURAL FIBER PROGRAM · ALL RIGHTS RESERVED</div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <script>
+        const topBar = document.getElementById('topBar');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) topBar.classList.add('scrolled');
+            else topBar.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.9s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.material-card, .process-row, .comp-col, .cert-card, .pin-list-row').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

@@ -1,0 +1,75 @@
+@model ThoiTrang.Models.Entities.Product
+@{
+    // Lớp nền ảnh luân phiên theo Id
+    string[] bgs = { "bg-dark", "bg-cream", "bg-blue", "bg-gray", "bg-brown" };
+    var bg = bgs[Model.ProductId % bgs.Length];
+
+    // Icon theo loại sản phẩm
+    var name = (Model.Name ?? "").ToLower();
+    string icon = "ti-shirt";
+    if (name.Contains("sneaker") || name.Contains("giày") || name.Contains("giay")) icon = "ti-shoe";
+    else if (name.Contains("quần") || name.Contains("quan") || name.Contains("jean") || name.Contains("kaki") || name.Contains("váy") || name.Contains("vay")) icon = "ti-hanger";
+
+    // Phần trăm giảm giá
+    int discountPct = 0;
+    if (Model.OldPrice.HasValue && Model.OldPrice > 0 && Model.OldPrice > Model.Price)
+        discountPct = (int)Math.Round((1 - (double)(Model.Price / Model.OldPrice.Value)) * 100);
+
+    // Tổng tồn kho — để hiện "Hết hàng"
+    int totalStock = Model.Variants?.Sum(v => v.Stock) ?? 0;
+    bool soldOut = totalStock <= 0;
+
+    // Badge: ưu tiên Hết hàng, rồi % giảm giá, rồi MỚI, rồi BESTSELLER
+    string badgeHtml = "";
+    if (soldOut) badgeHtml = "<span class=\"badge-product\" style=\"background:#9ca3af;\">HẾT HÀNG</span>";
+    else if (discountPct > 0) badgeHtml = $"<span class=\"badge-product badge-sale\">-{discountPct}%</span>";
+    else if (Model.IsNew) badgeHtml = "<span class=\"badge-product badge-new\">MỚI</span>";
+    else if (Model.IsFeatured) badgeHtml = "<span class=\"badge-product badge-bestseller\">BESTSELLER</span>";
+
+    var cat = Model.Category?.Name?.ToUpper() ?? "SẢN PHẨM";
+    var colors = (Model.Variants ?? Enumerable.Empty<ThoiTrang.Models.Entities.ProductVariant>())
+        .Where(v => v.Color != null && !string.IsNullOrEmpty(v.Color!.HexCode))
+        .Select(v => v.Color!.HexCode!)
+        .Distinct().Take(5).ToList();
+}
+<a class="product" href="/Home/CTSP/@Model.ProductId" style="text-decoration:none;color:inherit;">
+    <div class="product-image @bg">
+        <i class="ti @icon product-icon"></i>
+        @Html.Raw(badgeHtml)
+        <i class="ti ti-heart icon-heart" title="Thêm vào yêu thích"
+           onclick="event.preventDefault();event.stopPropagation();var el=this;fetch('/Home/ToggleWishlist',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'productId=@Model.ProductId'}).then(function(r){if(r.status===401){window.location.href='/Home/DangNhap';return null;}return r.json();}).then(function(d){if(d&&d.success){if(d.added){el.classList.add('ti-heart-filled','active');el.classList.remove('ti-heart');}else{el.classList.remove('ti-heart-filled','active');el.classList.add('ti-heart');}var b=document.getElementById('wishBadge');if(b)b.textContent=d.count;}});"></i>
+        <div class="quick-actions">
+            <button type="button" class="quick-btn" title="Xem chi tiết"
+                    onclick="event.preventDefault();event.stopPropagation();window.location.href='/Home/CTSP/@Model.ProductId';"><i class="ti ti-eye"></i></button>
+            <button type="button" class="quick-btn" title="Thêm vào giỏ"
+                    onclick="event.preventDefault();event.stopPropagation();var b=this;fetch('/Home/AddProductToCart',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'productId=@Model.ProductId'}).then(function(r){if(r.status===401){if(window.showToast)showToast('info','Cần đăng nhập','Vui lòng đăng nhập để thêm vào giỏ hàng');setTimeout(function(){window.location.href='/Home/DangNhap';},1400);return null;}if(!r.ok){return r.json().then(function(e){throw new Error(e.message||'Không thêm được');});}return r.json();}).then(function(d){if(!d)return;var bd=document.querySelector('.cart-badge')||document.getElementById('headerCartBadge');if(bd){bd.textContent=d.count;bd.style.display='';}b.innerHTML='<i class=\'ti ti-check\'></i>';setTimeout(function(){b.innerHTML='<i class=\'ti ti-plus\'></i>';},1200);if(window.showToast)showToast('success','Đã thêm vào giỏ','Sản phẩm đã vào giỏ hàng');}).catch(function(err){if(window.showToast)showToast('warning','Không thêm được',err.message||'Thử lại sau');});"><i class="ti ti-plus"></i></button>
+        </div>
+    </div>
+    <div class="product-info">
+        <div class="product-cat">@cat</div>
+        <div class="product-name">@Model.Name</div>
+        <div class="product-colors">
+            @foreach (var hex in colors)
+            {
+                <div class="mini-color" style="background:@hex;border:1px solid rgba(0,0,0,.1);"></div>
+            }
+        </div>
+        <div class="product-price-row">
+            <div class="price-left">
+                <span class="price-current">@Model.Price.ToString("#,##0")₫</span>
+                @if (Model.OldPrice.HasValue && Model.OldPrice > 0)
+                {
+                    <span class="price-old">@Model.OldPrice.Value.ToString("#,##0")₫</span>
+                }
+            </div>
+            @if (discountPct > 0)
+            {
+                <div class="rating-mini" style="color:#d4537e;font-weight:600;">-@discountPct%</div>
+            }
+            else
+            {
+                <div class="rating-mini"><i class="ti ti-star-filled"></i>@Model.RatingAvg.ToString("0.0")</div>
+            }
+        </div>
+    </div>
+</a>

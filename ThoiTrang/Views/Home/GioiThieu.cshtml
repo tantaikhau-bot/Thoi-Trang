@@ -1,0 +1,2335 @@
+﻿@{
+    ViewData["Title"] = "Về chúng tôi";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Về chúng tôi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @@keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0) rotate(0);
+            }
+
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        @@keyframes rotate {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spotlight {
+            0%, 100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        @@keyframes textReveal {
+            from {
+                clip-path: inset(0 100% 0 0);
+            }
+
+            to {
+                clip-path: inset(0 0 0 0);
+            }
+        }
+
+        @@keyframes scrollHint {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(10px);
+                opacity: 0.4;
+            }
+        }
+
+        @@keyframes drawLine {
+            from {
+                stroke-dashoffset: 1000;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes blink {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+
+            25%, 75% {
+                opacity: 0;
+            }
+        }
+
+        @@keyframes morphBlob {
+            0%, 100% {
+                border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+            }
+
+            33% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+
+            66% {
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+            .reveal-left.active {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+            .reveal-right.active {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+        /* ============ ANNOUNCEMENT ============ */
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .announce::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                animation: shimmer 4s infinite;
+            }
+
+        /* ============ HEADER ============ */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .header.scrolled {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            transition: transform 0.3s;
+        }
+
+            .logo:hover {
+                transform: scale(1.05);
+            }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 560px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+            .search-box:focus-within {
+                background: #fff;
+                border-color: #1a1a1a;
+                box-shadow: 0 0 0 3px rgba(26,26,26,0.08);
+            }
+
+            .search-box i {
+                font-size: 18px;
+                color: #888;
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+            animation: pulse 2s infinite;
+        }
+
+        .cart-badge {
+            background: #1a1a1a;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #1a1a1a;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a:hover {
+                    color: #1a1a1a;
+                }
+
+                    .nav a:hover::after, .nav a.active::after {
+                        width: 100%;
+                    }
+
+                .nav a.active {
+                    color: #1a1a1a;
+                    font-weight: 500;
+                }
+
+            .nav .sale-badge {
+                background: #d4537e;
+                color: #fff;
+                font-size: 9px;
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: super;
+                animation: pulse 1.5s infinite;
+            }
+
+        /* ============ HERO ============ */
+        .about-hero {
+            min-height: 100vh;
+            background: #0a0a0a;
+            color: #fff;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            font-size: 28vw;
+            font-weight: 700;
+            color: rgba(255,255,255,0.03);
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            letter-spacing: -1vw;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212,83,126,0.4), transparent 70%);
+            filter: blur(60px);
+            animation: morphBlob 15s ease-in-out infinite, floatSlow 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+        }
+
+        .blob-2 {
+            bottom: -10%;
+            right: -10%;
+            background: radial-gradient(circle, rgba(226,133,107,0.35), transparent 70%);
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(74,93,154,0.3), transparent 70%);
+            animation-delay: -7s;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 32px;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease;
+        }
+
+            .hero-eyebrow .dot {
+                width: 8px;
+                height: 8px;
+                background: #2eb872;
+                border-radius: 50%;
+                animation: blink 1.5s infinite;
+            }
+
+        .about-hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 32px;
+            letter-spacing: -7px;
+        }
+
+            .about-hero h1 .line {
+                display: block;
+                overflow: hidden;
+            }
+
+                .about-hero h1 .line span {
+                    display: inline-block;
+                    transform: translateY(120%);
+                    animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+
+                .about-hero h1 .line:nth-child(1) span {
+                    animation-delay: 0.2s;
+                }
+
+                .about-hero h1 .line:nth-child(2) span {
+                    animation-delay: 0.4s;
+                }
+
+                .about-hero h1 .line:nth-child(3) span {
+                    animation-delay: 0.6s;
+                    background: linear-gradient(90deg, #d4537e, #e2856b);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-style: italic;
+                }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.6);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .hero-cta-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            animation: fadeInUp 1s ease 1.1s both;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 30px rgba(255,255,255,0.2);
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+            .btn-outline:hover {
+                background: rgba(255,255,255,0.1);
+                border-color: #fff;
+                transform: translateY(-3px);
+            }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollHint 2s ease-in-out infinite;
+            z-index: 5;
+        }
+
+            .scroll-hint i {
+                font-size: 20px;
+            }
+
+        /* ============ MARQUEE TEXT BAND ============ */
+        .marquee-band {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 32px 0;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: shimmer 0s; /* placeholder */
+        }
+
+        .marquee-content {
+            animation: marqueeMove 25s linear infinite;
+        }
+
+        @@keyframes marqueeMove {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-text {
+            font-size: 56px;
+            font-weight: 500;
+            letter-spacing: -1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+            .marquee-text .accent {
+                background: linear-gradient(90deg, #d4537e, #e2856b);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+             
+            }
+
+            .marquee-text .star {
+                color: #d4537e;
+                font-size: 32px;
+                display: inline-block;
+                animation: rotate 8s linear infinite;
+            }
+
+        /* ============ STATS ============ */
+        .stats-section {
+            padding: 120px 60px;
+            background: #fafafa;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            position: relative;
+        }
+
+        .stat {
+            text-align: center;
+            position: relative;
+        }
+
+            .stat::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: -20px;
+                transform: translateY(-50%);
+                width: 1px;
+                height: 80%;
+                background: #ddd;
+            }
+
+            .stat:last-child::before {
+                display: none;
+            }
+
+        .stat-number {
+            font-size: 72px;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #1a1a1a, #d4537e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        /* ============ STORY / MISSION ============ */
+        .story-section {
+            padding: 120px 60px;
+            background: #fff;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .story-visual {
+            position: relative;
+            height: 600px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .story-visual::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(212,83,126,0.3), transparent 60%);
+            }
+
+            .story-visual::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 70% 70%, rgba(226,133,107,0.2), transparent 60%);
+            }
+
+            .story-visual .floating-icon {
+                position: absolute;
+                font-size: 32px;
+                color: rgba(255,255,255,0.4);
+                animation: floatSlow 6s ease-in-out infinite;
+            }
+
+            .story-visual .icon-1 {
+                top: 15%;
+                left: 15%;
+                animation-delay: 0s;
+            }
+
+            .story-visual .icon-2 {
+                top: 25%;
+                right: 20%;
+                animation-delay: -2s;
+                font-size: 24px;
+            }
+
+            .story-visual .icon-3 {
+                bottom: 30%;
+                left: 25%;
+                animation-delay: -3s;
+                font-size: 28px;
+            }
+
+            .story-visual .icon-4 {
+                bottom: 20%;
+                right: 15%;
+                animation-delay: -4s;
+            }
+
+            .story-visual .icon-5 {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                animation-delay: -1s;
+                font-size: 40px;
+            }
+
+            .story-visual .main-icon {
+                position: relative;
+                z-index: 3;
+                font-size: 200px;
+                color: rgba(255,255,255,0.85);
+            }
+
+        .story-quote {
+            position: absolute;
+            bottom: 32px;
+            left: 32px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            font-style: italic;
+            z-index: 3;
+        }
+
+        .story-eyebrow {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #d4537e;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .story-section h2 {
+            font-size: 48px;
+            font-weight: 500;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+            .story-section h2 .italic {
+                font-style: italic;
+                background: linear-gradient(90deg, #1a1a1a, #d4537e);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .story-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 16px;
+        }
+
+        .story-list {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+            .story-list li {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                font-size: 14px;
+                list-style: none;
+            }
+
+            .story-list i {
+                width: 36px;
+                height: 36px;
+                background: #1a1a1a;
+                color: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+
+        /* ============ TIMELINE ============ */
+        .timeline-section {
+            padding: 120px 60px;
+            background: #1a1a1a;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .timeline-section::before {
+                content: '';
+                position: absolute;
+                top: -20%;
+                right: -10%;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(212,83,126,0.15), transparent 70%);
+                filter: blur(40px);
+                animation: floatSlow 12s ease-in-out infinite;
+            }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #d4537e;
+            margin-bottom: 16px;
+            padding: 6px 16px;
+            background: rgba(212,83,126,0.1);
+            border-radius: 999px;
+        }
+
+        .section-head h2 {
+            font-size: 56px;
+            font-weight: 500;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+            .section-head h2 .italic {
+                font-style: italic;
+                background: linear-gradient(90deg, #d4537e, #e2856b);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 0;
+                transform: translateX(-50%);
+                width: 2px;
+                height: 100%;
+                background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 90%, transparent);
+            }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+            .timeline-item:last-child {
+                margin-bottom: 0;
+            }
+
+        .timeline-content {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+            .timeline-content:hover {
+                transform: translateY(-6px);
+                background: rgba(255,255,255,0.08);
+                border-color: rgba(212,83,126,0.3);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            }
+
+        .timeline-item:nth-child(odd) .timeline-content:nth-child(1) {
+            grid-column: 1;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-empty {
+            grid-column: 3;
+        }
+
+        .timeline-item:nth-child(even) .timeline-empty {
+            grid-column: 1;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            grid-column: 3;
+        }
+
+        .timeline-year {
+            font-size: 14px;
+            font-weight: 500;
+            color: #d4537e;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+        }
+
+        .timeline-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.7;
+        }
+
+        .timeline-dot {
+            grid-column: 2;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 0 0 8px #1a1a1a, 0 0 0 9px rgba(212,83,126,0.3);
+            z-index: 2;
+            position: relative;
+        }
+
+            .timeline-dot::before {
+                content: '';
+                position: absolute;
+                inset: -12px;
+                border: 1px dashed rgba(212,83,126,0.4);
+                border-radius: 50%;
+                animation: rotate 20s linear infinite;
+            }
+
+        /* ============ VALUES ============ */
+        .values-section {
+            padding: 120px 60px;
+            background: #fafafa;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .value-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #eee;
+            cursor: pointer;
+        }
+
+            .value-card::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(212,83,126,0.08), transparent 70%);
+                transition: all 0.6s ease;
+            }
+
+            .value-card:hover {
+                transform: translateY(-10px);
+                border-color: transparent;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            }
+
+                .value-card:hover::before {
+                    top: -20%;
+                    right: -20%;
+                }
+
+        .value-icon {
+            width: 72px;
+            height: 72px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 28px;
+            transition: all 0.4s ease;
+        }
+
+        .value-card:hover .value-icon {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            transform: rotate(-8deg) scale(1.05);
+        }
+
+        .value-card h3 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .value-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .value-number {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 14px;
+            color: #ccc;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ============ TEAM ============ */
+        .team-section {
+            padding: 120px 60px;
+            background: #fff;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .team-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+            .team-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            }
+
+        .team-photo {
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .team-photo i {
+                font-size: 120px;
+                color: rgba(255,255,255,0.2);
+                transition: transform 0.6s ease;
+            }
+
+        .team-card:hover .team-photo i {
+            transform: scale(1.1);
+        }
+
+        .team-bg-1 {
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+        }
+
+        .team-bg-2 {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+        }
+
+        .team-bg-3 {
+            background: linear-gradient(135deg, #2c3e5e, #4a5d3a);
+        }
+
+        .team-bg-4 {
+            background: linear-gradient(135deg, #6b4423, #2c2c2a);
+        }
+
+        .team-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            color: #fff;
+            transform: translateY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .team-name {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 1px;
+        }
+
+        .team-social {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+        }
+
+        .team-card:hover .team-social {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .team-social a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.95);
+            color: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+            .team-social a:hover {
+                background: #d4537e;
+                color: #fff;
+            }
+
+        /* ============ TESTIMONIALS ============ */
+        .testimonial-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .testimonial-section::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 20% 50%, rgba(212,83,126,0.15), transparent 50%), radial-gradient(circle at 80% 50%, rgba(226,133,107,0.12), transparent 50%);
+            }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+            .testimonial:hover {
+                background: rgba(255,255,255,0.08);
+                transform: translateY(-6px);
+                border-color: rgba(212,83,126,0.3);
+            }
+
+        .testimonial-quote-icon {
+            font-size: 40px;
+            color: #d4537e;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 24px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .avatar-1 {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+        }
+
+        .avatar-2 {
+            background: linear-gradient(135deg, #4a5d3a, #2c3e5e);
+        }
+
+        .avatar-3 {
+            background: linear-gradient(135deg, #6b4423, #d4537e);
+        }
+
+        .testimonial-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .testimonial-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .testimonial-stars {
+            color: #f0b400;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        /* ============ CTA ============ */
+        .cta-section {
+            padding: 120px 60px;
+            background: #fafafa;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .cta-section::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 30% 50%, rgba(212,83,126,0.08), transparent 50%), radial-gradient(circle at 70% 50%, rgba(226,133,107,0.06), transparent 50%);
+            }
+
+        .cta-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: 56px;
+            font-weight: 500;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+            .cta-section h2 .italic {
+                font-style: italic;
+                background: linear-gradient(90deg, #d4537e, #e2856b);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .cta-section p {
+            font-size: 17px;
+            color: #666;
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn-dark {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+            .btn-dark:hover {
+                background: #000;
+                transform: translateY(-3px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            }
+
+        .btn-light {
+            background: #fff;
+            color: #1a1a1a;
+            border: 1px solid #ddd;
+        }
+
+            .btn-light:hover {
+                border-color: #1a1a1a;
+                transform: translateY(-3px);
+            }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 30px 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            padding-bottom: 0;
+        }
+
+            .footer-brand .footer-logo::after {
+                display: none;
+            }
+        /* Bỏ gạch chân cũ */
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+                text-transform: none; /* Trả về chữ thường tự nhiên như mẫu */
+                letter-spacing: 0;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter (Đăng ký nhận tin) */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Vùng Bottom (Bản quyền & Thanh toán) */
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* Responsive mượt mà cho máy tính bảng và điện thoại */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding: 50px 0 24px 0;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+
+        /* SCROLL TO TOP */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 52px;
+            height: 52px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                background: #000;
+                transform: translateY(-4px);
+            }
+
+        /* Progress bar */
+        .progress-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #d4537e, #e2856b);
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 1280px) {
+            .header-top, .nav, .stats-section, .story-section, .timeline-section, .values-section, .team-section, .testimonial-section, .cta-section, .footer {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 60px;
+            }
+
+            .stat::before {
+                display: none;
+            }
+
+            .story-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .story-visual {
+                height: 400px;
+            }
+
+            .values-grid, .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-head h2, .story-section h2, .cta-section h2 {
+                font-size: 38px;
+            }
+
+            .marquee-text {
+                font-size: 40px;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .timeline::before {
+                left: 30px;
+                transform: none;
+            }
+
+            .timeline-dot {
+                grid-column: 1;
+                justify-self: start;
+                margin-left: -10px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                grid-column: 1;
+                text-align: left;
+            }
+
+            .timeline-empty {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .header-top, .nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .nav {
+                gap: 20px;
+                overflow-x: auto;
+            }
+
+            .stats-section, .story-section, .timeline-section, .values-section, .team-section, .testimonial-section, .cta-section, .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+
+            .stat-number {
+                font-size: 52px;
+            }
+
+            .marquee-text {
+                font-size: 32px;
+            }
+
+            .values-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta-row, .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress bar -->
+    <div class="progress-line" id="progressLine"></div>
+
+    <div class="announce">
+        Miễn phí vận chuyển cho đơn hàng từ 500.000₫ · Đổi trả trong 30 ngày
+    </div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm áo, quần, phụ kiện..." />
+            </div>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a asp-controller="Home" asp-action="Index" >Trang chủ</a>
+
+            <a asp-controller="Home" asp-action="Nam" asp-route-id="nam">Nam</a>
+
+            <a asp-controller="Home" asp-action="Nu" asp-route-id="nu">Nữ</a>
+
+            <a asp-controller="Home" asp-action="MoiVe">Mới về</a>
+
+            <a asp-controller="Home" asp-action="BoSuuTap">Bộ sưu tập</a>
+
+            <a asp-controller="Home" asp-action="Sale">Sale</a>
+
+            <a asp-controller="Home" asp-action="GioiThieu" class="active">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="about-hero">
+        <div class="hero-bg-text">MONO</div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="dot"></span>
+                <span>EST. 2020 · MADE IN VIETNAM</span>
+            </div>
+            <h1>
+                <span class="line"><span>Chúng tôi không</span></span>
+                <span class="line"><span>bán quần áo,</span></span>
+                <span class="line"><span>chúng tôi tạo dấu ấn.</span></span>
+            </h1>
+            <p class="hero-subtitle">
+                MONO.WEAR là hành trình tôn vinh sự tinh giản — nơi mỗi đường cắt, mỗi chất liệu đều kể câu chuyện về phong cách sống có chủ đích.
+            </p>
+            <div class="hero-cta-row">
+                <button class="btn btn-primary">Khám phá câu chuyện <i class="ti ti-arrow-down"></i></button>
+                <button class="btn btn-outline">Xem bộ sưu tập</button>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span>CUỘN ĐỂ KHÁM PHÁ</span>
+            <i class="ti ti-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ============ MARQUEE BAND ============ -->
+    <div class="marquee-band">
+        <div class="marquee-content">
+            <div class="marquee-text">
+                Tối giản <span class="star">✦</span> Bền vững <span class="star">✦</span> <span class="accent">Tinh tế</span> <span class="star">✦</span> Phi giới tính <span class="star">✦</span> Made in Vietnam <span class="star">✦</span>
+                Tối giản <span class="star">✦</span> Bền vững <span class="star">✦</span> <span class="accent">Tinh tế</span> <span class="star">✦</span> Phi giới tính <span class="star">✦</span> Made in Vietnam <span class="star">✦</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ STATS ============ -->
+    <section class="stats-section reveal">
+        <div class="stat">
+            <div class="stat-number">Năm <span data-target="2020">0</span></div>
+            <div class="stat-label">NĂM HÌNH THÀNH</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number"><span class="counter" data-target="120">0</span>K+</div>
+            <div class="stat-label">KHÁCH HÀNG</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number"><span class="counter" data-target="850">0</span>+</div>
+            <div class="stat-label">THIẾT KẾ</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number"><span class="counter" data-target="98">0</span>%</div>
+            <div class="stat-label">HÀI LÒNG</div>
+        </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section class="story-section">
+        <div class="story-visual reveal-left">
+            <i class="ti ti-needle floating-icon icon-1"></i>
+            <i class="ti ti-scissors floating-icon icon-2"></i>
+            <i class="ti ti-hanger floating-icon icon-3"></i>
+            <i class="ti ti-sparkles floating-icon icon-4"></i>
+            <i class="ti ti-shirt main-icon"></i>
+            <div class="story-quote">"Less is more — Mies van der Rohe"</div>
+        </div>
+        <div class="reveal-right">
+            <div class="story-eyebrow">CÂU CHUYỆN CỦA CHÚNG TÔI</div>
+            <h2>Bắt đầu từ <span class="italic">một niềm tin</span> giản đơn.</h2>
+            <p>Năm 2020, giữa một thế giới thời trang ồn ào và đầy rẫy xu hướng nhanh, chúng tôi tin rằng vẻ đẹp thực sự nằm ở sự tiết chế.</p>
+            <p>MONO.WEAR ra đời từ ý tưởng đó — tạo ra những món đồ mà bạn sẽ mặc đi mặc lại trong nhiều năm, không bị lỗi mốt, không phải vứt đi.</p>
+            <ul class="story-list">
+                <li><i class="ti ti-check"></i>Thiết kế phi giới tính, ai cũng có thể mặc</li>
+                <li><i class="ti ti-check"></i>Chất liệu tự nhiên, thân thiện môi trường</li>
+                <li><i class="ti ti-check"></i>Sản xuất tại Việt Nam với người thợ địa phương</li>
+                <li><i class="ti ti-check"></i>Bảo hành trọn đời, đổi trả không giới hạn lý do</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ============ TIMELINE ============ -->
+    <section class="timeline-section">
+        <div class="section-head reveal">
+            <span class="section-eyebrow">HÀNH TRÌNH</span>
+            <h2>Sáu năm, một <span class="italic">hành trình</span></h2>
+        </div>
+
+        <div class="timeline">
+
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-title">Khởi đầu</div>
+                    <div class="timeline-desc">MONO.WEAR được thành lập tại TP. Hồ Chí Minh với 1 cửa hàng nhỏ và 12 thiết kế đầu tiên.</div>
+                </div>
+                <div class="timeline-dot"><i class="ti ti-seedling"></i></div>
+                <div class="timeline-empty"></div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-empty"></div>
+                <div class="timeline-dot"><i class="ti ti-trending-up"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-title">Mở rộng online</div>
+                    <div class="timeline-desc">Ra mắt website chính thức, phục vụ khách hàng trên toàn quốc với hệ thống vận chuyển 24h.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2022</div>
+                    <div class="timeline-title">Bộ sưu tập Genderless</div>
+                    <div class="timeline-desc">Ra mắt dòng sản phẩm phi giới tính đầu tiên, mở đường cho xu hướng thời trang mới.</div>
+                </div>
+                <div class="timeline-dot"><i class="ti ti-star"></i></div>
+                <div class="timeline-empty"></div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-empty"></div>
+                <div class="timeline-dot"><i class="ti ti-leaf"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-title">Sustainable Promise</div>
+                    <div class="timeline-desc">Cam kết 100% chất liệu hữu cơ, hợp tác với 8 làng nghề dệt truyền thống ở miền Bắc.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">Vươn ra thế giới</div>
+                    <div class="timeline-desc">Xuất khẩu sang Nhật Bản và Hàn Quốc, được lựa chọn vào Tokyo Fashion Week.</div>
+                </div>
+                <div class="timeline-dot"><i class="ti ti-world"></i></div>
+                <div class="timeline-empty"></div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-empty"></div>
+                <div class="timeline-dot"><i class="ti ti-rocket"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-title">Hôm nay & tương lai</div>
+                    <div class="timeline-desc">Hệ thống 12 cửa hàng toàn quốc, nền tảng .NET hiện đại, phục vụ hơn 120K khách hàng thân thiết.</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ VALUES ============ -->
+    <section class="values-section">
+        <div class="section-head reveal">
+            <span class="section-eyebrow" style="color: #d4537e; background: rgba(212,83,126,0.1);">GIÁ TRỊ CỐT LÕI</span>
+            <h2 style="color: #1a1a1a;">Điều chúng tôi <span class="italic">đặt lên hàng đầu</span></h2>
+        </div>
+
+        <div class="values-grid">
+
+            <div class="value-card reveal">
+                <span class="value-number">01</span>
+                <div class="value-icon"><i class="ti ti-diamond"></i></div>
+                <h3>Chất lượng vượt thời gian</h3>
+                <p>Mỗi sản phẩm đều trải qua 32 bước kiểm tra chất lượng. Chúng tôi tin vào việc mặc 10 năm thay vì 10 tháng.</p>
+            </div>
+
+            <div class="value-card reveal">
+                <span class="value-number">02</span>
+                <div class="value-icon"><i class="ti ti-leaf"></i></div>
+                <h3>Bền vững với môi trường</h3>
+                <p>100% chất liệu hữu cơ. Bao bì tái chế. Nhuộm tự nhiên. Mỗi đơn hàng đều đóng góp vào quỹ trồng rừng.</p>
+            </div>
+
+            <div class="value-card reveal">
+                <span class="value-number">03</span>
+                <div class="value-icon"><i class="ti ti-heart-handshake"></i></div>
+                <h3>Tôn trọng người thợ</h3>
+                <p>Hợp tác trực tiếp với 8 làng nghề tại Việt Nam. Mức lương cao hơn 35% so với thị trường ngành may mặc.</p>
+            </div>
+
+            <div class="value-card reveal">
+                <span class="value-number">04</span>
+                <div class="value-icon"><i class="ti ti-users"></i></div>
+                <h3>Phi giới tính, phi định kiến</h3>
+                <p>Quần áo không có giới tính. Phong cách dành cho bất kỳ ai dám là chính mình, dám sống đơn giản và sâu sắc.</p>
+            </div>
+
+            <div class="value-card reveal">
+                <span class="value-number">05</span>
+                <div class="value-icon"><i class="ti ti-shield-check"></i></div>
+                <h3>Cam kết trọn đời</h3>
+                <p>Bảo hành trọn đời. Đổi trả không giới hạn lý do trong 30 ngày. Sửa miễn phí khi sản phẩm hỏng do sử dụng bình thường.</p>
+            </div>
+
+            <div class="value-card reveal">
+                <span class="value-number">06</span>
+                <div class="value-icon"><i class="ti ti-bulb"></i></div>
+                <h3>Đổi mới không ngừng</h3>
+                <p>Ứng dụng công nghệ .NET hiện đại, AI gợi ý size, AR thử đồ ảo. Trải nghiệm mua sắm thời trang tương lai.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ TEAM ============ -->
+    <section class="team-section">
+        <div class="section-head reveal">
+            <span class="section-eyebrow" style="color: #d4537e; background: rgba(212,83,126,0.1);">ĐỘI NGŨ</span>
+            <h2 style="color: #1a1a1a;">Những người <span class="italic">đứng sau MONO</span></h2>
+        </div>
+
+        <div class="team-grid">
+
+            <div class="team-card reveal">
+                <div class="team-photo team-bg-1">
+                    <i class="ti ti-user"></i>
+                </div>
+                <div class="team-social">
+                    <a href="#"><i class="ti ti-brand-instagram"></i></a>
+                    <a href="#"><i class="ti ti-brand-linkedin"></i></a>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Trần Minh Khôi</div>
+                    <div class="team-role">FOUNDER & CEO</div>
+                </div>
+            </div>
+
+            <div class="team-card reveal">
+                <div class="team-photo team-bg-2">
+                    <i class="ti ti-user"></i>
+                </div>
+                <div class="team-social">
+                    <a href="#"><i class="ti ti-brand-instagram"></i></a>
+                    <a href="#"><i class="ti ti-brand-behance"></i></a>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Lê Thị Mai Anh</div>
+                    <div class="team-role">CREATIVE DIRECTOR</div>
+                </div>
+            </div>
+
+            <div class="team-card reveal">
+                <div class="team-photo team-bg-3">
+                    <i class="ti ti-user"></i>
+                </div>
+                <div class="team-social">
+                    <a href="#"><i class="ti ti-brand-linkedin"></i></a>
+                    <a href="#"><i class="ti ti-brand-github"></i></a>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Phạm Đức Anh</div>
+                    <div class="team-role">CTO · .NET LEAD</div>
+                </div>
+            </div>
+
+            <div class="team-card reveal">
+                <div class="team-photo team-bg-4">
+                    <i class="ti ti-user"></i>
+                </div>
+                <div class="team-social">
+                    <a href="#"><i class="ti ti-brand-instagram"></i></a>
+                    <a href="#"><i class="ti ti-brand-linkedin"></i></a>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Nguyễn Hà Linh</div>
+                    <div class="team-role">HEAD OF DESIGN</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ TESTIMONIALS ============ -->
+    <section class="testimonial-section">
+        <div class="section-head reveal">
+            <span class="section-eyebrow">KHÁCH HÀNG NÓI GÌ</span>
+            <h2>Lời cảm ơn từ <span class="italic">những người yêu MONO</span></h2>
+        </div>
+
+        <div class="testimonial-grid">
+
+            <div class="testimonial reveal">
+                <i class="ti ti-quote testimonial-quote-icon"></i>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Tôi đã mua MONO 3 năm và chưa bao giờ thất vọng. Áo vẫn như mới sau hàng trăm lần giặt. Chất lượng đáng đồng tiền."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar avatar-1">A</div>
+                    <div>
+                        <div class="testimonial-name">Anh Quang Huy</div>
+                        <div class="testimonial-role">Designer · TP.HCM</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial reveal">
+                <i class="ti ti-quote testimonial-quote-icon"></i>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Phong cách tối giản đúng gu của mình. Mua online mà giao nhanh, đổi trả dễ dàng. Sẽ tiếp tục ủng hộ thương hiệu Việt!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar avatar-2">L</div>
+                    <div>
+                        <div class="testimonial-name">Chị Lan Phương</div>
+                        <div class="testimonial-role">Marketing · Hà Nội</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial reveal">
+                <i class="ti ti-quote testimonial-quote-icon"></i>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Là một người đàn ông không thích shopping, MONO giúp tôi đỡ đau đầu. Mua một lần, mặc nhiều năm, luôn lịch sự ở mọi hoàn cảnh."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar avatar-3">D</div>
+                    <div>
+                        <div class="testimonial-name">Anh Đức Trí</div>
+                        <div class="testimonial-role">Kỹ sư · Đà Nẵng</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-section reveal">
+        <div class="cta-inner">
+            <h2>Sẵn sàng <span class="italic">bắt đầu</span> hành trình<br />tối giản của bạn?</h2>
+            <p>Khám phá bộ sưu tập mới nhất hoặc ghé thăm cửa hàng gần nhất để cảm nhận chất lượng thực sự.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-dark">Khám phá sản phẩm <i class="ti ti-arrow-right"></i></button>
+                <button class="btn btn-light">Tìm cửa hàng <i class="ti ti-map-pin"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Thời trang Nam</a></li>
+                        <li><a href="#">Thời trang Nữ</a></li>
+                        <li><a href="#">Sản phẩm mới về</a></li>
+                        <li><a href="#">Ưu đãi đặc biệt</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa Credit/Debit"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD khi nhận hàng"></i>
+                    <i class="ti ti-shield-check" title="Giao dịch bảo mật qua SSL"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+
+    <script>
+        // ============ Progress bar ============
+        const progressLine = document.getElementById('progressLine');
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+            progressLine.style.width = scrolled + '%';
+        });
+
+        // ============ Header shadow ============
+        const header = document.getElementById('header');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ============ Reveal animation ============
+        const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.15 });
+        reveals.forEach(r => observer.observe(r));
+
+        // ============ Counter animation ============
+        const counters = document.querySelectorAll('.stat-number [data-target]');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.dataset.target);
+                    let current = 0;
+                    const step = target / 60;
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            el.textContent = target;
+                            clearInterval(timer);
+                        } else {
+                            el.textContent = Math.floor(current);
+                        }
+                    }, 25);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => counterObserver.observe(c));
+
+
+
+        // ============ Parallax for hero blobs ============
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 30;
+            const y = (e.clientY / window.innerHeight - 0.5) * 30;
+            const blobs = document.querySelectorAll('.blob');
+            blobs.forEach((blob, i) => {
+                const factor = (i + 1) * 0.5;
+                blob.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+            });
+        });
+
+        // ============ Smooth scroll for hero CTA ============
+        document.querySelectorAll('.btn').forEach(btn => {
+            if (btn.textContent.includes('Khám phá câu chuyện')) {
+                btn.addEventListener('click', () => {
+                    document.querySelector('.story-section').scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+
+    <script src="/js/search.js"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

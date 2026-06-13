@@ -1,0 +1,1948 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Editorial Capsule - Cấu Trúc Tương Lai Cổ Điển";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR · Cấu Trúc Tương Lai Cổ Điển</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@@0,400;0,500;0,700;1,400;1,500&family=JetBrains+Mono:wght@@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #2a2438;
+            background: #ebe5eb;
+            line-height: 1.6;
+            overflow-x: clip;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes drift {
+            0%, 100% {
+                transform: translate(0,0) rotate(0);
+            }
+
+            50% {
+                transform: translate(-12px, 8px) rotate(-3deg);
+            }
+        }
+
+        @@keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes scissorSnip {
+            0%, 100% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
+        }
+
+        @@keyframes pulseDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+        }
+
+        @@keyframes growLine {
+            from {
+                transform: scaleX(0);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        @@keyframes scrollHint {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes rotateSlow {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 22px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(235,229,235,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(42,36,56,0.08);
+            transition: padding 0.3s;
+        }
+
+            .top-bar.scrolled {
+                padding: 14px 60px;
+            }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+            .back-link:hover {
+                opacity: 0.5;
+            }
+
+            .back-link i {
+                font-size: 16px;
+            }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+        }
+
+            .logo span {
+                font-weight: 200;
+            }
+
+        .top-actions {
+            display: flex;
+            gap: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+            .top-actions a {
+                transition: opacity 0.3s;
+            }
+
+                .top-actions a:hover {
+                    opacity: 0.5;
+                }
+
+        /* HERO - asymmetric editorial */
+        .hero {
+            min-height: 100vh;
+            background: #ebe5eb;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 60px 80px;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 60%;
+            left: -3%;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(160px, 22vw, 360px);
+            font-weight: 400;
+            color: rgba(120, 96, 144, 0.08);
+            letter-spacing: -8px;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .hero-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 60px;
+            min-height: calc(100vh - 200px);
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-left {
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #786090;
+            margin-bottom: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+            .hero-eyebrow::before {
+                content: '';
+                width: 36px;
+                height: 1px;
+                background: #786090;
+                transform-origin: left;
+                animation: growLine 1s ease 0.3s both;
+            }
+
+            .hero-eyebrow .num {
+                font-family: 'JetBrains Mono', monospace;
+                color: #2a2438;
+                font-weight: 700;
+            }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 400;
+            line-height: 0.98;
+            letter-spacing: -3px;
+            margin-bottom: 36px;
+        }
+
+            .hero-title em {
+                font-style: italic;
+                color: #786090;
+                font-weight: 500;
+            }
+
+            .hero-title .scissor {
+                display: inline-block;
+                font-size: 0.5em;
+                color: #786090;
+                transform: rotate(-15deg);
+                margin: 0 12px;
+                vertical-align: middle;
+            }
+
+        .hero-desc {
+            font-size: 17px;
+            line-height: 1.85;
+            color: #4a4060;
+            max-width: 520px;
+            margin-bottom: 32px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+            .hero-desc strong {
+                color: #2a2438;
+                font-weight: 500;
+            }
+
+        .hero-meta {
+            display: flex;
+            gap: 40px;
+            padding-top: 28px;
+            border-top: 1.5px solid rgba(120,96,144,0.3);
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #786090;
+            font-weight: 600;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+            .hero-meta strong {
+                display: block;
+                color: #2a2438;
+                font-size: 16px;
+                margin-bottom: 4px;
+                letter-spacing: 0.5px;
+                font-weight: 500;
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+            }
+
+        /* Hero right - architectural sketch */
+        .hero-right {
+            position: relative;
+            aspect-ratio: 3/4;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-photo {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #d4c8d4 0%, #b8a4c4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            .hero-photo i {
+                font-size: 180px;
+                color: rgba(255,255,255,0.55);
+                animation: scissorSnip 4s ease-in-out infinite;
+            }
+
+        .hero-photo-tag {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.9);
+            background: rgba(42,36,56,0.4);
+            padding: 6px 12px;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+        }
+
+        .hero-photo-num {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 56px;
+            color: rgba(255,255,255,0.85);
+            line-height: 1;
+            font-weight: 400;
+        }
+
+            .hero-photo-num small {
+                display: block;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                font-style: normal;
+                letter-spacing: 2px;
+                color: rgba(255,255,255,0.7);
+                margin-top: 6px;
+                text-transform: uppercase;
+            }
+
+        /* Small label corner */
+        .hero-corner-label {
+            position: absolute;
+            top: -16px;
+            right: -16px;
+            background: #2a2438;
+            color: #ebe5eb;
+            padding: 8px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transform: rotate(3deg);
+        }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #786090;
+            text-transform: uppercase;
+            font-weight: 600;
+            z-index: 3;
+        }
+
+            .hero-scroll-hint i {
+                font-size: 18px;
+                animation: scrollHint 1.8s ease infinite;
+            }
+
+        /* PHILOSOPHY BAND - large statement */
+        .philosophy {
+            padding: 140px 60px;
+            background: #f5f0f5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .philosophy-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #786090;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .philosophy-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 4vw, 52px);
+            font-weight: 400;
+            line-height: 1.3;
+            letter-spacing: -0.8px;
+        }
+
+            .philosophy-text em {
+                font-style: italic;
+                color: #786090;
+            }
+
+        .philosophy-author {
+            margin-top: 36px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #786090;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+            .philosophy-author::before, .philosophy-author::after {
+                content: '';
+                width: 30px;
+                height: 1px;
+                background: #786090;
+            }
+
+        /* LOOKBOOK GRID - magazine spread */
+        .lookbook {
+            padding: 130px 60px;
+            background: #ebe5eb;
+        }
+
+        .sec-head {
+            max-width: 1400px;
+            margin: 0 auto 70px;
+        }
+
+            .sec-head.centered {
+                text-align: center;
+            }
+
+        .sec-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #786090;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .sec-title {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            font-family: 'Playfair Display', Georgia, serif;
+            max-width: 900px;
+        }
+
+        .sec-head.centered .sec-title {
+            margin: 0 auto;
+        }
+
+        .sec-title em {
+            font-style: italic;
+            color: #786090;
+        }
+
+        .sec-desc {
+            font-size: 15px;
+            color: #4a4060;
+            line-height: 1.85;
+            max-width: 600px;
+            margin-top: 24px;
+        }
+
+        .sec-head.centered .sec-desc {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .lookbook-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .look {
+            position: relative;
+            background: #d4c8d4;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .look:hover {
+                transform: translateY(-6px);
+            }
+
+            .look i {
+                font-size: clamp(60px, 10vw, 140px);
+                color: rgba(120,96,144,0.4);
+                transition: transform 0.6s;
+            }
+
+            .look:hover i {
+                transform: rotate(-8deg) scale(1.1);
+            }
+
+            .look.dark i {
+                color: rgba(255,255,255,0.25);
+            }
+
+        .look-cap {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.9);
+            background: rgba(42,36,56,0.45);
+            padding: 5px 10px;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .look-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(42,36,56,0.85), transparent);
+            color: #fff;
+        }
+
+        .look-info-name {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .look-info-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.75);
+            text-transform: uppercase;
+        }
+
+        /* Asymmetric layout */
+        .look-1 {
+            grid-column: 1 / 6;
+            aspect-ratio: 3/4;
+            background: #d4c8d4;
+        }
+
+        .look-2 {
+            grid-column: 6 / 10;
+            aspect-ratio: 1;
+            background: #786090;
+            margin-top: 60px;
+        }
+
+        .look-3 {
+            grid-column: 10 / 13;
+            aspect-ratio: 3/5;
+            background: #b8a4c4;
+        }
+
+        .look-4 {
+            grid-column: 1 / 5;
+            aspect-ratio: 1;
+            background: #5a4670;
+            margin-top: 30px;
+        }
+
+        .look-5 {
+            grid-column: 5 / 9;
+            aspect-ratio: 4/5;
+            background: #d4c8d4;
+        }
+
+        .look-6 {
+            grid-column: 9 / 13;
+            aspect-ratio: 3/4;
+            background: #786090;
+            margin-top: 40px;
+        }
+
+        /* TAILORING DETAILS - 3 cuts showcase */
+        .tailoring {
+            padding: 130px 60px;
+            background: #2a2438;
+            color: #ebe5eb;
+        }
+
+            .tailoring .sec-label {
+                color: #b8a4c4;
+            }
+
+        .tailoring-grid {
+            max-width: 1400px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .cut-card {
+            position: relative;
+            transition: transform 0.5s;
+        }
+
+            .cut-card:hover {
+                transform: translateY(-8px);
+            }
+
+        .cut-img {
+            aspect-ratio: 4/5;
+            background: #786090;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .cut-img i {
+                font-size: 120px;
+                color: rgba(255,255,255,0.3);
+                transition: transform 0.6s;
+            }
+
+        .cut-card:hover .cut-img i {
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .cut-img.dark {
+            background: #5a4670;
+        }
+
+        .cut-img.light {
+            background: #b8a4c4;
+        }
+
+            .cut-img.light i {
+                color: rgba(42,36,56,0.4);
+            }
+
+        .cut-img-num {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 56px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .cut-img.light .cut-img-num {
+            color: rgba(42,36,56,0.7);
+        }
+
+        .cut-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #b8a4c4;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .cut-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+            .cut-name em {
+                font-style: italic;
+                color: #b8a4c4;
+            }
+
+        .cut-desc {
+            font-size: 14px;
+            color: rgba(235,229,235,0.7);
+            line-height: 1.85;
+        }
+
+        .cut-spec {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(184,164,196,0.25);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #b8a4c4;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* TECHNICAL SPECS - feature blueprint */
+        .blueprint {
+            padding: 130px 60px;
+            background: #f5f0f5;
+        }
+
+        .blueprint-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .blueprint-visual {
+            aspect-ratio: 1;
+            background: #ebe5eb;
+            border: 1.5px solid #786090;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .blueprint-visual::before {
+                content: '';
+                position: absolute;
+                inset: 24px;
+                border: 1px dashed rgba(120,96,144,0.4);
+            }
+
+            .blueprint-visual i {
+                font-size: 240px;
+                color: rgba(120,96,144,0.3);
+                animation: rotateSlow 40s linear infinite;
+            }
+
+        .bp-corner {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: #786090;
+            background: #ebe5eb;
+            padding: 2px 6px;
+        }
+
+            .bp-corner.tl {
+                top: 16px;
+                left: 16px;
+            }
+
+            .bp-corner.tr {
+                top: 16px;
+                right: 16px;
+            }
+
+            .bp-corner.bl {
+                bottom: 16px;
+                left: 16px;
+            }
+
+            .bp-corner.br {
+                bottom: 16px;
+                right: 16px;
+            }
+
+        .blueprint-tag {
+            position: absolute;
+            top: 50%;
+            left: -1.5px;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: left center;
+            background: #2a2438;
+            color: #ebe5eb;
+            padding: 4px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .blueprint-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 4.5vw, 52px);
+            font-weight: 400;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+            .blueprint-text h2 em {
+                font-style: italic;
+                color: #786090;
+            }
+
+        .blueprint-text p {
+            font-size: 15px;
+            color: #4a4060;
+            line-height: 1.85;
+            margin-bottom: 16px;
+        }
+
+        .blueprint-list {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bp-list-item {
+            display: flex;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(120,96,144,0.2);
+            align-items: start;
+        }
+
+        .bp-list-num {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 22px;
+            color: #786090;
+            font-weight: 500;
+            line-height: 1;
+            min-width: 32px;
+        }
+
+        .bp-list-content h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .bp-list-content p {
+            font-size: 13px;
+            color: #4a4060;
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+
+        /* MOOD QUOTE */
+        .mood-quote {
+            padding: 100px 60px;
+            background: #786090;
+            color: #ebe5eb;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .mood-quote::before {
+                content: '"';
+                position: absolute;
+                top: -50px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: 'Playfair Display', serif;
+                font-size: 320px;
+                color: rgba(255,255,255,0.06);
+                line-height: 1;
+                pointer-events: none;
+            }
+
+        .mood-quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(26px, 3.5vw, 44px);
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+            letter-spacing: -0.5px;
+            max-width: 950px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mood-quote-author {
+            margin-top: 28px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: rgba(235,229,235,0.7);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* CINEMA */
+        .cinema-strip {
+            height: 65vh;
+            background: #2a2438;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .cinema-strip::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(rgba(184,164,196,0.15) 1px, transparent 0);
+                background-size: 32px 32px;
+                pointer-events: none;
+            }
+
+            .cinema-strip i {
+                font-size: 300px;
+                color: rgba(255,255,255,0.08);
+                animation: drift 6s ease-in-out infinite;
+            }
+
+        .cinema-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #b8a4c4;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            z-index: 2;
+        }
+
+            .cinema-text small {
+                display: block;
+                font-family: 'JetBrains Mono', monospace;
+                font-style: normal;
+                font-size: 11px;
+                letter-spacing: 5px;
+                color: rgba(184,164,196,0.6);
+                margin-top: 24px;
+                text-transform: uppercase;
+            }
+
+        /* COLLECTION CAPSULE PIECES */
+        .capsule {
+            padding: 130px 60px;
+            background: #ebe5eb;
+        }
+
+        .capsule-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .capsule-card {
+            cursor: pointer;
+            transition: transform 0.5s;
+            position: relative;
+        }
+
+            .capsule-card:hover {
+                transform: translateY(-6px);
+            }
+
+        .capsule-img {
+            aspect-ratio: 3/4;
+            background: #d4c8d4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+            .capsule-img i {
+                font-size: 90px;
+                color: rgba(120,96,144,0.35);
+                transition: transform 0.6s;
+            }
+
+            .capsule-img.dark {
+                background: #5a4670;
+            }
+
+                .capsule-img.dark i {
+                    color: rgba(255,255,255,0.25);
+                }
+
+            .capsule-img.med {
+                background: #b8a4c4;
+            }
+
+                .capsule-img.med i {
+                    color: rgba(255,255,255,0.4);
+                }
+
+        .capsule-card:hover .capsule-img i {
+            transform: scale(1.12);
+        }
+
+        .capsule-look {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(42,36,56,0.5);
+            color: #fff;
+            padding: 6px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+            font-weight: 600;
+        }
+
+        .capsule-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .capsule-info-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .capsule-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #786090;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .capsule-name {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
+        .capsule-cat {
+            font-size: 11px;
+            color: #786090;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .capsule-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: #2a2438;
+            white-space: nowrap;
+        }
+
+        /* JOURNEY TIMELINE - sản xuất */
+        .journey {
+            padding: 130px 60px;
+            background: #d4c8d4;
+        }
+
+        .journey-list {
+            max-width: 1100px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            position: relative;
+        }
+
+            .journey-list::before {
+                content: '';
+                position: absolute;
+                top: 36px;
+                left: 60px;
+                right: 60px;
+                height: 1.5px;
+                background: rgba(120,96,144,0.3);
+                z-index: 0;
+            }
+
+        .journey-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .journey-dot {
+            width: 72px;
+            height: 72px;
+            background: #ebe5eb;
+            border: 1.5px solid #786090;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 26px;
+            color: #786090;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s;
+        }
+
+        .journey-step:hover .journey-dot {
+            background: #786090;
+            color: #ebe5eb;
+            transform: scale(1.1);
+        }
+
+        .journey-step h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .journey-step p {
+            font-size: 13px;
+            color: #4a4060;
+            line-height: 1.7;
+        }
+
+        .journey-step .duration {
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #786090;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 140px 60px;
+            text-align: center;
+            background: #ebe5eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .cta::before {
+                content: '✂';
+                position: absolute;
+                top: 10%;
+                left: 5%;
+                font-size: 200px;
+                color: rgba(120,96,144,0.08);
+                transform: rotate(-20deg);
+                pointer-events: none;
+            }
+
+            .cta::after {
+                content: '✂';
+                position: absolute;
+                bottom: 5%;
+                right: 5%;
+                font-size: 240px;
+                color: rgba(120,96,144,0.08);
+                transform: rotate(20deg) scaleX(-1);
+                pointer-events: none;
+            }
+
+        .cta-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #786090;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 6vw, 88px);
+            font-weight: 400;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            max-width: 1000px;
+            margin: 0 auto 28px;
+            position: relative;
+            z-index: 2;
+        }
+
+            .cta h2 em {
+                font-style: italic;
+                color: #786090;
+            }
+
+        .cta-desc {
+            font-size: 15px;
+            color: #4a4060;
+            max-width: 540px;
+            margin: 0 auto 40px;
+            line-height: 1.85;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-buttons {
+            display: inline-flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1.5px solid #2a2438;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #2a2438;
+            color: #ebe5eb;
+        }
+
+            .btn-primary:hover {
+                background: transparent;
+                color: #2a2438;
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: #2a2438;
+        }
+
+            .btn-outline:hover {
+                background: #2a2438;
+                color: #ebe5eb;
+            }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+        .editorial-footer {
+            background: #2a2438;
+            color: #b8a4c4;
+            padding: 50px 60px 30px;
+            text-align: center;
+        }
+
+        .ef-marquee {
+            overflow: hidden;
+            padding-bottom: 36px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 36px;
+        }
+
+        .ef-marquee-track {
+            display: inline-flex;
+            gap: 50px;
+            white-space: nowrap;
+            animation: ticker 22s linear infinite;
+        }
+
+            .ef-marquee-track span {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 22px;
+                color: rgba(184,164,196,0.7);
+            }
+
+        .ef-bottom {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #786090;
+            color: #ebe5eb;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+            }
+
+        @@media (max-width: 1024px) {
+            .top-bar, .top-bar.scrolled {
+                padding: 16px 20px;
+            }
+
+            .top-actions {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-scroll-hint {
+                left: 20px;
+            }
+
+            .philosophy, .lookbook, .tailoring, .blueprint, .mood-quote, .capsule, .journey, .cta, .editorial-footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .lookbook-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .look-1, .look-2, .look-3, .look-4, .look-5, .look-6 {
+                grid-column: span 1;
+                aspect-ratio: 3/4;
+                margin-top: 0;
+            }
+
+            .tailoring-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .blueprint-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .capsule-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .journey-list {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+
+                .journey-list::before {
+                    display: none;
+                }
+        }
+
+        @@media (max-width: 640px) {
+            .lookbook-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .capsule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .journey-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-meta {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar" id="topBar">
+        <a href="/" class="back-link"><i class="ti ti-arrow-left"></i><span>Quay lại</span></a>
+        <a href="/" class="logo">MONO<span>.WEAR</span></a>
+        <div class="top-actions">
+            <a href="#">Capsule</a>
+            <a href="#">Shop</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-text">Tailoring</div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-eyebrow">EDITORIAL CAPSULE <span class="num">/ N° 04</span></div>
+                <h1 class="hero-title serif">Cấu Trúc<br /><em>Tương Lai</em><br />Cổ Điển</h1>
+                <p class="hero-desc">Tái định nghĩa thời trang <strong>may đo (Tailoring)</strong> qua các đường cắt bất đối xứng mềm mại. Mang lại vẻ ngoài cá tính ấn tượng nhưng vẫn lịch lãm, <em style="color:#786090;font-style:italic;">trường tồn</em>.</p>
+                <div class="hero-meta">
+                    <div>
+                        <strong>14 Looks</strong>
+                        Trong lookbook
+                    </div>
+                    <div>
+                        <strong>3 Cuts</strong>
+                        Tailoring đặc trưng
+                    </div>
+                    <div>
+                        <strong>2026</strong>
+                        Capsule mới
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-corner-label">CAPSULE 04</div>
+                <div class="hero-photo">
+                    <span class="hero-photo-tag">EDITORIAL · LOOKBOOK</span>
+                    <i class="ti ti-scissors"></i>
+                    <div class="hero-photo-num serif">
+                        04
+                        <small>VOLUME · 2026</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <i class="ti ti-chevron-down"></i>
+            <span>XEM LOOKBOOK</span>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy">
+        <div class="philosophy-inner">
+            <div class="philosophy-label">— DESIGN PHILOSOPHY</div>
+            <div class="philosophy-text serif">
+                Tương lai của <em>tailoring</em> không nằm ở<br />
+                những đường cắt thẳng tuyệt đối,<br />
+                mà ở khả năng <em>uốn cong nguyên tắc</em><br />
+                để phục vụ sự thoải mái của con người.
+            </div>
+            <div class="philosophy-author">MONO.WEAR DESIGN STUDIO</div>
+        </div>
+    </section>
+
+    <!-- LOOKBOOK -->
+    <section class="lookbook">
+        <div class="sec-head">
+            <div class="sec-label">— THE LOOKBOOK</div>
+            <h2 class="sec-title serif">14 looks —<br />14 <em>tuyên ngôn</em></h2>
+            <p class="sec-desc">Mỗi look là một câu chuyện về sự cân bằng giữa cổ điển và đương đại, giữa nghiêm túc và phá cách.</p>
+        </div>
+
+        <div class="lookbook-grid">
+            <div class="look look-1">
+                <span class="look-cap">LOOK 01</span>
+                <i class="ti ti-shirt"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Áo Suit Bất Đối Xứng</div>
+                    <div class="look-info-meta">Wool Italia · Lavender Mist</div>
+                </div>
+            </div>
+            <div class="look look-2 dark">
+                <span class="look-cap">LOOK 02</span>
+                <i class="ti ti-shirt-sport"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Blazer Cấu Trúc</div>
+                    <div class="look-info-meta">Linen Bỉ · Plum Deep</div>
+                </div>
+            </div>
+            <div class="look look-3">
+                <span class="look-cap">LOOK 03</span>
+                <i class="ti ti-hanger"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Quần Wide-leg</div>
+                    <div class="look-info-meta">Wool blend · Dusty Rose</div>
+                </div>
+            </div>
+            <div class="look look-4 dark">
+                <span class="look-cap">LOOK 04</span>
+                <i class="ti ti-shirt"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Áo Trench Coat</div>
+                    <div class="look-info-meta">Cotton Pima · Aubergine</div>
+                </div>
+            </div>
+            <div class="look look-5">
+                <span class="look-cap">LOOK 05</span>
+                <i class="ti ti-shirt-sport"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Vest Sculpted</div>
+                    <div class="look-info-meta">Silk wool · Mauve Soft</div>
+                </div>
+            </div>
+            <div class="look look-6 dark">
+                <span class="look-cap">LOOK 06</span>
+                <i class="ti ti-hanger"></i>
+                <div class="look-info">
+                    <div class="look-info-name serif">Bộ Suit Origami</div>
+                    <div class="look-info-meta">Wool Italia · Twilight</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAILORING DETAILS -->
+    <section class="tailoring">
+        <div class="sec-head">
+            <div class="sec-label">— THE THREE CUTS</div>
+            <h2 class="sec-title serif">Ba kỹ thuật<br /><em>may đo</em> độc bản</h2>
+            <p class="sec-desc">Sau 8 tháng nghiên cứu cùng nghệ nhân Milan và Tokyo, ba kỹ thuật cắt mới đã được phát triển — riêng cho capsule này.</p>
+        </div>
+
+        <div class="tailoring-grid">
+            <div class="cut-card">
+                <div class="cut-img dark">
+                    <span class="cut-img-num serif">I</span>
+                    <i class="ti ti-scissors"></i>
+                </div>
+                <div class="cut-label">— CUT N° 01</div>
+                <h3 class="cut-name">Đường cắt <em>bất đối xứng</em></h3>
+                <p class="cut-desc">Tà áo lệch 12° so với trục dọc, tạo cảm giác chuyển động ngay cả khi đứng yên. Đường may bên được giấu hoàn toàn vào lớp lót trong.</p>
+                <div class="cut-spec">
+                    <span>ANGLE</span>
+                    <span>12° OFFSET</span>
+                </div>
+            </div>
+
+            <div class="cut-card">
+                <div class="cut-img">
+                    <span class="cut-img-num serif">II</span>
+                    <i class="ti ti-vector-triangle"></i>
+                </div>
+                <div class="cut-label">— CUT N° 02</div>
+                <h3 class="cut-name">Phom <em>kiến trúc</em> 3 chiều</h3>
+                <p class="cut-desc">Sử dụng nguyên tắc tỉ lệ vàng 1:1.618 cho phần vai và eo. Vải được tạo khối thông qua kỹ thuật steam-shaping kéo dài 6 giờ.</p>
+                <div class="cut-spec">
+                    <span>RATIO</span>
+                    <span>1 : 1.618</span>
+                </div>
+            </div>
+
+            <div class="cut-card">
+                <div class="cut-img light">
+                    <span class="cut-img-num serif">III</span>
+                    <i class="ti ti-needle-thread"></i>
+                </div>
+                <div class="cut-label">— CUT N° 03</div>
+                <h3 class="cut-name">Mũi may <em>vô hình</em></h3>
+                <p class="cut-desc">Đường may được giấu giữa hai lớp vải bằng kỹ thuật fell-stitch của Savile Row. Mỗi đường may mất 4 giờ làm thủ công bởi nghệ nhân.</p>
+                <div class="cut-spec">
+                    <span>TIME / SEAM</span>
+                    <span>4 HOURS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLUEPRINT -->
+    <section class="blueprint">
+        <div class="blueprint-inner">
+            <div class="blueprint-visual">
+                <div class="blueprint-tag">PATTERN N° 04</div>
+                <div class="bp-corner tl">01</div>
+                <div class="bp-corner tr">02</div>
+                <div class="bp-corner bl">03</div>
+                <div class="bp-corner br">04</div>
+                <i class="ti ti-scissors"></i>
+            </div>
+
+            <div class="blueprint-text">
+                <div class="sec-label">— TECHNICAL BLUEPRINT</div>
+                <h2 class="serif">Khoa học<br />của <em>đường cắt</em></h2>
+                <p>Mỗi rập trong capsule này được tính toán bằng phần mềm chuyên dụng kết hợp với drape thủ công. Trung bình 17 lần điều chỉnh trước khi một rập được duyệt.</p>
+
+                <div class="blueprint-list">
+                    <div class="bp-list-item">
+                        <span class="bp-list-num">01</span>
+                        <div class="bp-list-content">
+                            <h4>Mock-up cotton thô</h4>
+                            <p>3-5 phiên bản mock-up cho mỗi look để kiểm tra phom dáng trên mannequin chuẩn.</p>
+                        </div>
+                    </div>
+                    <div class="bp-list-item">
+                        <span class="bp-list-num">02</span>
+                        <div class="bp-list-content">
+                            <h4>Body-scan 3D</h4>
+                            <p>Sử dụng công nghệ scan 360° để đảm bảo form phù hợp 12 dáng người tiêu chuẩn châu Á.</p>
+                        </div>
+                    </div>
+                    <div class="bp-list-item">
+                        <span class="bp-list-num">03</span>
+                        <div class="bp-list-content">
+                            <h4>Fitting với 3 model</h4>
+                            <p>Thử trực tiếp trên model có 3 dáng người khác nhau, ghi nhận phản hồi trước sản xuất.</p>
+                        </div>
+                    </div>
+                    <div class="bp-list-item">
+                        <span class="bp-list-num">04</span>
+                        <div class="bp-list-content">
+                            <h4>Final pattern lock</h4>
+                            <p>Sau khi đạt 100% điểm chuẩn, rập được khóa và đưa vào sản xuất giới hạn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOOD QUOTE -->
+    <section class="mood-quote">
+        <div class="mood-quote-text serif">
+            Một bộ vest đẹp không khoe mình.<br />
+            Nó <em>thuộc về</em> người mặc,<br />
+            đến mức người ta nhìn vào con người —<br />
+            chứ không phải bộ đồ.
+        </div>
+        <div class="mood-quote-author">— PHILOSOPHY OF MODERN TAILORING</div>
+    </section>
+
+    <!-- CINEMA -->
+    <section class="cinema-strip">
+        <i class="ti ti-scissors"></i>
+        <div class="cinema-text serif">
+            Tailoring
+            <small>FUTURE · CLASSIC · TIMELESS</small>
+        </div>
+    </section>
+
+    <!-- CAPSULE PIECES -->
+    <section class="capsule">
+        <div class="sec-head centered">
+            <div class="sec-label">— SHOP THE CAPSULE</div>
+            <h2 class="sec-title serif">Khám phá <em>capsule</em></h2>
+            <p class="sec-desc">9 mảnh chính trong bộ sưu tập, mỗi mảnh được đánh số riêng và đi kèm chứng nhận thiết kế.</p>
+        </div>
+
+        <div class="capsule-grid">
+            <div class="capsule-card">
+                <div class="capsule-img">
+                    <span class="capsule-look">LOOK 01</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 01 / 09</div>
+                        <div class="capsule-name serif">Áo Suit Bất Đối Xứng</div>
+                        <div class="capsule-cat">Wool Italia · Lavender</div>
+                    </div>
+                    <div class="capsule-price">3.890K</div>
+                </div>
+            </div>
+
+            <div class="capsule-card">
+                <div class="capsule-img dark">
+                    <span class="capsule-look">LOOK 02</span>
+                    <i class="ti ti-shirt-sport"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 02 / 09</div>
+                        <div class="capsule-name serif">Blazer Cấu Trúc</div>
+                        <div class="capsule-cat">Linen Bỉ · Plum Deep</div>
+                    </div>
+                    <div class="capsule-price">4.250K</div>
+                </div>
+            </div>
+
+            <div class="capsule-card">
+                <div class="capsule-img med">
+                    <span class="capsule-look">LOOK 03</span>
+                    <i class="ti ti-hanger"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 03 / 09</div>
+                        <div class="capsule-name serif">Quần Wide-leg</div>
+                        <div class="capsule-cat">Wool blend · Rose</div>
+                    </div>
+                    <div class="capsule-price">2.150K</div>
+                </div>
+            </div>
+
+            <div class="capsule-card">
+                <div class="capsule-img dark">
+                    <span class="capsule-look">LOOK 04</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 04 / 09</div>
+                        <div class="capsule-name serif">Áo Trench Coat</div>
+                        <div class="capsule-cat">Cotton Pima · Aubergine</div>
+                    </div>
+                    <div class="capsule-price">5.480K</div>
+                </div>
+            </div>
+
+            <div class="capsule-card">
+                <div class="capsule-img">
+                    <span class="capsule-look">LOOK 05</span>
+                    <i class="ti ti-shirt-sport"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 05 / 09</div>
+                        <div class="capsule-name serif">Vest Sculpted</div>
+                        <div class="capsule-cat">Silk wool · Mauve Soft</div>
+                    </div>
+                    <div class="capsule-price">2.890K</div>
+                </div>
+            </div>
+
+            <div class="capsule-card">
+                <div class="capsule-img med">
+                    <span class="capsule-look">LOOK 06</span>
+                    <i class="ti ti-hanger"></i>
+                </div>
+                <div class="capsule-info">
+                    <div class="capsule-info-left">
+                        <div class="capsule-num">N° 06 / 09</div>
+                        <div class="capsule-name serif">Bộ Suit Origami</div>
+                        <div class="capsule-cat">Wool Italia · Twilight</div>
+                    </div>
+                    <div class="capsule-price">6.250K</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="journey">
+        <div class="sec-head centered">
+            <div class="sec-label">— THE MAKING</div>
+            <h2 class="sec-title serif">Hành trình <em>4 bước</em></h2>
+            <p class="sec-desc">Từ ý tưởng đến showroom, mỗi mảnh capsule trải qua 4 giai đoạn thủ công nghiêm ngặt.</p>
+        </div>
+
+        <div class="journey-list">
+            <div class="journey-step">
+                <div class="journey-dot serif">I</div>
+                <h4 class="serif">Concept</h4>
+                <p>Phác thảo, nghiên cứu lịch sử tailoring châu Âu thế kỷ 18-21, lựa chọn 14 looks chính.</p>
+                <div class="duration">6 TUẦN</div>
+            </div>
+            <div class="journey-step">
+                <div class="journey-dot serif">II</div>
+                <h4 class="serif">Pattern</h4>
+                <p>Dựng rập 3D, thử mock-up 3-5 lần, làm việc với nghệ nhân Milan và Tokyo để hoàn thiện.</p>
+                <div class="duration">10 TUẦN</div>
+            </div>
+            <div class="journey-step">
+                <div class="journey-dot serif">III</div>
+                <h4 class="serif">Crafting</h4>
+                <p>Mỗi mảnh được hoàn thiện bởi 1 nghệ nhân duy nhất, từ 24 đến 56 giờ làm thủ công.</p>
+                <div class="duration">14 TUẦN</div>
+            </div>
+            <div class="journey-step">
+                <div class="journey-dot serif">IV</div>
+                <h4 class="serif">Release</h4>
+                <p>Photoshoot lookbook tại studio Tokyo, ra mắt tại showroom Sài Gòn vào tháng 9/2026.</p>
+                <div class="duration">2 TUẦN</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-label">— OWN A PIECE OF THE FUTURE</div>
+        <h2 class="serif">Mặc tương lai —<br /><em>giữ lại</em> cổ điển</h2>
+        <p class="cta-desc">Capsule Editorial N° 04 mở đặt trước từ tháng 8/2026. Số lượng giới hạn — ưu tiên thành viên VIP Gold trở lên.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">
+                Đặt trước capsule <i class="ti ti-arrow-right"></i>
+            </a>
+            <a href="#" class="btn btn-outline">
+                Tải lookbook PDF
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="editorial-footer">
+        <div class="ef-marquee">
+            <div class="ef-marquee-track">
+                <span>Editorial Capsule</span><span>·</span>
+                <span>Cấu Trúc Tương Lai</span><span>·</span>
+                <span>Cổ Điển</span><span>·</span>
+                <span>N° 04 / 2026</span><span>·</span>
+                <span>14 Looks</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+                <span>Editorial Capsule</span><span>·</span>
+                <span>Cấu Trúc Tương Lai</span><span>·</span>
+                <span>Cổ Điển</span><span>·</span>
+                <span>N° 04 / 2026</span><span>·</span>
+                <span>14 Looks</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+            </div>
+        </div>
+        <div class="ef-bottom">© 2026 MONO.WEAR · EDITORIAL CAPSULE N° 04 · ALL RIGHTS RESERVED</div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <script>
+        const topBar = document.getElementById('topBar');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) topBar.classList.add('scrolled');
+            else topBar.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.9s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.look, .cut-card, .bp-list-item, .capsule-card, .journey-step').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

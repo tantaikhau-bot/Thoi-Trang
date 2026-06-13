@@ -1,0 +1,1926 @@
+﻿@{
+    ViewData["Title"] = "Thanh toán đơn hàng";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Thanh toán</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes checkPop {
+            0% {
+                transform: scale(0);
+            }
+
+            60% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .announce::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                animation: shimmer 4s infinite;
+            }
+
+        /* HEADER */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .header.scrolled {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+        }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+        }
+
+        .cart-badge {
+            background: #1a1a1a;
+        }
+
+        /* PAGE HEADER + STEPS */
+        .page-header {
+            padding: 28px 60px 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+
+            .breadcrumb a:hover {
+                color: #1a1a1a;
+            }
+
+            .breadcrumb i {
+                font-size: 14px;
+            }
+
+            .breadcrumb .current {
+                color: #1a1a1a;
+            }
+
+        .steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 8px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .step-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e8e8e4;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+            .step.active .step-num {
+                background: #1a1a1a;
+                color: #fff;
+            }
+
+        .step.done .step-num {
+            background: #2eb872;
+            color: #fff;
+        }
+
+        .step.done {
+            color: #2eb872;
+        }
+
+        .step-divider {
+            width: 60px;
+            height: 2px;
+            background: #e8e8e4;
+            margin: 0 16px;
+        }
+
+            .step-divider.done {
+                background: #2eb872;
+            }
+
+        /* MAIN */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 28px;
+            padding: 32px 60px 80px;
+            align-items: start;
+        }
+
+        .checkout-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+            .card-title i {
+                width: 34px;
+                height: 34px;
+                background: #1a1a1a;
+                color: #fff;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+            }
+
+            .card-title .step-tag {
+                margin-left: auto;
+                font-size: 11px;
+                color: #aaa;
+                font-weight: 400;
+                letter-spacing: 1px;
+            }
+
+        /* SAVED ADDRESS */
+        .saved-address {
+            border: 2px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .saved-address.selected {
+                border-color: #1a1a1a;
+                background: #fafafa;
+            }
+
+            .saved-address .radio-dot {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #ccc;
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
+
+            .saved-address.selected .radio-dot {
+                border-color: #1a1a1a;
+            }
+
+                .saved-address.selected .radio-dot::after {
+                    content: '';
+                    position: absolute;
+                    top: 3px;
+                    left: 3px;
+                    width: 10px;
+                    height: 10px;
+                    background: #1a1a1a;
+                    border-radius: 50%;
+                }
+
+        .addr-name {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .addr-badge {
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .addr-phone {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .addr-detail {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .add-new-addr {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d4537e;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 0;
+            transition: opacity 0.3s;
+        }
+
+            .add-new-addr:hover {
+                opacity: 0.7;
+            }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+            .form-grid.collapsed {
+                display: none;
+            }
+
+        .form-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+        }
+
+            .form-label .req {
+                color: #d4537e;
+            }
+
+        .form-input {
+            padding: 12px 14px;
+            border: 1px solid #e0e0db;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.25s;
+            font-family: inherit;
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+            .form-input:focus {
+                border-color: #1a1a1a;
+                box-shadow: 0 0 0 3px rgba(26,26,26,0.05);
+            }
+
+            .form-input.error {
+                border-color: #e63946;
+            }
+
+        .form-error {
+            font-size: 11px;
+            color: #e63946;
+            display: none;
+        }
+
+            .form-error.show {
+                display: block;
+            }
+
+        select.form-input {
+            cursor: pointer;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* SHIPPING METHODS */
+        .ship-method, .pay-method-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1.5px solid #e0e0db;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .ship-method:hover, .pay-method-card:hover {
+                border-color: #1a1a1a;
+            }
+
+            .ship-method.selected, .pay-method-card.selected {
+                border-color: #1a1a1a;
+                background: #fafafa;
+            }
+
+        .ship-radio, .pay-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .selected .ship-radio, .selected .pay-radio {
+            border-color: #1a1a1a;
+        }
+
+            .selected .ship-radio::after, .selected .pay-radio::after {
+                content: '';
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 10px;
+                height: 10px;
+                background: #1a1a1a;
+                border-radius: 50%;
+                animation: checkPop 0.3s ease;
+            }
+
+        .ship-icon, .pay-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            background: #f5f5f3;
+            color: #1a1a1a;
+        }
+
+            .pay-icon.bank {
+                background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+                color: #fff;
+            }
+
+            .pay-icon.momo {
+                background: linear-gradient(135deg, #a50064, #d82e7f);
+                color: #fff;
+            }
+
+            .pay-icon.vnpay {
+                background: linear-gradient(135deg, #0068ff, #4d9fff);
+                color: #fff;
+            }
+
+            .pay-icon.visa {
+                background: linear-gradient(135deg, #1a1f71, #4267b2);
+                color: #fff;
+            }
+
+            .pay-icon.cod {
+                background: linear-gradient(135deg, #2eb872, #4ad295);
+                color: #fff;
+            }
+
+        .ship-info, .pay-info {
+            flex: 1;
+        }
+
+        .ship-name, .pay-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ship-desc, .pay-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .ship-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            flex-shrink: 0;
+        }
+
+            .ship-price.free {
+                color: #2eb872;
+            }
+
+        .recommend-tag {
+            background: #fbeaf0;
+            color: #d4537e;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        /* NOTE */
+        .order-note textarea {
+            width: 100%;
+        }
+
+        /* ============ RIGHT: SUMMARY ============ */
+        .checkout-right {
+            position: sticky;
+            top: 110px;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .summary-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .summary-title {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .summary-edit {
+            font-size: 12px;
+            color: #d4537e;
+            cursor: pointer;
+        }
+
+            .summary-edit:hover {
+                opacity: 0.7;
+            }
+
+        /* MINI ITEMS */
+        .mini-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #f0f0ec;
+        }
+
+            .mini-items::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .mini-items::-webkit-scrollbar-thumb {
+                background: #ddd;
+                border-radius: 4px;
+            }
+
+        .mini-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .mini-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+            .mini-img i {
+                font-size: 26px;
+                color: rgba(0,0,0,0.2);
+            }
+
+            .mini-img.dark i {
+                color: rgba(255,255,255,0.25);
+            }
+
+        .mini-qty-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .bg-cream {
+            background: #f1efe8;
+        }
+
+        .bg-dark {
+            background: #2c2c2a;
+        }
+
+        .bg-gray {
+            background: #d3d1c7;
+        }
+
+        .bg-blue {
+            background: #2c3e5e;
+        }
+
+        .bg-brown {
+            background: #6b4423;
+        }
+
+        .bg-green {
+            background: #4a5d3a;
+        }
+
+        .mini-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .mini-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-variant {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .mini-price {
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* SUMMARY ROWS */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+            .summary-row .label {
+                color: #666;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+                .summary-row .label i {
+                    font-size: 15px;
+                }
+
+            .summary-row.discount .value {
+                color: #d4537e;
+            }
+
+            .summary-row.discount .label {
+                color: #d4537e;
+            }
+
+        .summary-divider {
+            height: 1px;
+            background: #f0f0ec;
+            margin: 16px 0;
+        }
+
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+            .summary-row.total .value {
+                color: #d4537e;
+                font-size: 24px;
+            }
+
+        .place-order-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            .place-order-btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.6s;
+            }
+
+            .place-order-btn:hover::before {
+                left: 100%;
+            }
+
+            .place-order-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            }
+
+            .place-order-btn i {
+                font-size: 19px;
+            }
+
+        .secure-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #888;
+            margin-top: 14px;
+        }
+
+            .secure-note i {
+                font-size: 15px;
+                color: #2eb872;
+            }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 300px;
+            max-width: 360px;
+            border-left: 4px solid #1a1a1a;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.warning {
+                border-left-color: #d18800;
+            }
+
+            .toast.error {
+                border-left-color: #e63946;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast.warning .toast-icon {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .toast.error .toast-icon {
+            background: #fbeaea;
+            color: #e63946;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 0 0; /* Bỏ padding đáy để thanh marquee bám sát khít */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Dòng thông tin bản quyền ở giữa */
+        .footer-mid-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* ============ THANH MARQUEE ĐEN TUYỀN CHẠY ĐÁY TRANG (FULL-WIDTH) ============ */
+        .footer-bottom-marquee {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: #090909; /* Đen sẫm hơn hẳn tạo khối tương phản chân trang */
+            padding: 14px 0;
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            animation: footerMarqueeScroll 28s linear infinite;
+        }
+
+        .footer-bottom-marquee:hover .marquee-wrapper {
+            animation-play-state: paused; /* Rê chuột vào sẽ tạm dừng để đọc */
+        }
+
+        .marquee-text-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+            .marquee-text-item i {
+                color: #e2856b; /* Icon màu cam ấm tinh tế */
+                font-size: 13px;
+            }
+
+        @@keyframes footerMarqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-33.333%);
+            }
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding-top: 50px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-mid-row {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announce">Miễn phí vận chuyển cho đơn hàng từ 3.000.000₫ · Đổi trả trong 30 ngày</div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="breadcrumb">
+            <a href="/">Trang chủ</a>
+            <i class="ti ti-chevron-right"></i>
+            <a href="/Home/Cart">Giỏ hàng</a>
+            <i class="ti ti-chevron-right"></i>
+            <span class="current">Thanh toán</span>
+        </div>
+        <div class="steps">
+            <div class="step done">
+                <span class="step-num"><i class="ti ti-check"></i></span>
+                <span>Giỏ hàng</span>
+            </div>
+            <div class="step-divider done"></div>
+            <div class="step active">
+                <span class="step-num">2</span>
+                <span>Thanh toán</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <span>Hoàn tất</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-container">
+
+        <!-- LEFT -->
+        <div class="checkout-left">
+
+            <!-- ĐỊA CHỈ GIAO HÀNG -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="ti ti-map-pin"></i>Địa chỉ giao hàng
+                    <span class="step-tag">BƯỚC 1</span>
+                </div>
+
+                @{
+                    var addrs = ViewBag.MyAddresses as List<ThoiTrang.Models.Entities.Address>;
+                }
+                <div id="savedAddrList">
+                    @if (addrs != null && addrs.Count > 0)
+                    {
+                        var firstA = true;
+                        foreach (var a in addrs)
+                        {
+                            var full = $"{a.AddressLine}, {a.Ward}, {a.District}, {a.Province}".Replace(", ,", ",");
+                            <div class="saved-address @(firstA ? "selected" : "")" data-name="@a.ReceiverName" data-phone="@a.Phone" data-address="@full" onclick="selectAddr(this)">
+                                <div class="radio-dot"></div>
+                                <div class="addr-name">
+                                    @a.ReceiverName
+                                    @if (a.IsDefault) { <span class="addr-badge">MẶC ĐỊNH</span> }
+                                </div>
+                                <div class="addr-phone">@a.Phone</div>
+                                <div class="addr-detail">@full</div>
+                            </div>
+                            firstA = false;
+                        }
+                    }
+                    else
+                    {
+                        <div style="padding:14px;color:#888;font-size:13px;background:#faf8f4;border-radius:10px;">
+                            Bạn chưa có địa chỉ nào. Thêm địa chỉ ở <a href="/Home/TaiKhoan" style="color:#d4537e;">Tài khoản</a> hoặc nhập bên dưới.
+                        </div>
+                    }
+                </div>
+
+                <div class="add-new-addr" onclick="toggleNewAddr()">
+                    <i class="ti ti-plus"></i>
+                    <span id="addrToggleText">Giao đến địa chỉ khác</span>
+                </div>
+
+                <div class="form-grid collapsed" id="newAddrForm" style="margin-top: 14px;">
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên <span class="req">*</span></label>
+                        <input type="text" class="form-input" id="fullName" placeholder="Nguyễn Văn A" />
+                        <span class="form-error" id="err-fullName">Vui lòng nhập họ tên</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại <span class="req">*</span></label>
+                        <input type="tel" class="form-input" id="phone" placeholder="0901 234 567" />
+                        <span class="form-error" id="err-phone">Số điện thoại không hợp lệ</span>
+                    </div>
+                    <div class="form-group form-full">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="email" placeholder="email@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tỉnh / Thành phố <span class="req">*</span></label>
+                        <select class="form-input" id="province">
+                            <option value="">-- Chọn --</option>
+                            <option>TP. Hồ Chí Minh</option>
+                            <option>Hà Nội</option>
+                            <option>Đà Nẵng</option>
+                            <option>Cần Thơ</option>
+                            <option>Hải Phòng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quận / Huyện <span class="req">*</span></label>
+                        <select class="form-input" id="district">
+                            <option value="">-- Chọn --</option>
+                            <option>Quận 1</option>
+                            <option>Quận 3</option>
+                            <option>Quận 7</option>
+                            <option>Quận Bình Thạnh</option>
+                            <option>Quận Phú Nhuận</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-full">
+                        <label class="form-label">Địa chỉ cụ thể <span class="req">*</span></label>
+                        <input type="text" class="form-input" id="addressDetail" placeholder="Số nhà, tên đường, phường/xã" />
+                        <span class="form-error" id="err-addressDetail">Vui lòng nhập địa chỉ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHƯƠNG THỨC VẬN CHUYỂN -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="ti ti-truck"></i>Phương thức vận chuyển
+                    <span class="step-tag">BƯỚC 2</span>
+                </div>
+
+                @if ((bool)(ViewBag.ShipStandard ?? true))
+                {
+                    <div class="ship-method" data-ship="standard" data-fee="30000" onclick="selectShip(this)">
+                        <div class="ship-radio"></div>
+                        <div class="ship-icon"><i class="ti ti-truck"></i></div>
+                        <div class="ship-info">
+                            <div class="ship-name">Giao hàng tiêu chuẩn <span class="recommend-tag">PHỔ BIẾN</span></div>
+                            <div class="ship-desc">Nhận hàng sau 2-3 ngày làm việc</div>
+                        </div>
+                        <div class="ship-price" id="standardFee">30.000₫</div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.ShipExpress ?? true))
+                {
+                    <div class="ship-method" data-ship="express" data-fee="50000" onclick="selectShip(this)">
+                        <div class="ship-radio"></div>
+                        <div class="ship-icon"><i class="ti ti-rocket"></i></div>
+                        <div class="ship-info">
+                            <div class="ship-name">Giao hàng nhanh</div>
+                            <div class="ship-desc">Nhận hàng trong 24h (nội thành)</div>
+                        </div>
+                        <div class="ship-price">50.000₫</div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.ShipSameday ?? false))
+                {
+                    <div class="ship-method" data-ship="sameday" data-fee="80000" onclick="selectShip(this)">
+                        <div class="ship-radio"></div>
+                        <div class="ship-icon"><i class="ti ti-run"></i></div>
+                        <div class="ship-info">
+                            <div class="ship-name">Giao trong ngày (Express)</div>
+                            <div class="ship-desc">Nhận trong 4 giờ · nội thành HCM</div>
+                        </div>
+                        <div class="ship-price">80.000₫</div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.ShipStore ?? true))
+                {
+                    <div class="ship-method" data-ship="store" data-fee="0" onclick="selectShip(this)">
+                        <div class="ship-radio"></div>
+                        <div class="ship-icon"><i class="ti ti-building-store"></i></div>
+                        <div class="ship-info">
+                            <div class="ship-name">Nhận tại cửa hàng</div>
+                            <div class="ship-desc">MONO.WEAR Store · 123 Đồng Khởi, Q1</div>
+                        </div>
+                        <div class="ship-price free">Miễn phí</div>
+                    </div>
+                }
+            </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', function () {
+                    var sm = document.querySelectorAll('.ship-method');
+                    sm.forEach(function (m, i) { m.classList.toggle('selected', i === 0); });
+                    if (sm[0]) { try { selectedShipFee = parseInt(sm[0].dataset.fee); updateSummary(); } catch (e) {} }
+                });
+            </script>
+
+            <!-- PHƯƠNG THỨC THANH TOÁN -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="ti ti-credit-card"></i>Phương thức thanh toán
+                    <span class="step-tag">BƯỚC 3</span>
+                </div>
+
+                @if ((bool)(ViewBag.PayBank ?? true))
+                {
+                    <div class="pay-method-card" data-pay="bank" onclick="selectPay(this)">
+                        <div class="pay-radio"></div>
+                        <div class="pay-icon bank"><i class="ti ti-building-bank"></i></div>
+                        <div class="pay-info">
+                            <div class="pay-name">Chuyển khoản ngân hàng <span class="recommend-tag">KHUYÊN DÙNG</span></div>
+                            <div class="pay-desc">Quét mã QR hoặc chuyển khoản thủ công</div>
+                        </div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.PayMomo ?? true))
+                {
+                    <div class="pay-method-card" data-pay="momo" onclick="selectPay(this)">
+                        <div class="pay-radio"></div>
+                        <div class="pay-icon momo"><i class="ti ti-wallet"></i></div>
+                        <div class="pay-info">
+                            <div class="pay-name">Ví Momo</div>
+                            <div class="pay-desc">Thanh toán qua ứng dụng Momo</div>
+                        </div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.PayVnpay ?? true))
+                {
+                    <div class="pay-method-card" data-pay="vnpay" onclick="selectPay(this)">
+                        <div class="pay-radio"></div>
+                        <div class="pay-icon vnpay"><i class="ti ti-brand-visa"></i></div>
+                        <div class="pay-info">
+                            <div class="pay-name">VNPAY</div>
+                            <div class="pay-desc">Quét QR qua app ngân hàng / VNPAY</div>
+                        </div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.PayPaypal ?? false))
+                {
+                    <div class="pay-method-card" data-pay="vnpay" onclick="selectPay(this)">
+                        <div class="pay-radio"></div>
+                        <div class="pay-icon vnpay"><i class="ti ti-brand-paypal"></i></div>
+                        <div class="pay-info">
+                            <div class="pay-name">PayPal</div>
+                            <div class="pay-desc">Thanh toán quốc tế qua PayPal</div>
+                        </div>
+                    </div>
+                }
+                @if ((bool)(ViewBag.PayCod ?? true))
+                {
+                    <div class="pay-method-card" data-pay="cod" onclick="selectPay(this)">
+                        <div class="pay-radio"></div>
+                        <div class="pay-icon cod"><i class="ti ti-cash"></i></div>
+                        <div class="pay-info">
+                            <div class="pay-name">Thanh toán khi nhận hàng (COD)</div>
+                            <div class="pay-desc">Trả tiền mặt khi nhận được hàng</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <script>
+                // Chọn phương thức thanh toán đầu tiên đang bật (sau khi trang tải xong)
+                window.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.pay-method-card').forEach(function (c, i) { c.classList.toggle('selected', i === 0); });
+                    var first = document.querySelector('.pay-method-card');
+                    if (first) { try { selectedPayMethod = first.dataset.pay; } catch (e) {} }
+                });
+            </script>
+
+            <!-- GHI CHÚ -->
+            <div class="card order-note">
+                <div class="card-title">
+                    <i class="ti ti-note"></i>Ghi chú đơn hàng
+                    <span class="step-tag">TÙY CHỌN</span>
+                </div>
+                <textarea class="form-input" id="orderNote" rows="2" placeholder="Ghi chú cho người bán (ví dụ: giao giờ hành chính, gọi trước khi giao...)"></textarea>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: SUMMARY -->
+        <aside class="checkout-right">
+            <div class="summary-card">
+                <div class="summary-title">
+                    Đơn hàng của bạn
+                    <a asp-controller="Home" asp-action="GioHang" class="summary-edit">Chỉnh sửa</a>
+                </div>
+
+                <div class="mini-items" id="miniItems">
+                    <!-- JS render -->
+                </div>
+
+                <div class="summary-row">
+                    <span class="label">Tạm tính</span>
+                    <span class="value" id="sumSubtotal">0₫</span>
+                </div>
+                <div class="summary-row discount">
+                    <span class="label"><i class="ti ti-discount-2"></i>Giảm giá sản phẩm</span>
+                    <span class="value" id="sumProdDiscount">0₫</span>
+                </div>
+                <div class="summary-row discount" id="sumVoucherRow" style="display:none;">
+                    <span class="label"><i class="ti ti-ticket"></i>Voucher (<span id="sumVoucherCode"></span>)</span>
+                    <span class="value" id="sumVoucherAmount">0₫</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label"><i class="ti ti-truck"></i>Phí vận chuyển</span>
+                    <span class="value" id="sumShipping">0₫</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-row total">
+                    <span class="label">Tổng cộng</span>
+                    <span class="value" id="sumTotal">0₫</span>
+                </div>
+
+                <button class="place-order-btn" onclick="placeOrder()">
+                    <i class="ti ti-lock"></i>
+                    <span id="placeOrderText">Đặt hàng</span>
+                </button>
+
+                <div class="secure-note">
+                    <i class="ti ti-shield-check"></i>
+                    Thông tin của bạn được bảo mật an toàn
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="/Products">Tất cả sản phẩm</a></li>
+                        <li><a href="#">Bộ sưu tập mới</a></li>
+                        <li><a href="#">Áo thun & Polo</a></li>
+                        <li><a href="#">Quần & Accessories</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-mid-row">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD"></i>
+                    <i class="ti ti-shield-check" title="Bảo mật"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ========= Đọc đơn hàng từ sessionStorage =========
+        let order = null;
+        try {
+            order = JSON.parse(sessionStorage.getItem('monoOrder'));
+        } catch (e) { order = null; }
+
+        // Dữ liệu mặc định nếu vào trực tiếp không qua giỏ hàng
+        if (!order || !order.items || order.items.length === 0) {
+            order = {
+                items: [
+                    { name: 'Áo sơ mi linen oversize', cat: 'ÁO SƠ MI', variant: 'Kem · Size M', unit: 525000, qty: 2, bgClass: 'bg-cream', icon: 'ti-shirt' },
+                    { name: 'Quần tailored khaki', cat: 'QUẦN', variant: 'Nâu · Size 30', unit: 620000, qty: 1, bgClass: 'bg-brown', icon: 'ti-hanger' },
+                    { name: 'Sneakers minimal', cat: 'GIÀY', variant: 'Trắng · Size 42', unit: 1200000, qty: 1, bgClass: 'bg-gray', icon: 'ti-shoe' }
+                ],
+                subtotal: 2870000,
+                productDiscount: 585000,
+                voucher: '',
+                voucherDiscount: 0,
+                shipping: 30000,
+                total: 2315000
+            };
+        }
+
+        let selectedShipFee = order.shipping || 30000;
+        let selectedPayMethod = 'bank';
+
+        // ========= Render mini items =========
+        function renderItems() {
+            const container = document.getElementById('miniItems');
+            container.innerHTML = '';
+            order.items.forEach(it => {
+                const div = document.createElement('div');
+                div.className = 'mini-item';
+                const isDark = ['bg-dark','bg-blue','bg-brown','bg-green'].includes(it.bgClass);
+                div.innerHTML = `
+                    <div class="mini-img ${it.bgClass} ${isDark ? 'dark' : ''}">
+                        <i class="ti ${it.icon}"></i>
+                        <span class="mini-qty-badge">${it.qty}</span>
+                    </div>
+                    <div class="mini-info">
+                        <div class="mini-name">${it.name}</div>
+                        <div class="mini-variant">${it.variant}</div>
+                    </div>
+                    <div class="mini-price">${(it.unit * it.qty).toLocaleString('vi-VN')}₫</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // ========= Cập nhật tóm tắt =========
+        function updateSummary() {
+            document.getElementById('sumSubtotal').textContent = order.subtotal.toLocaleString('vi-VN') + '₫';
+            document.getElementById('sumProdDiscount').textContent = '-' + order.productDiscount.toLocaleString('vi-VN') + '₫';
+
+            if (order.voucher && order.voucherDiscount > 0) {
+                document.getElementById('sumVoucherRow').style.display = 'flex';
+                document.getElementById('sumVoucherCode').textContent = order.voucher;
+                document.getElementById('sumVoucherAmount').textContent = '-' + order.voucherDiscount.toLocaleString('vi-VN') + '₫';
+            }
+
+            document.getElementById('sumShipping').textContent = selectedShipFee === 0 ? 'Miễn phí' : selectedShipFee.toLocaleString('vi-VN') + '₫';
+
+            const total = order.subtotal - order.productDiscount - order.voucherDiscount + selectedShipFee;
+            order.finalTotal = total;
+            document.getElementById('sumTotal').textContent = total.toLocaleString('vi-VN') + '₫';
+        }
+
+        // ========= Chọn địa chỉ =========
+        function selectAddr(el) {
+            document.querySelectorAll('.saved-address').forEach(a => a.classList.remove('selected'));
+            el.classList.add('selected');
+            newAddrOpen = false;
+            const form = document.getElementById('newAddrForm');
+            if (form) form.classList.add('collapsed');
+            document.getElementById('addrToggleText').textContent = 'Giao đến địa chỉ khác';
+        }
+        let newAddrOpen = false;
+        function toggleNewAddr() {
+            newAddrOpen = !newAddrOpen;
+            const form = document.getElementById('newAddrForm');
+            if (newAddrOpen) {
+                form.classList.remove('collapsed');
+                document.querySelectorAll('.saved-address').forEach(a => a.classList.remove('selected'));
+                document.getElementById('addrToggleText').textContent = 'Dùng địa chỉ đã lưu';
+            } else {
+                form.classList.add('collapsed');
+                const first = document.querySelector('.saved-address');
+                if (first) first.classList.add('selected');
+                document.getElementById('addrToggleText').textContent = 'Giao đến địa chỉ khác';
+            }
+        }
+
+        // ========= Chọn vận chuyển =========
+        function selectShip(el) {
+            document.querySelectorAll('.ship-method').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedShipFee = parseInt(el.dataset.fee);
+            updateSummary();
+        }
+
+        // ========= Chọn thanh toán =========
+        function selectPay(el) {
+            document.querySelectorAll('.pay-method-card').forEach(m => m.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPayMethod = el.dataset.pay;
+            const btnText = document.getElementById('placeOrderText');
+            if (selectedPayMethod === 'cod') btnText.textContent = 'Đặt hàng (COD)';
+            else if (selectedPayMethod === 'bank') btnText.textContent = 'Tiến hành chuyển khoản';
+            else if (selectedPayMethod === 'momo') btnText.textContent = 'Thanh toán qua Momo';
+            else if (selectedPayMethod === 'vnpay') btnText.textContent = 'Thanh toán qua VNPAY';
+            else btnText.textContent = 'Đặt hàng';
+        }
+
+        // ========= Đặt hàng =========
+        let isPlacingOrder = false;
+        function placeOrder() {
+            // Chống đặt hàng nhiều lần (double-submit)
+            if (isPlacingOrder) {
+                showToast('info', 'Đơn đang được xử lý', 'Bạn đã đặt hàng — vui lòng đừng bấm quá nhanh!');
+                return;
+            }
+            // Validate địa chỉ mới nếu đang mở
+            if (newAddrOpen) {
+                let valid = true;
+                const fullName = document.getElementById('fullName');
+                const phone = document.getElementById('phone');
+                const addressDetail = document.getElementById('addressDetail');
+
+                [fullName, phone, addressDetail].forEach(f => f.classList.remove('error'));
+                document.querySelectorAll('.form-error').forEach(e => e.classList.remove('show'));
+
+                if (!fullName.value.trim()) { fullName.classList.add('error'); document.getElementById('err-fullName').classList.add('show'); valid = false; }
+                if (!/^0\d{9,10}$/.test(phone.value.replace(/\s/g, ''))) { phone.classList.add('error'); document.getElementById('err-phone').classList.add('show'); valid = false; }
+                if (!addressDetail.value.trim()) { addressDetail.classList.add('error'); document.getElementById('err-addressDetail').classList.add('show'); valid = false; }
+
+                if (!valid) {
+                    showToast('error', 'Thiếu thông tin', 'Vui lòng điền đầy đủ thông tin giao hàng');
+                    return;
+                }
+            }
+
+            // Lưu thông tin đầy đủ vào order
+            order.payMethod = selectedPayMethod;
+            order.shipFee = selectedShipFee;
+            order.finalTotal = order.subtotal - order.productDiscount - order.voucherDiscount + selectedShipFee;
+
+            // Thông tin người nhận
+            if (newAddrOpen) {
+                order.receiver = {
+                    name: document.getElementById('fullName').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    address: document.getElementById('addressDetail').value.trim() + ', ' + (document.getElementById('district').value || '') + ', ' + (document.getElementById('province').value || '')
+                };
+            } else {
+                const sel = document.querySelector('.saved-address.selected');
+                if (sel) {
+                    order.receiver = { name: sel.dataset.name, phone: sel.dataset.phone, address: sel.dataset.address };
+                } else {
+                    showToast('error', 'Chưa có địa chỉ', 'Vui lòng chọn hoặc thêm địa chỉ giao hàng');
+                    return;
+                }
+            }
+            order.note = document.getElementById('orderNote').value.trim();
+
+            order.orderDate = new Date().toLocaleString('vi-VN');
+
+            // ===== Gửi đơn hàng lên server để lưu vào DB =====
+            const payload = {
+                receiverName: order.receiver.name,
+                receiverPhone: order.receiver.phone,
+                shippingAddress: order.receiver.address,
+                note: order.note,
+                subtotal: order.subtotal,
+                productDiscount: order.productDiscount,
+                voucher: order.voucher || '',
+                voucherDiscount: order.voucherDiscount || 0,
+                shippingFee: selectedShipFee,
+                total: order.finalTotal,
+                shippingMethod: (document.querySelector('.ship-method.selected')?.dataset.ship) || 'standard',
+                paymentMethod: selectedPayMethod,
+                items: order.items.map(it => ({ variantId: it.variantId || null, name: it.name, variant: it.variant, unit: it.unit, qty: it.qty }))
+            };
+
+            // Khóa nút đặt hàng để tránh tạo trùng đơn
+            isPlacingOrder = true;
+            const placeBtn = document.querySelector('.place-order-btn');
+            const placeTxt = document.getElementById('placeOrderText');
+            if (placeBtn) placeBtn.disabled = true;
+            if (placeBtn) placeBtn.style.opacity = '0.7';
+            if (placeBtn) placeBtn.style.cursor = 'not-allowed';
+            if (placeTxt) placeTxt.textContent = 'Đang xử lý...';
+
+            fetch('/Home/PlaceOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(async r => {
+                if (r.status === 401) { showToast('info','Phiên đã hết hạn','Vui lòng đăng nhập lại'); setTimeout(() => location.href='/Home/DangNhap', 1400); return null; }
+                if (!r.ok) {
+                    const err = await r.json().catch(() => ({}));
+                    throw new Error(err.message || 'Không thể lưu đơn hàng');
+                }
+                return r.json();
+            })
+            .then(data => {
+                if (!data) return;
+                order.orderId = data.orderCode;
+                try { sessionStorage.setItem('monoOrder', JSON.stringify(order)); } catch (e) {}
+
+                if (selectedPayMethod === 'bank') {
+                    showToast('success', 'Đặt hàng thành công', 'Mã đơn ' + data.orderCode + ' · chuyển đến trang chuyển khoản...');
+                    setTimeout(() => { window.location.href = '/Home/BankTransfer'; }, 900);
+                } else if (selectedPayMethod === 'cod') {
+                    showToast('success', 'Đặt hàng thành công', 'Đơn COD ' + data.orderCode + ' đã được ghi nhận');
+                    setTimeout(() => { window.location.href = '/Home/OrderSuccess'; }, 900);
+                } else {
+                    showToast('info', 'Chuyển đến cổng thanh toán', `Đang mở ${selectedPayMethod.toUpperCase()}...`);
+                    setTimeout(() => { window.location.href = '/Home/BankTransfer'; }, 1000);
+                }
+            })
+            .catch(e => {
+                // Có lỗi → mở khóa nút để khách thử lại
+                isPlacingOrder = false;
+                if (placeBtn) { placeBtn.disabled = false; placeBtn.style.opacity = ''; placeBtn.style.cursor = ''; }
+                if (placeTxt) placeTxt.textContent = 'Đặt hàng';
+                showToast('error', 'Không thể đặt hàng', e.message || 'Vui lòng thử lại.');
+            });
+        }
+
+        // ========= Header scroll =========
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // ========= Toast =========
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: 'ti-circle-check', info: 'ti-info-circle', warning: 'ti-alert-circle', error: 'ti-x' };
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <button class="toast-close"><i class="ti ti-x"></i></button>
+            `;
+            container.appendChild(toast);
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            });
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        // ========= Khởi tạo =========
+        renderItems();
+        updateSummary();
+        document.getElementById('headerCartBadge').textContent = order.items.reduce((s, i) => s + i.qty, 0);
+    </script>
+
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

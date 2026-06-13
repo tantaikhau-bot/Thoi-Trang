@@ -1,0 +1,1343 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Campaign Autumn '26 - Sự Tĩnh Lặng Của Thành Thị";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR · Sự Tĩnh Lặng Của Thành Thị</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1a1a1a;
+            background: #f1efe8;
+            line-height: 1.6;
+            overflow-x: clip;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes drift {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-10px, 8px);
+            }
+        }
+
+        @@keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @@keyframes scrollIndicator {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 1;
+            }
+        }
+
+        /* ============ TOP BAR (minimal) ============ */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 24px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            mix-blend-mode: difference;
+            color: #fff;
+            transition: padding 0.3s, background 0.3s;
+        }
+
+            .top-bar.scrolled {
+                padding: 16px 60px;
+            }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+            .back-link:hover {
+                opacity: 0.7;
+            }
+
+            .back-link i {
+                font-size: 16px;
+            }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+        }
+
+            .logo span {
+                font-weight: 200;
+            }
+
+        .top-actions {
+            display: flex;
+            gap: 24px;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+        }
+
+            .top-actions a {
+                transition: opacity 0.3s;
+            }
+
+                .top-actions a:hover {
+                    opacity: 0.7;
+                }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            background: #d8d3c6;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(180px, 25vw, 380px);
+            font-weight: 700;
+            letter-spacing: -10px;
+            color: rgba(0,0,0,0.05);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 40px;
+            max-width: 900px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 5px;
+            font-weight: 600;
+            color: rgba(0,0,0,0.55);
+            margin-bottom: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+            .hero-eyebrow::before, .hero-eyebrow::after {
+                content: '';
+                width: 30px;
+                height: 1px;
+                background: rgba(0,0,0,0.4);
+            }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 112px);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 32px;
+        }
+
+            .hero-title em {
+                font-style: italic;
+                color: #8a4a3a;
+                font-weight: 500;
+            }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(0,0,0,0.55);
+            margin-top: 40px;
+            animation: fadeInUp 1.2s ease 0.4s both;
+        }
+
+            .hero-meta div {
+                text-align: center;
+            }
+
+            .hero-meta strong {
+                display: block;
+                color: #1a1a1a;
+                font-size: 14px;
+                margin-bottom: 4px;
+                letter-spacing: 1px;
+                font-weight: 500;
+            }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(0,0,0,0.5);
+        }
+
+            .scroll-indicator i {
+                font-size: 18px;
+                animation: scrollIndicator 1.6s ease infinite;
+            }
+
+        /* ============ INTRO ============ */
+        .intro {
+            padding: 140px 60px 100px;
+            background: #f1efe8;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .intro-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #8a4a3a;
+            font-weight: 600;
+            position: sticky;
+            top: 130px;
+        }
+
+        .intro-text {
+            font-size: clamp(22px, 2.4vw, 32px);
+            line-height: 1.55;
+            font-weight: 300;
+            letter-spacing: -0.4px;
+        }
+
+            .intro-text strong {
+                font-weight: 500;
+                color: #1a1a1a;
+            }
+
+            .intro-text em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        /* ============ MOOD GALLERY ============ */
+        .mood {
+            padding: 80px 60px 100px;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mood-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .mood-img i {
+                font-size: clamp(60px, 8vw, 120px);
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.6s ease;
+            }
+
+            .mood-img.dark i {
+                color: rgba(255,255,255,0.22);
+            }
+
+            .mood-img:hover i {
+                transform: scale(1.1);
+            }
+
+        .mood-1 {
+            grid-column: 1 / 5;
+            aspect-ratio: 3/4;
+            background: #c9b8a4;
+        }
+
+        .mood-2 {
+            grid-column: 5 / 9;
+            aspect-ratio: 4/5;
+            background: #2c2c2a;
+        }
+
+        .mood-3 {
+            grid-column: 9 / 13;
+            aspect-ratio: 3/4;
+            background: #d8d3c6;
+            margin-top: 60px;
+        }
+
+        .mood-cap {
+            grid-column: 1 / 7;
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: rgba(0,0,0,0.55);
+            margin-top: 24px;
+            text-transform: uppercase;
+        }
+
+        /* ============ QUOTE BLOCK ============ */
+        .quote-section {
+            padding: 100px 60px;
+            background: #2c2c2a;
+            color: #f1efe8;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .quote-section::before {
+                content: '"';
+                position: absolute;
+                top: 20px;
+                left: 60px;
+                font-family: 'Playfair Display', Georgia, serif;
+                font-size: 240px;
+                line-height: 1;
+                color: rgba(255,255,255,0.08);
+                pointer-events: none;
+            }
+
+        .quote-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote-text {
+            font-size: clamp(28px, 3.5vw, 48px);
+            font-weight: 400;
+            line-height: 1.4;
+            letter-spacing: -0.5px;
+            font-style: italic;
+        }
+
+        .quote-author {
+            font-size: 12px;
+            letter-spacing: 4px;
+            margin-top: 36px;
+            color: #c9a489;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+            .quote-author::before {
+                content: '';
+                width: 30px;
+                height: 1px;
+                background: #c9a489;
+            }
+
+        /* ============ STORY SECTIONS (alternating) ============ */
+        .story {
+            padding: 100px 60px;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+            .story-grid.reverse .story-text {
+                order: 2;
+            }
+
+        .story-text-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #8a4a3a;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .story-text h2 {
+            font-size: clamp(36px, 4.5vw, 56px);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 28px;
+        }
+
+            .story-text h2 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .story-text p {
+            font-size: 16px;
+            line-height: 1.85;
+            color: rgba(0,0,0,0.7);
+            margin-bottom: 18px;
+        }
+
+            .story-text p:last-of-type {
+                margin-bottom: 32px;
+            }
+
+        .story-image {
+            aspect-ratio: 4/5;
+            background: #c9b8a4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .story-image.dark {
+                background: #2c2c2a;
+            }
+
+            .story-image i {
+                font-size: 140px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.6s;
+            }
+
+            .story-image.dark i {
+                color: rgba(255,255,255,0.22);
+            }
+
+            .story-image:hover i {
+                transform: scale(1.08);
+            }
+
+        .story-image-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+        }
+
+        .story-image:not(.dark) .story-image-caption {
+            color: rgba(0,0,0,0.6);
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid #1a1a1a;
+            transition: gap 0.3s;
+            cursor: pointer;
+        }
+
+            .read-more:hover {
+                gap: 16px;
+            }
+
+            .read-more i {
+                font-size: 16px;
+            }
+
+        /* ============ PALETTE STRIP ============ */
+        .palette {
+            padding: 80px 60px;
+            text-align: center;
+        }
+
+        .palette-title {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #8a4a3a;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .palette-h2 {
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 400;
+            margin-bottom: 60px;
+            letter-spacing: -0.8px;
+        }
+
+            .palette-h2 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .palette-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .color-chip {
+            aspect-ratio: 1/1.2;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 16px;
+        }
+
+            .color-chip:hover {
+                transform: translateY(-8px);
+            }
+
+        .color-chip-name {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #1a1a1a;
+        }
+
+        .color-chip.dark .color-chip-name {
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+        }
+
+        .c1 {
+            background: #d8d3c6;
+        }
+
+        .c2 {
+            background: #8a6a52;
+        }
+
+        .c3 {
+            background: #2c2c2a;
+        }
+
+        .c4 {
+            background: #c9b8a4;
+        }
+
+        .c5 {
+            background: #5a4435;
+        }
+
+        /* ============ PRODUCTS IN CAMPAIGN ============ */
+        .campaign-products {
+            padding: 100px 60px 120px;
+            background: #fff;
+        }
+
+        .cp-header {
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .cp-title h2 {
+            font-size: clamp(36px, 4.5vw, 52px);
+            font-weight: 400;
+            letter-spacing: -1.2px;
+            line-height: 1.1;
+        }
+
+            .cp-title h2 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .cp-title-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #8a4a3a;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .cp-link {
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 4px;
+            border-bottom: 1.5px solid #1a1a1a;
+            transition: gap 0.3s;
+        }
+
+            .cp-link:hover {
+                gap: 14px;
+            }
+
+        .cp-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .cp-card {
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+            .cp-card:hover {
+                transform: translateY(-8px);
+            }
+
+        .cp-img {
+            aspect-ratio: 3/4;
+            background: #f1efe8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .cp-img i {
+                font-size: 90px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.5s;
+            }
+
+            .cp-img.dark {
+                background: #2c2c2a;
+            }
+
+                .cp-img.dark i {
+                    color: rgba(255,255,255,0.22);
+                }
+
+        .cp-card:hover .cp-img i {
+            transform: scale(1.1);
+        }
+
+        .cp-img-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 9px;
+            letter-spacing: 2px;
+            padding: 4px 10px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .cp-num {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #8a4a3a;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .cp-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .cp-price {
+            font-size: 14px;
+            color: rgba(0,0,0,0.6);
+        }
+
+        /* ============ CINEMA STRIP (full-width image rows) ============ */
+        .cinema-strip {
+            height: 70vh;
+            background: #2c2c2a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .cinema-strip i {
+                font-size: 240px;
+                color: rgba(255,255,255,0.1);
+                animation: drift 6s ease-in-out infinite;
+            }
+
+        .cinema-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 400;
+            font-style: italic;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: -2px;
+            text-align: center;
+            line-height: 1;
+            z-index: 2;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* ============ CTA SECTION ============ */
+        .cta {
+            padding: 140px 60px;
+            text-align: center;
+            background: #f1efe8;
+        }
+
+        .cta-label {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #8a4a3a;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+
+        .cta h2 {
+            font-size: clamp(48px, 6vw, 88px);
+            font-weight: 400;
+            letter-spacing: -2px;
+            line-height: 1;
+            max-width: 1100px;
+            margin: 0 auto 28px;
+        }
+
+            .cta h2 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .cta-desc {
+            font-size: 16px;
+            color: rgba(0,0,0,0.65);
+            max-width: 540px;
+            margin: 0 auto 44px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: inline-flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            border-radius: 0;
+            font-size: 12px;
+            letter-spacing: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 1.5px solid #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #f1efe8;
+        }
+
+            .btn-primary:hover {
+                background: transparent;
+                color: #1a1a1a;
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a1a1a;
+        }
+
+            .btn-outline:hover {
+                background: #1a1a1a;
+                color: #f1efe8;
+            }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        /* ============ FOOTER ============ */
+        .editorial-footer {
+            background: #1a1a1a;
+            color: #c9a489;
+            padding: 60px;
+            text-align: center;
+        }
+
+        .ef-marquee {
+            overflow: hidden;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+
+        .ef-marquee-track {
+            display: inline-flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+        }
+
+            .ef-marquee-track span {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 24px;
+                font-weight: 400;
+                color: rgba(201, 164, 137, 0.7);
+            }
+
+        .ef-bottom {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* SCROLL TOP */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #1a1a1a;
+            color: #f1efe8;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+            }
+
+        /* RESPONSIVE */
+        @@media (max-width: 1024px) {
+            .top-bar, .top-bar.scrolled {
+                padding: 18px 24px;
+            }
+
+            .top-actions {
+                display: none;
+            }
+
+            .intro, .mood, .quote-section, .story, .palette, .campaign-products, .cta, .editorial-footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .intro-label {
+                position: static;
+            }
+
+            .mood-1 {
+                grid-column: 1 / 8;
+            }
+
+            .mood-2 {
+                grid-column: 8 / 13;
+                aspect-ratio: 3/4;
+            }
+
+            .mood-3 {
+                grid-column: 1 / 13;
+                margin-top: 0;
+                aspect-ratio: 4/3;
+            }
+
+            .mood-cap {
+                grid-column: 1 / 13;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+                .story-grid.reverse .story-text {
+                    order: 0;
+                }
+
+            .cp-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .palette-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .top-bar, .top-bar.scrolled {
+                padding: 14px 16px;
+            }
+
+            .intro, .mood, .quote-section, .story, .palette, .campaign-products, .cta, .editorial-footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .intro {
+                padding-top: 80px;
+                padding-bottom: 60px;
+            }
+
+            .hero-meta {
+                gap: 28px;
+            }
+
+            .palette-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .cp-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cinema-strip {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar" id="topBar">
+        <a href="/" class="back-link">
+            <i class="ti ti-arrow-left"></i>
+            <span>Quay lại</span>
+        </a>
+        <a href="/" class="logo">MONO<span>.WEAR</span></a>
+        <div class="top-actions">
+            <a href="#">Lookbook</a>
+            <a href="#">Shop</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-text serif">AUTUMN</div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">CAMPAIGN AUTUMN '26</div>
+            <h1 class="hero-title serif">Sự Tĩnh Lặng<br />Của <em>Thành Thị</em></h1>
+            <div class="hero-meta">
+                <div>
+                    <strong>22 Looks</strong>
+                    Bộ sưu tập đầy đủ
+                </div>
+                <div>
+                    <strong>Studio Nhà K</strong>
+                    Sài Gòn, 10/2026
+                </div>
+                <div>
+                    <strong>Tone Đất</strong>
+                    Mộc · Ấm · Trầm
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>CUỘN XUỐNG</span>
+            <i class="ti ti-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="intro">
+        <div class="intro-grid">
+            <div class="intro-label">— LỜI MỞ ĐẦU</div>
+            <div class="intro-text serif">
+                Giữa nhịp <em>tấp nập</em> của đời sống đô thị, MONO.WEAR tìm về <strong>khoảng lặng</strong> bên trong từng đường cắt. <em>Autumn '26</em> không kể chuyện về mùa thu — mà kể chuyện về <strong>cảm giác mùa thu</strong>: tone màu đất ấm áp, phom dáng oversize giải phóng cơ thể, và một sự bình tĩnh hiếm có giữa lòng phố thị.
+            </div>
+        </div>
+    </section>
+
+    <!-- MOOD GALLERY -->
+    <section class="mood">
+        <div class="mood-grid">
+            <div class="mood-img mood-1">
+                <i class="ti ti-shirt"></i>
+            </div>
+            <div class="mood-img mood-2 dark">
+                <i class="ti ti-hanger"></i>
+            </div>
+            <div class="mood-img mood-3">
+                <i class="ti ti-shoe"></i>
+            </div>
+            <div class="mood-cap">— BỘ ẢNH CAMPAIGN · CHỤP TẠI XƯỞNG MONO.STUDIO, QUẬN 3, SÀI GÒN</div>
+        </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="quote-section">
+        <div class="quote-inner">
+            <div class="quote-text serif">
+                Thời trang không phải là <em>tiếng ồn</em>,<br />
+                mà là <em>khoảng lặng</em><br />
+                giữa hai nhịp thở.
+            </div>
+            <div class="quote-author">KHỞI XƯỚNG · MONO.WEAR DESIGN TEAM</div>
+        </div>
+    </section>
+
+    <!-- STORY 1 -->
+    <section class="story">
+        <div class="story-grid">
+            <div class="story-text">
+                <span class="story-text-label">— CHƯƠNG MỘT</span>
+                <h2 class="serif">Tone <em>màu đất</em><br />kể câu chuyện về nguồn cội</h2>
+                <p>Bộ sưu tập lấy cảm hứng từ những bức tranh khắc gỗ Nhật Bản thế kỷ 18, nơi tone màu đất được pha trộn từ khoáng chất tự nhiên — không bão hòa, không phô trương, nhưng đủ chiều sâu để giữ chân ánh nhìn.</p>
+                <p>Mỗi sắc thái cát, nâu trầm, kem ấm trong Autumn '26 đều được nhuộm thủ công bằng phương pháp <em>plant-dye</em>, sử dụng vỏ óc chó, lá chè và đất sét đỏ.</p>
+                <a class="read-more">Đọc về quy trình nhuộm <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="story-image">
+                <i class="ti ti-droplet"></i>
+                <div class="story-image-caption">— STUDIO #01 · NHUỘM THỦ CÔNG</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORY 2 (reverse) -->
+    <section class="story">
+        <div class="story-grid reverse">
+            <div class="story-image dark">
+                <i class="ti ti-shirt"></i>
+                <div class="story-image-caption">— STUDIO #02 · CẮT MAY</div>
+            </div>
+            <div class="story-text">
+                <span class="story-text-label">— CHƯƠNG HAI</span>
+                <h2 class="serif">Phom <em>oversize</em><br />giải phóng cơ thể</h2>
+                <p>Đường cắt rộng rãi không phải để che giấu, mà để <strong>tôn trọng</strong>. Mỗi outfit được dựng trên tỉ lệ 1:1.4 — đủ rộng để chuyển động tự do, đủ ôm để giữ form khi đứng yên.</p>
+                <p>Đường may sườn bên được giấu hoàn toàn, tạo cảm giác như một mảnh vải duy nhất bao phủ cơ thể. Đây là kỹ thuật <em>seamless tailoring</em> mà MONO.WEAR đã phát triển trong 6 tháng cuối năm 2025.</p>
+                <a class="read-more">Xem kỹ thuật tailoring <i class="ti ti-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMA STRIP -->
+    <section class="cinema-strip">
+        <i class="ti ti-hanger"></i>
+        <div class="cinema-text serif">A U T U M N</div>
+    </section>
+
+    <!-- PALETTE -->
+    <section class="palette">
+        <div class="palette-title">BẢNG MÀU MÙA</div>
+        <h2 class="palette-h2 serif">Năm sắc thái <em>của mùa</em></h2>
+        <div class="palette-row">
+            <div class="color-chip c1">
+                <div class="color-chip-name">CÁT KHÔ</div>
+            </div>
+            <div class="color-chip c2 dark">
+                <div class="color-chip-name">ÓC CHÓ</div>
+            </div>
+            <div class="color-chip c3 dark">
+                <div class="color-chip-name">MỰC TÀU</div>
+            </div>
+            <div class="color-chip c4">
+                <div class="color-chip-name">KEM RANG</div>
+            </div>
+            <div class="color-chip c5 dark">
+                <div class="color-chip-name">ĐẤT NUNG</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS IN CAMPAIGN -->
+    <section class="campaign-products">
+        <div class="cp-header">
+            <div class="cp-title">
+                <span class="cp-title-label">— SẢN PHẨM TRONG BỘ SƯU TẬP</span>
+                <h2 class="serif">22 mảnh ghép<br />cho mùa <em>thu yên</em></h2>
+            </div>
+            <a class="cp-link" href="#">Xem toàn bộ <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="cp-grid">
+            <div class="cp-card">
+                <div class="cp-img">
+                    <span class="cp-img-tag">LOOK 03</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="cp-num">N° 01 / 22</div>
+                <div class="cp-name">Áo Linen Cát Khô</div>
+                <div class="cp-price">1.250.000₫</div>
+            </div>
+            <div class="cp-card">
+                <div class="cp-img dark">
+                    <span class="cp-img-tag">LOOK 07</span>
+                    <i class="ti ti-hanger"></i>
+                </div>
+                <div class="cp-num">N° 02 / 22</div>
+                <div class="cp-name">Quần Wool Mực Tàu</div>
+                <div class="cp-price">1.680.000₫</div>
+            </div>
+            <div class="cp-card">
+                <div class="cp-img">
+                    <span class="cp-img-tag">LOOK 11</span>
+                    <i class="ti ti-shirt-sport"></i>
+                </div>
+                <div class="cp-num">N° 03 / 22</div>
+                <div class="cp-name">Áo Khoác Óc Chó</div>
+                <div class="cp-price">2.450.000₫</div>
+            </div>
+            <div class="cp-card">
+                <div class="cp-img dark">
+                    <span class="cp-img-tag">LOOK 15</span>
+                    <i class="ti ti-shoe"></i>
+                </div>
+                <div class="cp-num">N° 04 / 22</div>
+                <div class="cp-name">Sneakers Đất Nung</div>
+                <div class="cp-price">1.890.000₫</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-label">— KHÁM PHÁ THÊM</div>
+        <h2 class="serif">Tham gia vào <em>khoảng lặng</em><br />của mùa thu này</h2>
+        <p class="cta-desc">22 thiết kế, 5 sắc thái, một câu chuyện. Khám phá bộ sưu tập đầy đủ và tìm cho mình một mảnh ghép.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">
+                Mua bộ sưu tập <i class="ti ti-arrow-right"></i>
+            </a>
+            <a href="#" class="btn btn-outline">
+                Đặt lịch xem tại showroom
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER MARQUEE -->
+    <footer class="editorial-footer">
+        <div class="ef-marquee">
+            <div class="ef-marquee-track">
+                <span>Autumn '26</span>
+                <span>·</span>
+                <span>Sự Tĩnh Lặng</span>
+                <span>·</span>
+                <span>Của Thành Thị</span>
+                <span>·</span>
+                <span>22 Looks</span>
+                <span>·</span>
+                <span>MONO.WEAR</span>
+                <span>·</span>
+                <span>Autumn '26</span>
+                <span>·</span>
+                <span>Sự Tĩnh Lặng</span>
+                <span>·</span>
+                <span>Của Thành Thị</span>
+                <span>·</span>
+                <span>22 Looks</span>
+                <span>·</span>
+                <span>MONO.WEAR</span>
+                <span>·</span>
+            </div>
+        </div>
+        <div class="ef-bottom">© 2026 MONO.WEAR · ALL RIGHTS RESERVED</div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <script>
+        // Top bar scrolled state
+        const topBar = document.getElementById('topBar');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) topBar.classList.add('scrolled');
+            else topBar.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth reveal cho các section khi scroll vào view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.9s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.intro-text, .mood-grid, .quote-text, .story-grid, .palette-row, .cp-card').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

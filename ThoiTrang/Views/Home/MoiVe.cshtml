@@ -1,0 +1,2791 @@
+﻿@model List<ThoiTrang.Models.Entities.Product>
+@{
+    ViewData["Title"] = "Sản phẩm mới về";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Mới Về</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ANIMATIONS */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.3);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            75% {
+                transform: scale(1.2);
+            }
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes pulseDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.6);
+                opacity: 0.4;
+            }
+        }
+
+        @@keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes badgeBounce {
+            0%, 100% {
+                transform: translateY(0) rotate(-8deg);
+            }
+
+            50% {
+                transform: translateY(-6px) rotate(-8deg);
+            }
+        }
+
+        @@keyframes scrollHint {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 1;
+            }
+        }
+
+        /* ANNOUNCE */
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .announce::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                animation: shimmer 4s infinite;
+            }
+
+        /* HEADER */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: box-shadow 0.3s;
+        }
+
+            .header.scrolled {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+        }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 480px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f3;
+            border-radius: 10px;
+            padding: 11px 16px;
+        }
+
+            .search-box i {
+                font-size: 18px;
+                color: #888;
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+            animation: pulse 2s infinite;
+        }
+
+        .cart-badge {
+            background: #1a1a1a;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #1a1a1a;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a:hover {
+                    color: #1a1a1a;
+                }
+
+                    .nav a:hover::after, .nav a.active::after {
+                        width: 100%;
+                    }
+
+                .nav a.active {
+                    color: #1a1a1a;
+                    font-weight: 500;
+                }
+
+        /* ===== HERO MỚI VỀ ===== */
+        .new-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2a 60%, #3a2a3a 100%);
+            color: #fff;
+            padding: 60px 60px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .new-hero::before {
+                content: '';
+                position: absolute;
+                top: -100px;
+                right: -50px;
+                width: 500px;
+                height: 500px;
+                background: radial-gradient(circle, rgba(212,83,126,0.3), transparent 70%);
+                filter: blur(50px);
+                pointer-events: none;
+            }
+
+            .new-hero::after {
+                content: '';
+                position: absolute;
+                bottom: -100px;
+                left: -50px;
+                width: 450px;
+                height: 450px;
+                background: radial-gradient(circle, rgba(226,133,107,0.25), transparent 70%);
+                filter: blur(50px);
+                pointer-events: none;
+            }
+
+        /* Marquee chữ to chạy ngang phía sau */
+        .new-hero-marquee {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: clamp(120px, 18vw, 220px);
+            font-weight: 700;
+            color: rgba(255,255,255,0.04);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            display: flex;
+            animation: ticker 25s linear infinite;
+            letter-spacing: -4px;
+        }
+
+            .new-hero-marquee span {
+                padding-right: 60px;
+            }
+
+        .new-hero-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+        }
+
+            .breadcrumb a {
+                transition: color 0.3s;
+            }
+
+                .breadcrumb a:hover {
+                    color: #fff;
+                }
+
+            .breadcrumb i {
+                font-size: 14px;
+            }
+
+            .breadcrumb .current {
+                color: #fff;
+            }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #e2856b;
+            margin-bottom: 18px;
+            font-weight: 600;
+            animation: fadeInUp 0.8s ease;
+        }
+
+            .hero-eyebrow .live-dot {
+                width: 8px;
+                height: 8px;
+                background: #e2856b;
+                border-radius: 50%;
+                animation: pulseDot 1.5s ease infinite;
+            }
+
+        .new-hero h1 {
+            font-size: clamp(48px, 7vw, 96px);
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+            .new-hero h1 em {
+                font-style: italic;
+                background: linear-gradient(135deg, #d4537e, #e2856b);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 400;
+            }
+
+        .new-hero-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 36px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        /* Countdown to next drop */
+        .drop-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 16px 22px;
+            border-radius: 14px;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+            flex-wrap: wrap;
+        }
+
+        .drop-countdown-label {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+            .drop-countdown-label .small {
+                font-size: 10px;
+                letter-spacing: 2px;
+                color: rgba(255,255,255,0.5);
+            }
+
+            .drop-countdown-label .big {
+                font-size: 13px;
+                font-weight: 600;
+                color: #fff;
+            }
+
+        .drop-timer {
+            display: flex;
+            gap: 6px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-unit {
+            background: #fff;
+            color: #1a1a1a;
+            padding: 6px 10px;
+            border-radius: 8px;
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .timer-num {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 9px;
+            color: #888;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .timer-sep {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            align-self: center;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-stat-num {
+            font-size: 32px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff, #d4537e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 6px;
+        }
+
+        /* ===== FILTER STRIP ===== */
+        .filter-strip {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 16px 60px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 60px;
+            z-index: 50;
+            flex-wrap: wrap;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            flex: 1;
+            min-width: 0;
+        }
+
+            .filter-pills::-webkit-scrollbar {
+                display: none;
+            }
+
+        .filter-pill {
+            padding: 9px 16px;
+            background: #f5f5f3;
+            border: 1.5px solid transparent;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .filter-pill:hover {
+                background: #ececec;
+            }
+
+            .filter-pill.active {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+
+            .filter-pill i {
+                font-size: 15px;
+            }
+
+            .filter-pill .count {
+                font-size: 10px;
+                background: rgba(255,255,255,0.2);
+                padding: 1px 6px;
+                border-radius: 999px;
+                font-weight: 600;
+            }
+
+            .filter-pill:not(.active) .count {
+                background: rgba(0,0,0,0.06);
+                color: #888;
+            }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f5f5f3;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+            .sort-control:hover {
+                background: #ececec;
+            }
+
+            .sort-control i {
+                font-size: 16px;
+            }
+
+        /* ===== FEATURED HERO PRODUCT (this week's drop) ===== */
+        .featured-drop {
+            padding: 60px;
+        }
+
+        .featured-drop-card {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 0;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .featured-image {
+            background: linear-gradient(135deg, #d4c8d4, #b8a4c4);
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .featured-image::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0);
+                background-size: 24px 24px;
+                opacity: 0.5;
+            }
+
+            .featured-image i {
+                font-size: 260px;
+                color: rgba(255,255,255,0.4);
+                animation: float 5s ease-in-out infinite;
+            }
+
+        .featured-badge {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .featured-badge .dot {
+                width: 6px;
+                height: 6px;
+                background: #e2856b;
+                border-radius: 50%;
+                animation: pulseDot 1.5s ease infinite;
+            }
+
+        .featured-week-tag {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255,255,255,0.95);
+            color: #1a1a1a;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .featured-info {
+            padding: 50px 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-cat {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #d4537e;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .featured-name {
+            font-size: clamp(28px, 3.5vw, 40px);
+            font-weight: 500;
+            line-height: 1.15;
+            letter-spacing: -0.8px;
+            margin-bottom: 16px;
+        }
+
+        .featured-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .featured-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+            padding: 18px 0;
+            border-top: 1px solid #f0f0ec;
+            border-bottom: 1px solid #f0f0ec;
+        }
+
+        .featured-meta-item .label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .featured-meta-item .value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .featured-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .featured-price {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
+
+        .featured-price-old {
+            font-size: 16px;
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        .featured-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-add {
+            flex: 1;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-add::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.6s;
+            }
+
+            .btn-add:hover::before {
+                left: 100%;
+            }
+
+            .btn-add:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            }
+
+            .btn-add i {
+                font-size: 18px;
+            }
+
+        .btn-icon-action {
+            width: 52px;
+            height: 52px;
+            background: #fff;
+            border: 1.5px solid #ececec;
+            border-radius: 12px;
+            font-size: 20px;
+            color: #555;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .btn-icon-action:hover {
+                border-color: #1a1a1a;
+                color: #d4537e;
+            }
+
+            .btn-icon-action.active {
+                color: #d4537e;
+                border-color: #d4537e;
+            }
+
+        /* ===== SECTION HEADERS ===== */
+        .section {
+            padding: 40px 60px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .section-sub {
+            font-size: 13px;
+            color: #888;
+            margin-top: 4px;
+            margin-left: 52px;
+        }
+
+        .section-link {
+            font-size: 13px;
+            color: #1a1a1a;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1.5px solid #1a1a1a;
+            transition: gap 0.3s;
+        }
+
+            .section-link:hover {
+                gap: 12px;
+            }
+
+        /* WEEK TIMELINE - tuần phát hành */
+        .week-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #ececec;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+            .week-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+        .week-tab {
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+            .week-tab:hover {
+                color: #1a1a1a;
+            }
+
+            .week-tab.active {
+                color: #1a1a1a;
+            }
+
+                .week-tab.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -1px;
+                    left: 24px;
+                    right: 24px;
+                    height: 2px;
+                    background: linear-gradient(90deg, #d4537e, #e2856b);
+                }
+
+            .week-tab .week-num {
+                font-family: 'Courier New', monospace;
+                font-size: 11px;
+                color: #aaa;
+                font-weight: 600;
+            }
+
+            .week-tab.active .week-num {
+                color: #d4537e;
+            }
+
+            .week-tab .new-badge {
+                background: linear-gradient(135deg, #d4537e, #e2856b);
+                color: #fff;
+                font-size: 9px;
+                padding: 2px 6px;
+                border-radius: 5px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+            }
+
+        /* ===== PRODUCT GRID ===== */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s, box-shadow 0.4s;
+            position: relative;
+        }
+
+            .product:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 16px 36px rgba(0,0,0,0.08);
+            }
+
+        .product-image {
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-icon {
+            font-size: 100px;
+            color: rgba(0,0,0,0.15);
+            transition: transform 0.5s ease;
+        }
+
+        .product:hover .product-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .bg-cream {
+            background: #f1efe8;
+        }
+
+        .bg-dark {
+            background: #2c2c2a;
+        }
+
+        .bg-gray {
+            background: #d3d1c7;
+        }
+
+        .bg-blue {
+            background: #2c3e5e;
+        }
+
+        .bg-brown {
+            background: #6b4423;
+        }
+
+        .bg-green {
+            background: #4a5d3a;
+        }
+
+        .bg-pink {
+            background: #f8d7e3;
+        }
+
+        .bg-rose {
+            background: #d4537e;
+        }
+
+        .bg-lavender {
+            background: #d4c8d4;
+        }
+
+        .bg-mint {
+            background: #c8d8c4;
+        }
+
+        .bg-dark .product-icon,
+        .bg-blue .product-icon,
+        .bg-brown .product-icon,
+        .bg-green .product-icon,
+        .bg-rose .product-icon {
+            color: rgba(255,255,255,0.18);
+        }
+
+        /* Top-left "new" sticker */
+        .new-sticker {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            animation: badgeBounce 2.5s ease-in-out infinite;
+            box-shadow: 0 6px 14px rgba(212,83,126,0.35);
+        }
+
+            .new-sticker i {
+                font-size: 11px;
+            }
+
+        .day-tag {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255,255,255,0.95);
+            color: #1a1a1a;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(4px);
+        }
+
+        .bg-dark .day-tag,
+        .bg-blue .day-tag,
+        .bg-brown .day-tag,
+        .bg-green .day-tag,
+        .bg-rose .day-tag {
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+        }
+
+        .icon-heart {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.95);
+            color: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(4px);
+        }
+
+            .icon-heart:hover {
+                color: #d4537e;
+                transform: scale(1.1);
+            }
+
+            .icon-heart.active {
+                color: #d4537e;
+                animation: heartBeat 0.6s ease;
+            }
+
+        .bg-dark .icon-heart,
+        .bg-blue .icon-heart,
+        .bg-brown .icon-heart,
+        .bg-green .icon-heart,
+        .bg-rose .icon-heart {
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+        }
+
+        .product-info {
+            padding: 18px 18px 20px;
+        }
+
+        .product-cat {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #d4537e;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+            .product-meta i {
+                font-size: 13px;
+            }
+
+        .product-colors {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .mini-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid #fff;
+            box-shadow: 0 0 0 1px #ddd;
+        }
+
+        .swatch-black {
+            background: #1a1a1a;
+        }
+
+        .swatch-white {
+            background: #fff;
+            box-shadow: 0 0 0 1px #ddd;
+        }
+
+        .swatch-gray {
+            background: #888;
+        }
+
+        .swatch-cream {
+            background: #f1efe8;
+            box-shadow: 0 0 0 1px #ddd;
+        }
+
+        .swatch-blue {
+            background: #2c3e5e;
+        }
+
+        .swatch-brown {
+            background: #6b4423;
+        }
+
+        .swatch-green {
+            background: #4a5d3a;
+        }
+
+        .swatch-pink {
+            background: #e8a5c4;
+        }
+
+        .swatch-red {
+            background: #c8424d;
+        }
+
+        .product-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-price {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .product-price-old {
+            font-size: 12px;
+            color: #aaa;
+            text-decoration: line-through;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        .product-add {
+            width: 36px;
+            height: 36px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .product-add:hover {
+                background: #d4537e;
+                transform: scale(1.1) rotate(90deg);
+            }
+
+        /* ===== TRENDING NOW STRIP ===== */
+        .trending {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px 40px;
+            margin: 60px 60px 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+        }
+
+        .trending-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .trending-title-block .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+            font-size: 10px;
+            letter-spacing: 2px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+            .trending-title-block .label i {
+                font-size: 14px;
+                animation: float 2s ease-in-out infinite;
+            }
+
+        .trending-title-block h2 {
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .trending-title-block p {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .trending-items {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .trending-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+            .trending-item:hover {
+                transform: translateY(-4px);
+            }
+
+        .trending-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .trending-icon i {
+                font-size: 36px;
+                color: rgba(0,0,0,0.25);
+            }
+
+            .trending-icon.dark i {
+                color: rgba(255,255,255,0.3);
+            }
+
+            .trending-icon .heat {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+                background: rgba(255,255,255,0.95);
+                color: #d4537e;
+                font-size: 9px;
+                padding: 2px 6px;
+                border-radius: 5px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
+
+        .trending-name {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .trending-price {
+            font-size: 12px;
+            color: #d4537e;
+            font-weight: 600;
+        }
+
+        /* ===== LOAD MORE ===== */
+        .load-more-wrap {
+            text-align: center;
+            padding: 40px 60px 80px;
+        }
+
+        .load-more-btn {
+            padding: 16px 40px;
+            background: transparent;
+            color: #1a1a1a;
+            border: 1.5px solid #1a1a1a;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+            text-transform: uppercase;
+        }
+
+            .load-more-btn:hover {
+                background: #1a1a1a;
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+            .load-more-btn i {
+                font-size: 16px;
+                transition: transform 0.3s;
+            }
+
+            .load-more-btn:hover i {
+                transform: rotate(180deg);
+            }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter-band {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2a 60%, #3a2a3a 100%);
+            color: #fff;
+            padding: 80px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .newsletter-band::before {
+                content: '';
+                position: absolute;
+                top: -100px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(circle, rgba(212,83,126,0.25), transparent 60%);
+                filter: blur(50px);
+                pointer-events: none;
+            }
+
+        .newsletter-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .newsletter-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #e2856b;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .newsletter-band h2 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 500;
+            line-height: 1.15;
+            letter-spacing: -0.8px;
+            margin-bottom: 14px;
+        }
+
+            .newsletter-band h2 em {
+                font-style: italic;
+                background: linear-gradient(135deg, #d4537e, #e2856b);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .newsletter-band p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .newsletter-form-wrap {
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 6px;
+            border-radius: 14px;
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255,255,255,0.4);
+            }
+
+        .newsletter-btn {
+            background: #fff;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .newsletter-btn:hover {
+                background: #d4537e;
+                color: #fff;
+            }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 60px 60px 30px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+        }
+
+        .footer-col-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .footer-links-list {
+            list-style: none;
+        }
+
+            .footer-links-list li {
+                margin-bottom: 10px;
+            }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255,255,255,0.6);
+                transition: color 0.3s;
+            }
+
+                .footer-links-list a:hover {
+                    color: #d4537e;
+                }
+
+        .footer-mid-row {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 14px;
+            font-size: 22px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* SCROLL TOP */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+            }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 300px;
+            max-width: 360px;
+            border-left: 4px solid #1a1a1a;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 1280px) {
+            .header-top, .nav, .filter-strip, .featured-drop, .section, .trending, .newsletter-band, .footer {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+
+            .products {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .featured-drop-card {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-image {
+                min-height: 320px;
+            }
+
+            .featured-info {
+                padding: 32px;
+            }
+
+            .trending-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 900px) {
+            .new-hero {
+                padding: 40px 32px 60px;
+            }
+
+            .filter-strip {
+                top: 110px;
+            }
+
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .trending-items {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav {
+                gap: 18px;
+                overflow-x: auto;
+                padding: 12px 32px;
+            }
+
+            .search-box {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .header-top, .nav, .filter-strip, .featured-drop, .section, .trending, .newsletter-band, .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .header-top {
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+
+            .new-hero {
+                padding: 30px 16px 50px;
+            }
+
+                .new-hero h1 {
+                    font-size: 40px;
+                }
+
+            .hero-stats {
+                gap: 28px;
+            }
+
+            .hero-stat-num {
+                font-size: 24px;
+            }
+
+            .drop-countdown {
+                padding: 12px 16px;
+                gap: 10px;
+            }
+
+            .timer-unit {
+                min-width: 36px;
+                padding: 5px 8px;
+            }
+
+            .timer-num {
+                font-size: 16px;
+            }
+
+            .featured-info {
+                padding: 24px;
+            }
+
+            .featured-meta {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .products {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .product-icon {
+                font-size: 70px;
+            }
+
+            .product-name {
+                font-size: 13px;
+            }
+
+            .product-info {
+                padding: 14px;
+            }
+
+            .section {
+                padding: 30px 16px 40px;
+            }
+
+            .trending {
+                margin: 30px 16px;
+                padding: 24px;
+            }
+
+            .trending-items {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .newsletter-form-wrap {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - 32px);
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+        }
+
+        /* ===== Override cho thẻ sản phẩm dùng chung (_ProductCard) ===== */
+        .products .product { display: block; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #ececec; transition: transform .3s, box-shadow .3s; }
+        .products .product:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,.08); }
+        .products .product-image { aspect-ratio: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .products .product-image i.product-icon { font-size: 100px; color: rgba(0,0,0,.15); transition: transform .6s ease; }
+        .products .product:hover .product-icon { transform: scale(1.15) rotate(5deg); }
+        .products .bg-dark .product-icon, .products .bg-blue .product-icon, .products .bg-brown .product-icon { color: rgba(255,255,255,.15); }
+        .products .quick-actions { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; transition: bottom .4s ease; }
+        .products .product:hover .quick-actions { bottom: 16px; }
+        .products .quick-btn { background: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); transition: all .3s; }
+        .products .quick-btn:hover { background: #1a1a1a; color: #fff; transform: scale(1.1); }
+        .products .badge-product { position: absolute; top: 14px; left: 14px; font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; z-index: 3; }
+        .products .badge-new { background: #1a1a1a; color: #fff; }
+        .products .badge-sale { background: #d4537e; color: #fff; }
+        .products .badge-bestseller { background: #fff; color: #1a1a1a; border: 1px solid #eee; }
+        .products .icon-heart { position: absolute; top: 14px; right: 14px; font-size: 18px; cursor: pointer; color: #1a1a1a; z-index: 3; background: rgba(255,255,255,.85); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all .3s; }
+        .products .bg-dark .icon-heart, .products .bg-blue .icon-heart, .products .bg-brown .icon-heart { background: rgba(0,0,0,.3); color: #fff; }
+        .products .icon-heart:hover { color: #d4537e; transform: scale(1.1); }
+        .products .icon-heart.active { color: #d4537e; }
+        .products .product-info { padding: 18px; }
+        .products .product-cat { font-size: 11px; color: #888; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+        .products .product-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; color: #1a1a1a; }
+        .products .product-colors { display: flex; gap: 4px; margin-bottom: 10px; }
+        .products .mini-color { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #eee; }
+        .products .product-price-row { display: flex; align-items: baseline; gap: 8px; justify-content: space-between; }
+        .products .price-left { display: flex; align-items: baseline; gap: 6px; }
+        .products .price-current { font-size: 17px; font-weight: 500; color: #1a1a1a; }
+        .products .price-old { font-size: 13px; color: #aaa; text-decoration: line-through; }
+        .products .rating-mini { display: flex; align-items: center; gap: 3px; font-size: 12px; color: #666; }
+        .products .rating-mini i { color: #f0b400; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="announce">Bộ sưu tập tháng mới · Miễn phí vận chuyển cho đơn từ 500.000₫</div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a asp-controller="Home" asp-action="Index" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm sản phẩm mới về..." />
+            </div>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+            <a asp-controller="Home" asp-action="Nam">Nam</a>
+            <a asp-controller="Home" asp-action="Nu">Nữ</a>
+            <a asp-controller="Home" asp-action="MoiVe" class="active">Mới về</a>
+            <a asp-controller="Home" asp-action="BoSuuTap">Bộ sưu tập</a>
+            <a asp-controller="Home" asp-action="Sale">Sale</a>
+            <a asp-controller="Home" asp-action="GioiThieu">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="new-hero">
+        <div class="new-hero-marquee">
+            <span>NEW · ARRIVALS · MỚI · VỀ ·</span>
+            <span>NEW · ARRIVALS · MỚI · VỀ ·</span>
+            <span>NEW · ARRIVALS · MỚI · VỀ ·</span>
+        </div>
+        <div class="new-hero-inner">
+            <div class="breadcrumb">
+                <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+                <i class="ti ti-chevron-right"></i>
+                <span class="current">Mới về</span>
+            </div>
+
+            <div class="hero-eyebrow">
+                <span class="live-dot"></span>
+                <span>VỪA RA MẮT · TUẦN 22 / 2026</span>
+            </div>
+            <h1>Mới về <em>tuần này</em></h1>
+            <p class="new-hero-sub">Khám phá những thiết kế mới nhất vừa cập bến MONO.WEAR. Mỗi thứ 5 hàng tuần, bộ sưu tập mới sẽ xuất hiện — luôn giới hạn, luôn đặc biệt.</p>
+
+            <div class="drop-countdown">
+                <div class="drop-countdown-label">
+                    <span class="small">DROP TIẾP THEO</span>
+                    <span class="big">Thứ 5 tuần sau · 18:00</span>
+                </div>
+                <div class="drop-timer" id="dropTimer">
+                    <div class="timer-unit">
+                        <div class="timer-num" id="dDays">02</div>
+                        <div class="timer-label">NGÀY</div>
+                    </div>
+                    <span class="timer-sep">:</span>
+                    <div class="timer-unit">
+                        <div class="timer-num" id="dHours">14</div>
+                        <div class="timer-label">GIỜ</div>
+                    </div>
+                    <span class="timer-sep">:</span>
+                    <div class="timer-unit">
+                        <div class="timer-num" id="dMinutes">36</div>
+                        <div class="timer-label">PHÚT</div>
+                    </div>
+                    <span class="timer-sep">:</span>
+                    <div class="timer-unit">
+                        <div class="timer-num" id="dSeconds">28</div>
+                        <div class="timer-label">GIÂY</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-num">42</div>
+                    <div class="hero-stat-label">SẢN PHẨM MỚI</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num">12</div>
+                    <div class="hero-stat-label">MÀU SẮC MỚI</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num">4</div>
+                    <div class="hero-stat-label">TUẦN PHÁT HÀNH</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FILTER STRIP -->
+    <div class="filter-strip" id="filterStrip">
+        <div class="filter-pills">
+            <div class="filter-pill active"><i class="ti ti-sparkles"></i>Tất cả mới<span class="count">42</span></div>
+            <div class="filter-pill"><i class="ti ti-shirt"></i>Áo<span class="count">18</span></div>
+            <div class="filter-pill"><i class="ti ti-hanger"></i>Quần & Váy<span class="count">12</span></div>
+            <div class="filter-pill"><i class="ti ti-shirt-sport"></i>Áo khoác<span class="count">6</span></div>
+            <div class="filter-pill"><i class="ti ti-shoe"></i>Giày<span class="count">4</span></div>
+            <div class="filter-pill"><i class="ti ti-shopping-bag"></i>Phụ kiện<span class="count">2</span></div>
+        </div>
+        <div class="sort-control">
+            <i class="ti ti-arrows-sort"></i>
+            <span>Sắp xếp: Mới nhất</span>
+            <i class="ti ti-chevron-down" style="font-size: 14px;"></i>
+        </div>
+    </div>
+
+    <!-- FEATURED DROP (this week's hero product) -->
+    <section class="featured-drop">
+        <div class="featured-drop-card">
+            <div class="featured-image">
+                <span class="featured-badge"><span class="dot"></span>JUST DROPPED</span>
+                <span class="featured-week-tag">N° 042 / 2026</span>
+                <i class="ti ti-shirt-sport"></i>
+            </div>
+            <div class="featured-info">
+                <div class="featured-cat">— PRODUCT OF THE WEEK</div>
+                <h2 class="featured-name">Áo Khoác Wool<br />Lavender Mist</h2>
+                <p class="featured-desc">Phom dáng oversize với chất liệu len cashmere phối lụa tơ tằm Bảo Lộc. Đường cắt bất đối xứng độc bản — chỉ phát hành 200 chiếc trong tuần này.</p>
+
+                <div class="featured-meta">
+                    <div class="featured-meta-item">
+                        <div class="label">CHẤT LIỆU</div>
+                        <div class="value">Cashmere · Silk</div>
+                    </div>
+                    <div class="featured-meta-item">
+                        <div class="label">SIZE</div>
+                        <div class="value">XS · S · M · L</div>
+                    </div>
+                    <div class="featured-meta-item">
+                        <div class="label">CÒN LẠI</div>
+                        <div class="value" style="color: #d4537e;">134 / 200</div>
+                    </div>
+                </div>
+
+                <div class="featured-price-row">
+                    <span class="featured-price">2.450.000₫</span>
+                    <span class="featured-price-old">3.200.000₫</span>
+                </div>
+
+                <div class="featured-actions">
+                    <button class="btn-add" onclick="addToCart()"><i class="ti ti-shopping-bag"></i>Thêm vào giỏ</button>
+                    <button class="btn-icon-action" title="Yêu thích" onclick="toggleFavBtn(this)"><i class="ti ti-heart"></i></button>
+                    <button class="btn-icon-action" title="Chia sẻ"><i class="ti ti-share-2"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THIS WEEK'S DROPS -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">
+                    <span class="section-title-icon"><i class="ti ti-flame"></i></span>
+                    Drop tuần này
+                </h2>
+                <div class="section-sub">Vừa lên kệ · Cập nhật mỗi thứ 5 hàng tuần</div>
+            </div>
+            <a href="#" class="section-link">Xem tất cả 18 sản phẩm <i class="ti ti-arrow-right"></i></a>
+        </div>
+
+        <!-- WEEK TABS -->
+        <div class="week-tabs">
+            <button class="week-tab active">
+                <span>Tuần này</span>
+                <span class="week-num">W22</span>
+                <span class="new-badge">18 MỚI</span>
+            </button>
+            <button class="week-tab">
+                <span>Tuần trước</span>
+                <span class="week-num">W21</span>
+            </button>
+            <button class="week-tab">
+                <span>2 tuần trước</span>
+                <span class="week-num">W20</span>
+            </button>
+            <button class="week-tab">
+                <span>3 tuần trước</span>
+                <span class="week-num">W19</span>
+            </button>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div class="products">
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var p in Model)
+                {
+                    @await Html.PartialAsync("_ProductCard", p)
+                }
+            }
+            @*
+            <div class="product">
+                <div class="product-image bg-lavender">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>HÔM NAY</span>
+                    <span class="day-tag">29/05</span>
+                    <i class="ti ti-shirt product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">ÁO BLOUSE</div>
+                    <div class="product-name">Áo blouse voan tay phồng tím nhạt</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>Vừa lên kệ 4 giờ trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-pink"></div>
+                        <div class="mini-color" style="background:#d4c8d4"></div>
+                        <div class="mini-color swatch-white"></div>
+                        <div class="mini-color swatch-cream"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">485.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-pink">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">28/05</span>
+                    <i class="ti ti-hanger product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">ĐẦM / VÁY</div>
+                    <div class="product-name">Đầm midi xếp ly Sakura</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>1 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-pink"></div>
+                        <div class="mini-color swatch-cream"></div>
+                        <div class="mini-color swatch-white"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">685.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-dark">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">28/05</span>
+                    <i class="ti ti-shirt-sport product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">ÁO KHOÁC NAM</div>
+                    <div class="product-name">Áo blazer wool Italia phom rộng</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>1 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-black"></div>
+                        <div class="mini-color swatch-gray"></div>
+                        <div class="mini-color swatch-brown"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.890.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-mint">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">27/05</span>
+                    <i class="ti ti-shirt product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">ÁO POLO</div>
+                    <div class="product-name">Polo cotton organic xanh mint</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>2 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color" style="background:#c8d8c4"></div>
+                        <div class="mini-color swatch-cream"></div>
+                        <div class="mini-color swatch-white"></div>
+                        <div class="mini-color swatch-blue"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">425.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-cream">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">27/05</span>
+                    <i class="ti ti-hanger product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">CHÂN VÁY</div>
+                    <div class="product-name">Chân váy lụa A-line viền ren</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>2 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-cream"></div>
+                        <div class="mini-color swatch-black"></div>
+                        <div class="mini-color swatch-pink"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">525.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-rose">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">26/05</span>
+                    <i class="ti ti-shoe product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">GIÀY NỮ</div>
+                    <div class="product-name">Sandals quai mảnh dây thắt nơ</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>3 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color" style="background:#d4537e"></div>
+                        <div class="mini-color swatch-black"></div>
+                        <div class="mini-color swatch-cream"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">595.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-blue">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">26/05</span>
+                    <i class="ti ti-hanger product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">QUẦN JEANS</div>
+                    <div class="product-name">Jeans ống suông wash xanh nhạt</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>3 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-blue"></div>
+                        <div class="mini-color swatch-black"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">745.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product">
+                <div class="product-image bg-brown">
+                    <span class="new-sticker"><i class="ti ti-sparkles"></i>MỚI</span>
+                    <span class="day-tag">25/05</span>
+                    <i class="ti ti-shopping-bag product-icon"></i>
+                    <i class="ti ti-heart icon-heart"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat">TÚI XÁCH</div>
+                    <div class="product-name">Túi tote da bê thuộc thủ công</div>
+                    <div class="product-meta">
+                        <i class="ti ti-clock"></i>
+                        <span>4 ngày trước</span>
+                    </div>
+                    <div class="product-colors">
+                        <div class="mini-color swatch-brown"></div>
+                        <div class="mini-color swatch-black"></div>
+                        <div class="mini-color swatch-cream"></div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price">1.250.000₫</div>
+                        <button class="product-add" title="Thêm vào giỏ" onclick="addToCart()"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+            *@
+        </div>
+    </section>
+
+    <!-- TRENDING NOW -->
+    <section class="trending">
+        <div class="trending-grid">
+            <div class="trending-title-block">
+                <div class="label"><i class="ti ti-trending-up"></i>TRENDING NOW</div>
+                <h2>Đang được<br />săn lùng</h2>
+                <p>Những món mới về được khách yêu thích nhất trong 24 giờ qua. Cập nhật theo thời gian thực.</p>
+            </div>
+            <div class="trending-items">
+                <div class="trending-item">
+                    <div class="trending-icon bg-lavender">
+                        <span class="heat">🔥 248</span>
+                        <i class="ti ti-shirt"></i>
+                    </div>
+                    <div class="trending-name">Áo blouse voan tím</div>
+                    <div class="trending-price">485.000₫</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-icon bg-dark dark">
+                        <span class="heat">🔥 186</span>
+                        <i class="ti ti-shirt-sport"></i>
+                    </div>
+                    <div class="trending-name">Áo blazer wool</div>
+                    <div class="trending-price">1.890.000₫</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-icon bg-pink">
+                        <span class="heat">🔥 142</span>
+                        <i class="ti ti-hanger"></i>
+                    </div>
+                    <div class="trending-name">Đầm midi Sakura</div>
+                    <div class="trending-price">685.000₫</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-icon bg-rose dark">
+                        <span class="heat">🔥 98</span>
+                        <i class="ti ti-shoe"></i>
+                    </div>
+                    <div class="trending-name">Sandals dây nơ</div>
+                    <div class="trending-price">595.000₫</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMING SOON -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">
+                    <span class="section-title-icon"><i class="ti ti-calendar"></i></span>
+                    Sắp ra mắt
+                </h2>
+                <div class="section-sub">Thứ 5 tuần sau · 18:00 · Đặt nhắc trước để không bỏ lỡ</div>
+            </div>
+        </div>
+
+        <div class="products">
+
+            <div class="product" style="opacity: 0.92;">
+                <div class="product-image bg-cream">
+                    <span class="day-tag" style="background:#1a1a1a;color:#fff;">SẮP RA · 06/06</span>
+                    <i class="ti ti-shirt product-icon"></i>
+                    <i class="ti ti-bell icon-heart" title="Nhắc tôi khi ra mắt"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat" style="color:#888;">ÁO SƠ MI · COMING SOON</div>
+                    <div class="product-name">Sơ mi linen Summer Edition</div>
+                    <div class="product-meta">
+                        <i class="ti ti-bell"></i>
+                        <span>248 người đặt nhắc</span>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price" style="color:#888;">~ 525.000₫</div>
+                        <button class="product-add" style="background:#fff;color:#1a1a1a;border:1.5px solid #1a1a1a;" title="Nhắc tôi" onclick="notifyMe()"><i class="ti ti-bell"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product" style="opacity: 0.92;">
+                <div class="product-image bg-mint">
+                    <span class="day-tag" style="background:#1a1a1a;color:#fff;">SẮP RA · 06/06</span>
+                    <i class="ti ti-hanger product-icon"></i>
+                    <i class="ti ti-bell icon-heart" title="Nhắc tôi khi ra mắt"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat" style="color:#888;">QUẦN SHORT · COMING SOON</div>
+                    <div class="product-name">Quần short kaki xanh mint</div>
+                    <div class="product-meta">
+                        <i class="ti ti-bell"></i>
+                        <span>156 người đặt nhắc</span>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price" style="color:#888;">~ 385.000₫</div>
+                        <button class="product-add" style="background:#fff;color:#1a1a1a;border:1.5px solid #1a1a1a;" title="Nhắc tôi" onclick="notifyMe()"><i class="ti ti-bell"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product" style="opacity: 0.92;">
+                <div class="product-image bg-gray">
+                    <span class="day-tag" style="background:#1a1a1a;color:#fff;">SẮP RA · 06/06</span>
+                    <i class="ti ti-shoe product-icon"></i>
+                    <i class="ti ti-bell icon-heart" title="Nhắc tôi khi ra mắt"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat" style="color:#888;">GIÀY · COMING SOON</div>
+                    <div class="product-name">Sneakers minimal V2 da bò</div>
+                    <div class="product-meta">
+                        <i class="ti ti-bell"></i>
+                        <span>312 người đặt nhắc</span>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price" style="color:#888;">~ 1.450.000₫</div>
+                        <button class="product-add" style="background:#fff;color:#1a1a1a;border:1.5px solid #1a1a1a;" title="Nhắc tôi" onclick="notifyMe()"><i class="ti ti-bell"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product" style="opacity: 0.92;">
+                <div class="product-image bg-pink">
+                    <span class="day-tag" style="background:#1a1a1a;color:#fff;">SẮP RA · 13/06</span>
+                    <i class="ti ti-shopping-bag product-icon"></i>
+                    <i class="ti ti-bell icon-heart" title="Nhắc tôi khi ra mắt"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-cat" style="color:#888;">PHỤ KIỆN · COMING SOON</div>
+                    <div class="product-name">Khăn lụa hoạ tiết hoa anh đào</div>
+                    <div class="product-meta">
+                        <i class="ti ti-bell"></i>
+                        <span>87 người đặt nhắc</span>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="product-price" style="color:#888;">~ 285.000₫</div>
+                        <button class="product-add" style="background:#fff;color:#1a1a1a;border:1.5px solid #1a1a1a;" title="Nhắc tôi" onclick="notifyMe()"><i class="ti ti-bell"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="load-more-wrap">
+        <button class="load-more-btn" id="loadMoreBtn">
+            <i class="ti ti-refresh"></i>
+            Xem thêm 34 sản phẩm mới
+        </button>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter-band">
+        <div class="newsletter-inner">
+            <div class="newsletter-label">— NEVER MISS A DROP</div>
+            <h2>Đăng ký để nhận<br /><em>drop mới</em> sớm nhất</h2>
+            <p>Bạn sẽ là người đầu tiên biết khi bộ sưu tập mới ra mắt mỗi thứ 5. Thành viên đăng ký được ưu tiên mua trước công chúng 2 giờ.</p>
+            <div class="newsletter-form-wrap">
+                <input type="email" class="newsletter-input" placeholder="email@@example.com" id="newsletterEmail" />
+                <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                    Đăng ký <i class="ti ti-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO<span style="font-weight:300">.WEAR</span></div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+                <div>
+                    <div class="footer-col-title">Khám phá</div>
+                    <ul class="footer-links-list">
+                        <li><a asp-controller="Home" asp-action="MoiVe">Mới về</a></li>
+                        <li><a asp-controller="Home" asp-action="Nam">Thời trang Nam</a></li>
+                        <li><a asp-controller="Home" asp-action="Nu">Thời trang Nữ</a></li>
+                        <li><a asp-controller="Home" asp-action="Sale">Sale</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-col-title">Hỗ trợ</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn size</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 14px;">Nhận thông báo về bộ sưu tập mới và ưu đãi đặc quyền.</p>
+                </div>
+            </div>
+            <div class="footer-mid-row">
+                <div class="footer-text">© 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core</div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="COD"></i>
+                    <i class="ti ti-shield-check" title="Bảo mật"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Lên đầu trang">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ===== Countdown đến drop tiếp theo =====
+        const dropTarget = new Date();
+        dropTarget.setDate(dropTarget.getDate() + 2);
+        dropTarget.setHours(18, 0, 0, 0);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = dropTarget - now;
+            if (diff <= 0) {
+                document.getElementById('dDays').textContent = '00';
+                document.getElementById('dHours').textContent = '00';
+                document.getElementById('dMinutes').textContent = '00';
+                document.getElementById('dSeconds').textContent = '00';
+                return;
+            }
+            const days = Math.floor(diff / 86400000);
+            const hours = Math.floor((diff % 86400000) / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            document.getElementById('dDays').textContent = String(days).padStart(2, '0');
+            document.getElementById('dHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('dMinutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('dSeconds').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // ===== Filter pills =====
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                const name = pill.textContent.replace(/\d+/g, '').trim();
+                showToast('info', 'Đã lọc', `Đang xem: ${name}`);
+            });
+        });
+
+        // ===== Week tabs =====
+        document.querySelectorAll('.week-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const week = tab.querySelector('.week-num').textContent;
+                showToast('info', 'Đã chuyển tuần', `Đang xem sản phẩm ${week}`);
+            });
+        });
+
+        // ===== Heart toggle (product cards) =====
+        document.querySelectorAll('.icon-heart').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (icon.classList.contains('ti-bell')) {
+                    notifyMe();
+                    return;
+                }
+                icon.classList.toggle('active');
+                if (icon.classList.contains('active')) {
+                    showToast('success', 'Đã thêm yêu thích', 'Sản phẩm đã được lưu vào danh sách');
+                }
+            });
+        });
+
+        function toggleFavBtn(btn) {
+            btn.classList.toggle('active');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('active')) {
+                icon.classList.remove('ti-heart');
+                icon.classList.add('ti-heart-filled');
+                showToast('success', 'Đã thêm yêu thích', 'Sản phẩm đã được lưu vào danh sách');
+            } else {
+                icon.classList.remove('ti-heart-filled');
+                icon.classList.add('ti-heart');
+            }
+        }
+
+        // ===== Add to cart =====
+        function addToCart() {
+            const badge = document.querySelector('.cart-badge');
+            badge.textContent = parseInt(badge.textContent) + 1;
+            badge.style.animation = 'none';
+            void badge.offsetWidth;
+            badge.style.animation = 'heartBeat 0.6s ease, pulse 2s infinite 0.6s';
+            showToast('success', 'Đã thêm vào giỏ', 'Sản phẩm đã được thêm thành công');
+        }
+
+        // ===== Notify me (coming soon) =====
+        function notifyMe() {
+            showToast('success', 'Đã đặt nhắc', 'Chúng tôi sẽ thông báo khi sản phẩm ra mắt');
+        }
+
+        // ===== Newsletter =====
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletterEmail').value.trim();
+            if (!email || !email.includes('@@')) {
+                showToast('info', 'Email không hợp lệ', 'Vui lòng nhập đúng định dạng email');
+                return;
+            }
+            document.getElementById('newsletterEmail').value = '';
+            showToast('success', 'Đăng ký thành công', 'Bạn sẽ nhận drop mới sớm nhất qua email');
+        }
+
+        // ===== Load more =====
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            const btn = document.getElementById('loadMoreBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="ti ti-loader-2"></i> Đang tải...';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ti ti-refresh"></i> Xem thêm 26 sản phẩm mới';
+                showToast('info', 'Đã tải thêm 8 sản phẩm', 'Cuộn xuống để xem');
+            }, 1500);
+        });
+
+        // ===== Header scroll =====
+        const header = document.getElementById('header');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ===== Toast =====
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: 'ti-circle-check', info: 'ti-info-circle' };
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <button class="toast-close"><i class="ti ti-x"></i></button>
+            `;
+            container.appendChild(toast);
+            const closeBtn = toast.querySelector('.toast-close');
+            const removeToast = () => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            };
+            closeBtn.addEventListener('click', removeToast);
+            setTimeout(removeToast, 3500);
+        }
+    </script>
+
+    <script src="~/js/filter.js" asp-append-version="true"></script>
+
+    <script src="/js/search.js"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

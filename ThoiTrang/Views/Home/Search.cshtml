@@ -1,0 +1,131 @@
+﻿@model List<ThoiTrang.Models.Entities.Product>
+@{
+    ViewData["Title"] = "Tìm kiếm: " + (ViewBag.Query ?? "");
+    var q = (string)(ViewBag.Query ?? "");
+    var count = (int)(ViewBag.Count ?? 0);
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Tìm kiếm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color: #1a1a1a; background: #f5f5f3; line-height: 1.5; }
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; cursor: pointer; }
+
+        .header { background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        .header-top { display: flex; align-items: center; gap: 28px; padding: 18px 60px; }
+        .logo { font-size: 26px; font-weight: 500; letter-spacing: 1.5px; }
+        .logo span { font-weight: 300; }
+        .search-box { flex: 1; max-width: 620px; display: flex; align-items: center; background: #f5f5f3; border: 1px solid transparent; border-radius: 12px; padding: 12px 16px; position: relative; }
+        .search-box:focus-within { background: #fff; border-color: #1a1a1a; }
+        .search-box i { font-size: 18px; color: #888; }
+        .search-box input { border: none; background: transparent; outline: none; flex: 1; margin-left: 10px; font-size: 14px; }
+        .header-icons { display: flex; align-items: center; gap: 22px; font-size: 22px; }
+
+        .results-head { padding: 28px 60px 8px; }
+        .results-title { font-size: 22px; font-weight: 500; }
+        .results-title strong { color: #d4537e; }
+        .results-sub { color: #888; font-size: 14px; margin-top: 4px; }
+
+        .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 20px 60px 60px; }
+        @@media (max-width: 1100px) { .products { grid-template-columns: repeat(3, 1fr); } }
+        @@media (max-width: 800px) { .products { grid-template-columns: repeat(2, 1fr); } .header-top, .results-head { padding-left: 20px; padding-right: 20px; } .products { padding-left: 20px; padding-right: 20px; } }
+
+        /* Thẻ sản phẩm dùng chung (_ProductCard) */
+        .products .product { display: block; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #ececec; transition: transform .3s, box-shadow .3s; }
+        .products .product:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,.08); }
+        .products .product-image { aspect-ratio: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .products .product-image i.product-icon { font-size: 100px; color: rgba(0,0,0,.15); transition: transform .6s ease; }
+        .products .product:hover .product-icon { transform: scale(1.15) rotate(5deg); }
+        .products .bg-cream { background: #f1efe8; } .products .bg-dark { background: #2c2c2a; } .products .bg-gray { background: #d3d1c7; } .products .bg-blue { background: #2c3e5e; } .products .bg-brown { background: #6b4423; }
+        .products .bg-dark .product-icon, .products .bg-blue .product-icon, .products .bg-brown .product-icon { color: rgba(255,255,255,.15); }
+        .products .quick-actions { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; transition: bottom .4s ease; }
+        .products .product:hover .quick-actions { bottom: 16px; }
+        .products .quick-btn { background: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .products .badge-product { position: absolute; top: 14px; left: 14px; font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 6px; z-index: 3; }
+        .products .badge-new { background: #1a1a1a; color: #fff; } .products .badge-sale { background: #d4537e; color: #fff; } .products .badge-bestseller { background: #fff; color: #1a1a1a; border: 1px solid #eee; }
+        .products .icon-heart { position: absolute; top: 14px; right: 14px; font-size: 18px; cursor: pointer; color: #1a1a1a; z-index: 3; background: rgba(255,255,255,.85); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .products .bg-dark .icon-heart, .products .bg-blue .icon-heart, .products .bg-brown .icon-heart { background: rgba(0,0,0,.3); color: #fff; }
+        .products .product-info { padding: 18px; }
+        .products .product-cat { font-size: 11px; color: #888; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+        .products .product-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; color: #1a1a1a; }
+        .products .product-colors { display: flex; gap: 4px; margin-bottom: 10px; }
+        .products .mini-color { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #eee; }
+        .products .product-price-row { display: flex; align-items: baseline; gap: 8px; justify-content: space-between; }
+        .products .price-left { display: flex; align-items: baseline; gap: 6px; }
+        .products .price-current { font-size: 17px; font-weight: 500; color: #1a1a1a; }
+        .products .price-old { font-size: 13px; color: #aaa; text-decoration: line-through; }
+        .products .rating-mini { display: flex; align-items: center; gap: 3px; font-size: 12px; color: #666; }
+        .products .rating-mini i { color: #f0b400; font-size: 14px; }
+
+        .empty { text-align: center; padding: 80px 20px; color: #888; }
+        .empty i { font-size: 56px; color: #ccc; }
+        .empty h3 { font-size: 20px; color: #1a1a1a; margin: 16px 0 8px; }
+        .empty a { display: inline-block; margin-top: 18px; padding: 11px 24px; background: #1a1a1a; color: #fff; border-radius: 10px; }
+        .sugg-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+        .sugg-chips a { padding: 8px 16px; background: #fff; border: 1px solid #e5e5e5; border-radius: 999px; font-size: 13px; }
+        .sugg-chips a:hover { border-color: #1a1a1a; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" id="searchInput" value="@q" placeholder="Tìm áo, quần, giày, phụ kiện..." autofocus />
+            </div>
+            <div class="header-icons">
+                <a href="/Home/YeuThich" title="Yêu thích"><i class="ti ti-heart"></i></a>
+                <a href="/Home/GioHang" title="Giỏ hàng"><i class="ti ti-shopping-bag"></i></a>
+                <a href="/Home/TaiKhoan" title="Tài khoản"><i class="ti ti-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="results-head">
+        @if (!string.IsNullOrWhiteSpace(q))
+        {
+            <div class="results-title">Kết quả cho "<strong>@q</strong>"</div>
+            <div class="results-sub">Tìm thấy @count sản phẩm</div>
+        }
+        else
+        {
+            <div class="results-title">Tất cả sản phẩm</div>
+            <div class="results-sub">@count sản phẩm</div>
+        }
+    </section>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="products">
+            @foreach (var p in Model)
+            {
+                @await Html.PartialAsync("_ProductCard", p)
+            }
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(q))
+    {
+        <div class="empty">
+            <i class="ti ti-mood-empty"></i>
+            <h3>Không tìm thấy sản phẩm nào</h3>
+            <p>Thử tìm với từ khóa khác hoặc khám phá danh mục bên dưới.</p>
+            <div class="sugg-chips">
+                <a href="/Home/Nam">Thời trang Nam</a>
+                <a href="/Home/Nu">Thời trang Nữ</a>
+                <a href="/Home/MoiVe">Hàng mới về</a>
+                <a href="/Home/Sale">Đang giảm giá</a>
+            </div>
+        </div>
+    }
+
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

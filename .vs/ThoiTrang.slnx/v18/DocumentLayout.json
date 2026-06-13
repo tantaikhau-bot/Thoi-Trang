@@ -1,0 +1,581 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\CV\\ThoiTrang\\ThoiTrang\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\chatknowledge.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\chatknowledge.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\collections.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\seedproducts.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\seedproducts.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\syncstock.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\syncstock.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\uservouchers.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\uservouchers.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\seedcustomers.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\seedcustomers.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\chatmessages.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\chatmessages.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\monowear.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\monowear.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\admin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\admin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\models\\entities\\chatknowledge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\models\\entities\\chatknowledge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\taikhoan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\taikhoan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\ctsp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\ctsp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\gioithieu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\gioithieu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\checkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\checkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\thongbao.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\thongbao.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\giohang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\giohang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\yeuthich.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\yeuthich.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\sale.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\sale.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\moive.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\moive.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\nu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\nu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\nam.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\nam.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\dangnhap.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\dangnhap.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\banktransfer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\banktransfer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\ordersuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\ordersuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\bosuutap.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\bosuutap.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\limitededition.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\limitededition.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\editorialcapsule.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\editorialcapsule.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\rawmaterials.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\rawmaterials.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\home\\thongtincn.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\home\\thongtincn.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|d:\\cv\\thoitrang\\thoitrang\\thoitrang\\database\\chatknowledge.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{EAF8AC46-DE04-D772-06CF-E0373A50E996}|ThoiTrang\\ThoiTrang.csproj|solutionrelative:thoitrang\\database\\chatknowledge.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SeedCustomers.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SeedCustomers.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\SeedCustomers.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SeedCustomers.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\SeedCustomers.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:43:05.109Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SeedProducts.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SeedProducts.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\SeedProducts.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SeedProducts.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\SeedProducts.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:55.456Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SyncStock.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SyncStock.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\SyncStock.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\SyncStock.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\SyncStock.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:47.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserVouchers.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\UserVouchers.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\UserVouchers.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\UserVouchers.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\UserVouchers.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:43.268Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Collections.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\Collections.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\Collections.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\Collections.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\Collections.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:34.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ChatKnowledge.sql ",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\ChatKnowledge.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\ChatKnowledge.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\ChatKnowledge.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\ChatKnowledge.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:19.807Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ChatMessages.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\ChatMessages.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\ChatMessages.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\ChatMessages.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\ChatMessages.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T00:42:26.435Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\appsettings.json",
+              "RelativeDocumentMoniker": "ThoiTrang\\appsettings.json",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\appsettings.json",
+              "RelativeToolTip": "ThoiTrang\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-09T16:26:35.557Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "TaiKhoan.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\TaiKhoan.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\TaiKhoan.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\TaiKhoan.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\TaiKhoan.cshtml",
+              "ViewState": "AgIAAGMKAAAAAAAAAAAAALcJAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-05T15:46:35.063Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "YeuThich.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\YeuThich.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\YeuThich.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\YeuThich.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\YeuThich.cshtml",
+              "ViewState": "AgIAAPEGAAAAAAAAAAAAAP8GAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T14:37:54.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "GioHang.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\GioHang.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\GioHang.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\GioHang.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\GioHang.cshtml",
+              "ViewState": "AgIAAAgHAAAAAAAAAAAAABEHAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T08:15:33.84Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ThongBao.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\ThongBao.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\ThongBao.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\ThongBao.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\ThongBao.cshtml",
+              "ViewState": "AgIAACMGAAAAAAAAAAAYwDIGAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-21T06:15:23.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Checkout.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Checkout.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Checkout.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Checkout.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Checkout.cshtml",
+              "ViewState": "AgIAAOIEAAAAAAAAAAAiwPQEAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-30T04:02:09.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Admin.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Admin.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Admin.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Admin.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Admin.cshtml",
+              "ViewState": "AgIAABwRAAAAAAAAAAAAAMYDAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-02T14:32:17.522Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MonoWear.sql",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\MonoWear.sql",
+              "RelativeDocumentMoniker": "ThoiTrang\\Database\\MonoWear.sql",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Database\\MonoWear.sql",
+              "RelativeToolTip": "ThoiTrang\\Database\\MonoWear.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-04T07:38:28.402Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ChatKnowledge.cs",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Models\\Entities\\ChatKnowledge.cs",
+              "RelativeDocumentMoniker": "ThoiTrang\\Models\\Entities\\ChatKnowledge.cs",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Models\\Entities\\ChatKnowledge.cs",
+              "RelativeToolTip": "ThoiTrang\\Models\\Entities\\ChatKnowledge.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T17:03:52.323Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "GioiThieu.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\GioiThieu.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\GioiThieu.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\GioiThieu.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\GioiThieu.cshtml",
+              "ViewState": "AgIAABoHAAAAAAAAAAAAADYHAABbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T07:14:12.417Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CTSP.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\CTSP.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\CTSP.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\CTSP.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\CTSP.cshtml",
+              "ViewState": "AgIAAEgJAAAAAAAAAAAgwGwJAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-21T07:34:12.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "MoiVe.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\MoiVe.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\MoiVe.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\MoiVe.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\MoiVe.cshtml",
+              "ViewState": "AgIAAM0HAAAAAAAAAAAAAN4HAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T02:06:22.97Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAADcFAAAAAAAAAAAAAE8FAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T00:18:12.031Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Sale.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Sale.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Sale.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Sale.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Sale.cshtml",
+              "ViewState": "AgIAAKUJAAAAAAAAAAAAALYJAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T03:49:31.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Nu.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Nu.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Nu.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Nu.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Nu.cshtml",
+              "ViewState": "AgIAAP4FAAAAAAAAAAAAAKgIAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T01:43:52.134Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Nam.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Nam.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\Nam.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\Nam.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\Nam.cshtml",
+              "ViewState": "AgIAAOgFAAAAAAAAAAAAAB8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T00:58:39.821Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "DangNhap.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\DangNhap.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\DangNhap.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\DangNhap.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\DangNhap.cshtml",
+              "ViewState": "AgIAAOUFAAAAAAAAAAAowO0FAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T07:48:46.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "ThoiTrang\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "ThoiTrang\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA8AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-04T07:38:24.232Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "ThoiTrang\\Controllers\\HomeController.cs",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "ThoiTrang\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAAAF4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-20T00:23:44.158Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BankTransfer.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\BankTransfer.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\BankTransfer.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\BankTransfer.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\BankTransfer.cshtml",
+              "ViewState": "AgIAAIoFAAAAAAAAAAAAAKoFAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-30T04:13:06.47Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "BoSuuTap.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\BoSuuTap.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\BoSuuTap.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\BoSuuTap.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\BoSuuTap.cshtml",
+              "ViewState": "AgIAANUDAAAAAAAAAAAAAPUDAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T02:16:27.059Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "OrderSuccess.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\OrderSuccess.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\OrderSuccess.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\OrderSuccess.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\OrderSuccess.cshtml",
+              "ViewState": "AgIAABgFAAAAAAAAAAAUwEEFAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-30T14:10:40.773Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "LimitedEdition.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\LimitedEdition.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\LimitedEdition.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\LimitedEdition.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\LimitedEdition.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPsFAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-28T06:57:59.813Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "RawMaterials.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\RawMaterials.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\RawMaterials.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\RawMaterials.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\RawMaterials.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIUGAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-28T07:19:24.925Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "EditorialCapsule.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\EditorialCapsule.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\EditorialCapsule.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\EditorialCapsule.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\EditorialCapsule.cshtml",
+              "ViewState": "AgIAAH0HAAAAAAAAAADwv4cHAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-28T07:39:23.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ThongTinCN.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\ThongTinCN.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Home\\ThongTinCN.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Home\\ThongTinCN.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Home\\ThongTinCN.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-25T06:44:51.778Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\_ViewImports.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T00:24:00.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "ThoiTrang\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\CV\\ThoiTrang\\ThoiTrang\\ThoiTrang\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "ThoiTrang\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAwAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-20T00:20:42.372Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,787 @@
+﻿@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Tài khoản của tôi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #fafafa;
+            line-height: 1.5;
+            overflow-x: clip;
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        input, select {
+            font-family: inherit;
+            outline: none;
+        }
+
+        /* ANIMATIONS CHUẨN SYSTEM */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+
+            14% {
+                transform: scale(1.15);
+            }
+
+            28% {
+                transform: scale(1);
+            }
+
+            42% {
+                transform: scale(1.15);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        /* HEADER SYSTEM ĐỒNG NHẤT */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+            .header.scrolled {
+                background: #fff;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+        }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 560px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 20px;
+            padding: 10px 18px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+            .search-box:focus-within {
+                background: #fff;
+                border-color: #1a1a1a;
+                box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.2s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-2px);
+                }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -7px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 10px;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 2px solid #fff;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f5f5f5;
+            font-size: 14px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #1a1a1a;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a:hover, .nav a.active {
+                    color: #1a1a1a;
+                }
+
+                    .nav a:hover::after, .nav a.active::after {
+                        width: 100%;
+                    }
+
+        /* BREADCRUMB */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #888;
+            padding: 24px 60px 0;
+        }
+
+            .breadcrumb a:hover {
+                color: #1a1a1a;
+            }
+
+        /* LAYOUT TRANG THÔNG TIN CÁ NHÂN */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+            padding: 30px 60px 80px;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* SIDEBAR MENU TRÁI */
+        .profile-sidebar {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 24px;
+            height: fit-content;
+        }
+
+        .user-summary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        /* Khu vực Avatar */
+        .avatar-wrapper {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #f5f5f5;
+            border: 2px solid #eee;
+        }
+
+        .change-avatar-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+            .change-avatar-label:hover {
+                transform: scale(1.1);
+            }
+
+        .avatar-file-input {
+            display: none;
+        }
+
+        .summary-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .summary-role {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Danh sách Menu */
+        .profile-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            color: #555;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+            .menu-item i {
+                font-size: 18px;
+            }
+
+            .menu-item:hover, .menu-item.active {
+                background: #f5f5f5;
+                color: #1a1a1a;
+            }
+
+            .menu-item.active {
+                font-weight: 500;
+            }
+
+        /* KHỐI FORM THÔNG TIN PHẢI */
+        .profile-main-content {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 28px;
+        }
+
+            .content-header h2 {
+                font-size: 20px;
+                font-weight: 500;
+                letter-spacing: -0.5px;
+            }
+
+        /* Nút Chỉnh sửa / Hủy */
+        .btn-edit-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            border: 1px solid #ddd;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+            .btn-edit-toggle:hover {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+
+        /* Grid inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px 20px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+            .form-group.full-width {
+                grid-column: span 2;
+            }
+
+            .form-group label {
+                font-size: 13px;
+                font-weight: 500;
+                color: #555;
+            }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 0 14px;
+            font-size: 14px;
+            color: #1a1a1a;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: #1a1a1a;
+                box-shadow: 0 0 0 4px rgba(0,0,0,0.03);
+            }
+
+            .form-control:disabled {
+                background: #fafafa;
+                color: #777;
+                border-color: #e8e8e8;
+                cursor: not-allowed;
+            }
+
+        /* Khối hành động lưu dữ liệu */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #f5f5f5;
+            display: none; /* Chỉ hiển thị khi nhấn Edit */
+        }
+
+        .btn-save {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+            .btn-save:hover {
+                opacity: 0.9;
+            }
+
+        /* TOAST COMPONENT CHUẨN ĐỒNG NHẤT */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            min-width: 340px;
+            border: 1px solid #eee;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+            .toast.hide {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.3s ease;
+            }
+
+        .toast-icon {
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .toast.success {
+            border-left: 4px solid #1a1a1a;
+        }
+
+            .toast.success .toast-icon {
+                color: #1a1a1a;
+            }
+
+        .toast.error {
+            border-left: 4px solid #e63946;
+        }
+
+            .toast.error .toast-icon {
+                color: #e63946;
+            }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 992px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                padding: 20px 24px;
+            }
+
+            .header-top {
+                padding: 18px 24px;
+            }
+
+            .breadcrumb {
+                padding: 24px 24px 0;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm kiếm sản phẩm..." />
+            </div>
+            <div class="header-icons">
+                <a href="#" class="active"><i class="ti ti-user"></i></a>
+                <a href="#"><i class="ti ti-shopping-bag"></i><span class="cart-badge">2</span></a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a href="/">Trang chủ</a>
+            <a href="#">Nam</a>
+            <a href="#">Nữ</a>
+            <a href="#">Bộ sưu tập</a>
+            <a href="#">Sale</a>
+        </nav>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="/">Trang chủ</a>
+        <i class="ti ti-chevron-right"></i>
+        <span>Tài khoản của tôi</span>
+    </div>
+
+    <div class="profile-container">
+
+        <aside class="profile-sidebar">
+            <div class="user-summary">
+                <div class="avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" class="user-avatar" id="avatarPreview" alt="Avatar" />
+                    <label for="avatarFile" class="change-avatar-label">
+                        <i class="ti ti-camera"></i>
+                    </label>
+                    <input type="file" id="avatarFile" class="avatar-file-input" accept="image/*" />
+                </div>
+                <div class="summary-name" id="sidebarName">Nguyễn Hoàng An</div>
+                <div class="summary-role">Thành viên Bạc</div>
+            </div>
+
+            <nav class="profile-menu">
+                <a href="#" class="menu-item active"><i class="ti ti-user-circle"></i> Hồ sơ cá nhân</a>
+                <a href="#" class="menu-item"><i class="ti ti-package"></i> Đơn hàng đã mua</a>
+                <a href="#" class="menu-item"><i class="ti ti-map-pin"></i> Sổ địa chỉ nhận hàng</a>
+                <a href="#" class="menu-item"><i class="ti ti-bell"></i> Thông báo của tôi</a>
+                <a href="#" class="menu-item" style="color: #e63946;"><i class="ti ti-logout"></i> Đăng xuất</a>
+            </nav>
+        </aside>
+
+        <main class="profile-main-content">
+            <div class="content-header">
+                <h2>Thông tin cá nhân</h2>
+                <button type="button" class="btn-edit-toggle" id="editToggleBtn">
+                    <i class="ti ti-edit"></i> <span>Chỉnh sửa</span>
+                </button>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="inputName">Họ và tên</label>
+                        <input type="text" id="inputName" class="form-control" value="Nguyễn Hoàng An" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPhone">Số điện thoại</label>
+                        <input type="text" id="inputPhone" class="form-control" value="0987654321" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail">Địa chỉ Email</label>
+                        <input type="email" id="inputEmail" class="form-control" value="hoangan.nguyen@@gmail.com" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectGender">Giới tính</label>
+                        <select id="selectGender" class="form-control" disabled>
+                            <option value="Nam" selected>Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="inputAddress">Địa chỉ mặc định</label>
+                        <input type="text" id="inputAddress" class="form-control" value="123 Đường Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh" disabled />
+                    </div>
+
+                </div>
+
+                <div class="form-actions" id="formActionsGroup">
+                    <button type="submit" class="btn-save">Lưu thay đổi</button>
+                </div>
+            </form>
+        </main>
+
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // 1. Đồng bộ thanh Header shadow khi cuộn chuột
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // 2. Xử lý Thay đổi Ảnh Đại Diện lập tức (Avatar Instant Preview)
+        const avatarFileInput = document.getElementById('avatarFile');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        avatarFileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                // Kiểm tra định dạng file có phải hình ảnh không
+                if (!file.type.startsWith('image/')) {
+                    showToast('error', 'Lỗi định dạng', 'Vui lòng chọn tệp tin hình ảnh hợp lệ.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                    showToast('success', 'Ảnh đại diện', 'Cập nhật ảnh xem trước thành công. Nhấn Lưu để hoàn tất.');
+                    // Tự động mở chế độ lưu nếu chưa bật
+                    if(!isEditMode) {
+                        toggleEditState(true);
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 3. Xử lý Bật/Tắt chế độ chỉnh sửa Form (Edit Mode Toggle)
+        const editToggleBtn = document.getElementById('editToggleBtn');
+        const formActionsGroup = document.getElementById('formActionsGroup');
+        const formControls = document.querySelectorAll('.form-control');
+        let isEditMode = false;
+
+        function toggleEditState(forceState = null) {
+            isEditMode = forceState !== null ? forceState : !isEditMode;
+
+            if (isEditMode) {
+                // Mở khóa toàn bộ các trường nhập liệu
+                formControls.forEach(input => input.disabled = false);
+                formActionsGroup.style.display = 'flex';
+                editToggleBtn.innerHTML = '<i class="ti ti-x"></i> <span>Hủy bỏ</span>';
+                editToggleBtn.style.borderColor = '#e63946';
+                editToggleBtn.style.color = '#e63946';
+            } else {
+                // Khóa lại các trường nhập liệu
+                formControls.forEach(input => input.disabled = true);
+                formActionsGroup.style.display = 'none';
+                editToggleBtn.innerHTML = '<i class="ti ti-edit"></i> <span>Chỉnh sửa</span>';
+                editToggleBtn.style.borderColor = '#ddd';
+                editToggleBtn.style.color = '#666';
+                // Reset form về dữ liệu ban đầu nếu người dùng ấn Hủy
+                document.getElementById('profileForm').reset();
+            }
+        }
+
+        editToggleBtn.addEventListener('click', () => toggleEditState());
+
+        // 4. Xử lý Sự kiện Submit Form và Lưu Dữ Liệu
+        const profileForm = document.getElementById('profileForm');
+        const sidebarName = document.getElementById('sidebarName');
+
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Ngăn hành vi tải lại trang mặc định của HTML Form
+
+            // Thu thập dữ liệu và kiểm tra validation cơ bản
+            const nameValue = document.getElementById('inputName').value.trim();
+            const phoneValue = document.getElementById('inputPhone').value.trim();
+            const emailValue = document.getElementById('inputEmail').value.trim();
+
+            if (nameValue === "" || phoneValue === "" || emailValue === "") {
+                showToast('error', 'Lỗi nhập liệu', 'Vui lòng điền đầy đủ các thông tin bắt buộc.');
+                return;
+            }
+
+            // Đồng bộ cập nhật tên mới lên Sidebar trái ngay lập tức
+            sidebarName.textContent = nameValue;
+
+            // Thực hiện khóa form lại (Thành công)
+            toggleEditState(false);
+
+            // Hiển thị thông báo Toast thành công chuẩn mẫu giao diện thương hiệu
+            showToast('success', 'Cập nhật thành công', 'Hệ thống đã lưu lại toàn bộ thông tin mới của bạn.');
+        });
+
+        // 5. Hệ thống Dynamic Toast Notification chuẩn đồng nhất cấu trúc file mẫu của bạn
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            // Map icon tương ứng với loại thông báo
+            const icons = { success: 'ti-circle-check', error: 'ti-alert-circle' };
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <button class="toast-close"><i class="ti ti-x"></i></button>
+            `;
+
+            container.appendChild(toast);
+
+            const closeBtn = toast.querySelector('.toast-close');
+            const removeToast = () => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            };
+
+            closeBtn.addEventListener('click', removeToast);
+            setTimeout(removeToast, 3500); // Tự động đóng sau 3.5 giây
+        }
+    </script>
+    <script src="/js/search.js"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

@@ -1,0 +1,2274 @@
+﻿@{
+    ViewData["Title"] = "Thông báo";
+    var allNotifs = ViewBag.Notifications as List<ThoiTrang.Models.Entities.Notification> ?? new List<ThoiTrang.Models.Entities.Notification>();
+    int ntTotal = allNotifs.Count;
+    int ntUnread = allNotifs.Count(n => !n.IsRead);
+    int ntOrder = allNotifs.Count(n => n.Type == "order");
+    int ntPromo = allNotifs.Count(n => n.Type == "promo");
+    int ntSystem = allNotifs.Count(n => n.Type == "system");
+    int ntNews = allNotifs.Count(n => n.Type != "order" && n.Type != "promo" && n.Type != "system");
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Thông báo của bạn</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        @@keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0) rotate(0);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(-5deg);
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes ringSlow {
+            0%, 60%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-12deg);
+            }
+
+            20%, 40% {
+                transform: rotate(12deg);
+            }
+        }
+
+        @@keyframes itemRemove {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+                max-height: 200px;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(60px);
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                margin: 0;
+            }
+        }
+
+        @@keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @@keyframes morphBlob {
+            0%, 100% {
+                border-radius: 50% 50% 50% 50%;
+            }
+
+            33% {
+                border-radius: 60% 40% 30% 70%;
+            }
+
+            66% {
+                border-radius: 30% 60% 70% 40%;
+            }
+        }
+
+        .announce {
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 10px 16px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .announce::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                animation: shimmer 4s infinite;
+            }
+
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .header.scrolled {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            transition: transform 0.3s;
+        }
+
+            .logo:hover {
+                transform: scale(1.05);
+            }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 480px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f3;
+            border-radius: 10px;
+            padding: 11px 16px;
+        }
+
+            .search-box i {
+                font-size: 18px;
+                color: #888;
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+                .header-icons a.active-page {
+                    color: #d4537e;
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #d4537e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+            animation: pulse 2s infinite;
+        }
+
+        .cart-badge {
+            background: #1a1a1a;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #1a1a1a;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a:hover {
+                    color: #1a1a1a;
+                }
+
+                    .nav a:hover::after {
+                        width: 100%;
+                    }
+
+        .hero {
+            position: relative;
+            padding: 56px 60px 36px;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-bg-bell {
+            position: absolute;
+            top: -30px;
+            right: 60px;
+            font-size: 240px;
+            color: rgba(212,83,126,0.06);
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            animation: floatSlow 8s ease-in-out infinite;
+        }
+
+        .hero-blob {
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(226,133,107,0.12), transparent 70%);
+            filter: blur(40px);
+            animation: morphBlob 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+            .breadcrumb a:hover {
+                color: #1a1a1a;
+            }
+
+            .breadcrumb i {
+                font-size: 14px;
+            }
+
+            .breadcrumb .current {
+                color: #1a1a1a;
+            }
+
+        .hero-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .hero-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .hero-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+            .hero-icon i {
+                animation: ringSlow 4s ease-in-out infinite;
+                transform-origin: top center;
+            }
+
+            .hero-icon::after {
+                content: '';
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                width: 12px;
+                height: 12px;
+                background: #d4537e;
+                border: 2px solid #1a1a1a;
+                border-radius: 50%;
+                animation: pulse 1.5s infinite;
+            }
+
+        .hero-title {
+            font-size: 38px;
+            font-weight: 500;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: #777;
+            margin-top: 6px;
+        }
+
+            .hero-subtitle strong {
+                color: #d4537e;
+                font-weight: 500;
+            }
+
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            padding: 11px 18px;
+            border: 1px solid #ececec;
+            background: #fff;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.3s;
+            color: #1a1a1a;
+        }
+
+            .hero-btn:hover {
+                border-color: #1a1a1a;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            }
+
+            .hero-btn.primary {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+
+                .hero-btn.primary:hover {
+                    background: #000;
+                }
+
+            .hero-btn.danger {
+                color: #d44;
+            }
+
+                .hero-btn.danger:hover {
+                    color: #fff;
+                    background: #d44;
+                    border-color: #d44;
+                }
+
+            .hero-btn i {
+                font-size: 16px;
+            }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 28px;
+            padding: 0 60px 80px;
+            align-items: start;
+        }
+
+        .tabs-wrap {
+            background: #fff;
+            border-radius: 14px;
+            padding: 8px;
+            border: 1px solid #ececec;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+            .tabs-wrap::-webkit-scrollbar {
+                display: none;
+            }
+
+        .tab {
+            padding: 10px 18px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: #777;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+            .tab:hover {
+                background: #f5f5f3;
+                color: #1a1a1a;
+            }
+
+            .tab.active {
+                background: #1a1a1a;
+                color: #fff;
+            }
+
+            .tab i {
+                font-size: 16px;
+            }
+
+        .tab-count {
+            background: #f0f0ec;
+            color: #888;
+            padding: 1px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+        }
+
+        .tab.active .tab-count {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+            .tab.active .tab-count.urgent {
+                background: #d4537e;
+                color: #fff;
+            }
+
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .notif-group {
+            background: #fff;
+            border-radius: 18px;
+            border: 1px solid #ececec;
+            overflow: hidden;
+        }
+
+        .group-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0ec;
+            background: #fafaf8;
+        }
+
+        .group-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .group-title i {
+                font-size: 16px;
+                color: #999;
+            }
+
+        .group-action {
+            font-size: 12px;
+            color: #888;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+            .group-action:hover {
+                color: #1a1a1a;
+            }
+
+        .notif-item {
+            display: flex;
+            gap: 16px;
+            padding: 18px 20px;
+            border-bottom: 1px solid #f5f5f3;
+            transition: background 0.25s;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .notif-item:last-child {
+                border-bottom: none;
+            }
+
+            .notif-item:hover {
+                background: #fafaf8;
+            }
+
+            .notif-item.unread {
+                background: #fefaf5;
+            }
+
+                .notif-item.unread:hover {
+                    background: #fdf3e8;
+                }
+
+            .notif-item.removing {
+                animation: itemRemove 0.4s ease forwards;
+                overflow: hidden;
+            }
+
+            .notif-item.unread::before {
+                content: '';
+                position: absolute;
+                left: 8px;
+                top: 50%;
+                width: 6px;
+                height: 6px;
+                background: #d4537e;
+                border-radius: 50%;
+                transform: translateY(-50%);
+                animation: blink 2s infinite;
+            }
+
+        .notif-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .icon-order {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .icon-promo {
+            background: #fbeaf0;
+            color: #d4537e;
+        }
+
+        .icon-shipping {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .icon-system {
+            background: #f0f0ec;
+            color: #555;
+        }
+
+        .icon-review {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .icon-news {
+            background: #fde8ee;
+            color: #e2856b;
+        }
+
+        .icon-vip {
+            background: linear-gradient(135deg, #d4537e, #e2856b);
+            color: #fff;
+        }
+
+        .notif-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .notif-title {
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notif-tag {
+            display: inline-flex;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-new {
+            background: #d4537e;
+            color: #fff;
+        }
+
+        .tag-urgent {
+            background: #d44;
+            color: #fff;
+        }
+
+        .notif-time {
+            font-size: 12px;
+            color: #aaa;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .notif-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+            .notif-desc strong {
+                color: #1a1a1a;
+                font-weight: 500;
+            }
+
+        .notif-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .notif-btn {
+            padding: 6px 12px;
+            background: #fff;
+            border: 1px solid #ececec;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+            .notif-btn:hover {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+
+            .notif-btn.primary {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+
+                .notif-btn.primary:hover {
+                    background: #000;
+                }
+
+            .notif-btn i {
+                font-size: 13px;
+            }
+
+        .notif-close {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.25s;
+            align-self: flex-start;
+            flex-shrink: 0;
+        }
+
+            .notif-close:hover {
+                color: #d44;
+                background: #fbeaea;
+            }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #ececec;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .empty-state.show {
+                display: block;
+                animation: fadeInUp 0.6s ease;
+            }
+
+            .empty-state::before {
+                content: '';
+                position: absolute;
+                top: -100px;
+                right: -100px;
+                width: 280px;
+                height: 280px;
+                background: radial-gradient(circle, rgba(212,83,126,0.08), transparent 70%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .empty-icon-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 24px;
+            z-index: 2;
+        }
+
+        .empty-icon-main {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: #fff;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.2);
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #777;
+            max-width: 380px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 130px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            border-radius: 18px;
+            padding: 22px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stats-card::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 280px;
+                height: 280px;
+                background: radial-gradient(circle, rgba(212,83,126,0.25), transparent 60%);
+                filter: blur(40px);
+                pointer-events: none;
+            }
+
+        .stats-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+            .stats-head i {
+                font-size: 18px;
+                color: #d4537e;
+            }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-mini {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .stat-mini-num {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            background: linear-gradient(135deg, #fff, #d4537e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-mini-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .settings-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid #ececec;
+        }
+
+        .settings-title {
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+            .settings-title i {
+                font-size: 18px;
+            }
+
+        .settings-sub {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f3;
+            gap: 12px;
+        }
+
+            .setting-row:last-child {
+                border-bottom: none;
+            }
+
+        .setting-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .setting-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .setting-desc {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+            .toggle input {
+                display: none;
+            }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #d0d0cc;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .toggle-slider::after {
+                content: '';
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 18px;
+                height: 18px;
+                background: #fff;
+                border-radius: 50%;
+                transition: transform 0.3s;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            }
+
+        .toggle input:checked ~ .toggle-slider {
+            background: #1a1a1a;
+        }
+
+            .toggle input:checked ~ .toggle-slider::after {
+                transform: translateX(18px);
+            }
+
+        .quick-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid #ececec;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin: 0 -4px;
+        }
+
+            .quick-link:hover {
+                background: #f5f5f3;
+                color: #1a1a1a;
+            }
+
+            .quick-link i {
+                font-size: 18px;
+                color: #888;
+            }
+
+            .quick-link .arrow {
+                margin-left: auto;
+                font-size: 14px;
+                opacity: 0.5;
+            }
+
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 30px 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            padding-bottom: 0;
+        }
+
+            .footer-brand .footer-logo::after {
+                display: none;
+            }
+        /* Bỏ gạch chân cũ */
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+                text-transform: none; /* Trả về chữ thường tự nhiên như mẫu */
+                letter-spacing: 0;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter (Đăng ký nhận tin) */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Vùng Bottom (Bản quyền & Thanh toán) */
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* Responsive mượt mà cho máy tính bảng và điện thoại */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding: 50px 0 24px 0;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+                background: #000;
+            }
+
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 320px;
+            max-width: 380px;
+            border-left: 4px solid #1a1a1a;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.warning {
+                border-left-color: #d18800;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast.warning .toast-icon {
+            background: #fff4e0;
+            color: #d18800;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        @@media (max-width: 1280px) {
+            .header-top, .nav, .hero, .main-container, .footer {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .hero-title {
+                font-size: 30px;
+            }
+
+            .hero-bg-bell {
+                font-size: 180px;
+                right: 20px;
+            }
+
+            .search-box {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 720px) {
+            .header-top, .nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .nav {
+                gap: 18px;
+                overflow-x: auto;
+            }
+
+            .hero, .main-container, .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .hero {
+                padding-top: 32px;
+                padding-bottom: 24px;
+            }
+
+            .hero-bg-bell {
+                font-size: 120px;
+                top: 0;
+                right: 0;
+            }
+
+            .hero-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .hero-title-wrap {
+                width: 100%;
+            }
+
+            .hero-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 22px;
+                border-radius: 14px;
+            }
+
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .hero-actions {
+                width: 100%;
+            }
+
+            .hero-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .notif-item {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+            }
+
+            .notif-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .notif-head {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .notif-time {
+                order: -1;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - 32px);
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announce">
+        Miễn phí vận chuyển cho đơn hàng từ 500.000₫ · Đổi trả trong 30 ngày
+    </div>
+
+    <header class="header" id="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm sản phẩm..." />
+            </div>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+
+            <a asp-controller="Home" asp-action="Nam" asp-route-id="nam">Nam</a>
+
+            <a asp-controller="Home" asp-action="Nu" asp-route-id="nu">Nữ</a>
+
+            <a asp-controller="Home" asp-action="MoiVe">Mới về</a>
+
+            <a asp-controller="Home" asp-action="BoSuuTap">Bộ sưu tập</a>
+
+            <a asp-controller="Home" asp-action="Sale">Sale</a>
+
+            <a asp-controller="Home" asp-action="GioiThieu">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-blob"></div>
+        <i class="ti ti-bell-filled hero-bg-bell"></i>
+        <div class="hero-content">
+            <div class="breadcrumb">
+                <a href="/">Trang chủ</a>
+                <i class="ti ti-chevron-right"></i>
+                <span class="current">Thông báo</span>
+            </div>
+            <div class="hero-row">
+                <div class="hero-title-wrap">
+                    <div class="hero-icon"><i class="ti ti-bell"></i></div>
+                    <div>
+                        <h1 class="hero-title">Thông báo</h1>
+                        <div class="hero-subtitle">
+                            Bạn có <strong id="unreadCount">@ntUnread thông báo chưa đọc</strong> · Tổng <strong id="totalNotif">@ntTotal thông báo</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button class="hero-btn" onclick="markAllRead()">
+                        <i class="ti ti-checks"></i>Đánh dấu đã đọc
+                    </button>
+                    <button class="hero-btn primary" onclick="showToast('info','Cài đặt thông báo','Mở trang cài đặt nâng cao')">
+                        <i class="ti ti-settings"></i>Cài đặt
+                    </button>
+                    <button class="hero-btn danger" onclick="clearAll()">
+                        <i class="ti ti-trash"></i>Xóa tất cả
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-container">
+
+        <div>
+            <div class="tabs-wrap">
+                <button class="tab active" data-filter="all">
+                    <i class="ti ti-inbox"></i>Tất cả <span class="tab-count">@ntTotal</span>
+                </button>
+                <button class="tab" data-filter="unread">
+                    <i class="ti ti-mail"></i>Chưa đọc <span class="tab-count urgent">@ntUnread</span>
+                </button>
+                <button class="tab" data-filter="order">
+                    <i class="ti ti-package"></i>Đơn hàng <span class="tab-count">@ntOrder</span>
+                </button>
+                <button class="tab" data-filter="promo">
+                    <i class="ti ti-gift"></i>Khuyến mãi <span class="tab-count">@ntPromo</span>
+                </button>
+                <button class="tab" data-filter="system">
+                    <i class="ti ti-settings"></i>Hệ thống <span class="tab-count">@ntSystem</span>
+                </button>
+                <button class="tab" data-filter="news">
+                    <i class="ti ti-news"></i>Tin tức <span class="tab-count">@ntNews</span>
+                </button>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon-wrap">
+                    <div class="empty-icon-main"><i class="ti ti-bell-off"></i></div>
+                </div>
+                <h3>Không có thông báo</h3>
+                <p>Hộp thông báo của bạn đang trống. Khi có thông báo mới, chúng sẽ xuất hiện ở đây.</p>
+            </div>
+
+            <div class="notif-list" id="notifList">
+                @{
+                    var notifs = ViewBag.Notifications as List<ThoiTrang.Models.Entities.Notification>;
+                }
+                @if (notifs != null && notifs.Count > 0)
+                {
+                    <div class="notif-group">
+                        <div class="group-header">
+                            <div class="group-title"><i class="ti ti-bell"></i>THÔNG BÁO CỦA BẠN</div>
+                        </div>
+                        @foreach (var n in notifs)
+                        {
+                            var (icls, iic) = n.Type switch
+                            {
+                                "order" => ("icon-order", "ti-package"),
+                                "promo" => ("icon-promo", "ti-gift"),
+                                "system" => ("icon-system", "ti-info-circle"),
+                                _ => ("icon-news", "ti-bell")
+                            };
+                            var ago = DateTime.Now - n.CreatedAt;
+                            string timeText = ago.TotalMinutes < 1 ? "Vừa xong"
+                                : ago.TotalHours < 1 ? $"{(int)ago.TotalMinutes} phút trước"
+                                : ago.TotalDays < 1 ? $"{(int)ago.TotalHours} giờ trước"
+                                : ago.TotalDays < 30 ? $"{(int)ago.TotalDays} ngày trước"
+                                : n.CreatedAt.ToString("dd/MM/yyyy");
+                            <div class="notif-item @(n.IsRead ? "" : "unread")" data-cat="@n.Type">
+                                <div class="notif-icon @icls"><i class="ti @iic"></i></div>
+                                <div class="notif-body">
+                                    <div class="notif-head">
+                                        <div class="notif-title">@n.Title @(n.IsRead ? "" : Html.Raw("<span class=\"notif-tag tag-new\">MỚI</span>"))</div>
+                                        <div class="notif-time">@timeText</div>
+                                    </div>
+                                    <div class="notif-desc">@n.Content</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div style="padding:50px 20px;text-align:center;color:#999;">
+                        <i class="ti ti-bell-off" style="font-size:46px;color:#ccc;"></i>
+                        <div style="margin-top:12px;font-size:15px;">Bạn chưa có thông báo nào</div>
+                    </div>
+                }
+                @*
+                <div class="notif-group">
+                    <div class="group-header">
+                        <div class="group-title"><i class="ti ti-calendar-event"></i>HÔM NAY</div>
+                        <button class="group-action">Đánh dấu đã đọc</button>
+                    </div>
+
+                    <div class="notif-item unread" data-cat="order">
+                        <div class="notif-icon icon-order"><i class="ti ti-circle-check"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Đơn hàng đã giao thành công <span class="notif-tag tag-new">MỚI</span></div>
+                                <div class="notif-time">2 giờ trước</div>
+                            </div>
+                            <div class="notif-desc">Đơn hàng <strong>#MNW20260518</strong> với 2 sản phẩm đã được giao đến địa chỉ của bạn. Hãy đánh giá để nhận 50 điểm thưởng!</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-star"></i>Đánh giá ngay</button>
+                                <button class="notif-btn"><i class="ti ti-eye"></i>Xem đơn</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item unread" data-cat="promo">
+                        <div class="notif-icon icon-promo"><i class="ti ti-gift"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Flash Sale bắt đầu trong 1 giờ <span class="notif-tag tag-urgent">GẤP</span></div>
+                                <div class="notif-time">3 giờ trước</div>
+                            </div>
+                            <div class="notif-desc">Giảm tới <strong>70%</strong> cho bộ sưu tập Hè 2026. Áp dụng cho thành viên VIP từ <strong>12:00 trưa nay</strong>.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-bolt"></i>Vào mua ngay</button>
+                                <button class="notif-btn"><i class="ti ti-bookmark"></i>Đặt nhắc nhở</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item unread" data-cat="order">
+                        <div class="notif-icon icon-shipping"><i class="ti ti-truck-delivery"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Đơn hàng đang được giao</div>
+                                <div class="notif-time">5 giờ trước</div>
+                            </div>
+                            <div class="notif-desc">Đơn hàng <strong>#MNW20260516</strong> đang trên đường giao tới bạn. Dự kiến nhận hàng <strong>21/05/2026</strong>.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-map-pin"></i>Theo dõi đơn</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                </div>
+
+                <div class="notif-group">
+                    <div class="group-header">
+                        <div class="group-title"><i class="ti ti-calendar"></i>HÔM QUA</div>
+                        <button class="group-action">Đánh dấu đã đọc</button>
+                    </div>
+
+                    <div class="notif-item unread" data-cat="promo">
+                        <div class="notif-icon icon-vip"><i class="ti ti-crown"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Chúc mừng lên hạng VIP Gold 🎉</div>
+                                <div class="notif-time">Hôm qua, 18:30</div>
+                            </div>
+                            <div class="notif-desc">Bạn đã trở thành thành viên VIP Gold với nhiều đặc quyền: <strong>giảm 15% tổng đơn</strong>, freeship toàn quốc, quà sinh nhật và ưu tiên hỗ trợ.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-sparkles"></i>Khám phá đặc quyền</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item unread" data-cat="promo">
+                        <div class="notif-icon icon-promo"><i class="ti ti-ticket"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Bạn nhận được voucher mới</div>
+                                <div class="notif-time">Hôm qua, 14:12</div>
+                            </div>
+                            <div class="notif-desc">Voucher <strong>SUMMER100</strong> giảm 100.000₫ cho đơn hàng từ 800.000₫. Hạn sử dụng đến <strong>15/06/2026</strong>.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-copy"></i>Sao chép mã</button>
+                                <button class="notif-btn">Dùng ngay</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item" data-cat="review">
+                        <div class="notif-icon icon-review"><i class="ti ti-star"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Nhắc nhở đánh giá sản phẩm</div>
+                                <div class="notif-time">Hôm qua, 10:05</div>
+                            </div>
+                            <div class="notif-desc">Bạn đã nhận được <strong>Áo sơ mi linen oversize</strong> được 7 ngày. Đánh giá ngay để nhận <strong>50 điểm thưởng</strong>.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-pencil"></i>Viết đánh giá</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                </div>
+
+                <div class="notif-group">
+                    <div class="group-header">
+                        <div class="group-title"><i class="ti ti-history"></i>TUẦN NÀY</div>
+                        <button class="group-action">Đánh dấu đã đọc</button>
+                    </div>
+
+                    <div class="notif-item" data-cat="order">
+                        <div class="notif-icon icon-order"><i class="ti ti-package"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Đơn hàng đã được xác nhận</div>
+                                <div class="notif-time">3 ngày trước</div>
+                            </div>
+                            <div class="notif-desc">Đơn hàng <strong>#MNW20260514</strong> đã được xác nhận và đang chuẩn bị đóng gói. Dự kiến giao trong 2-3 ngày tới.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn"><i class="ti ti-eye"></i>Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item" data-cat="news">
+                        <div class="notif-icon icon-news"><i class="ti ti-news"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Bộ sưu tập Thu Đông 2026 đã ra mắt</div>
+                                <div class="notif-time">4 ngày trước</div>
+                            </div>
+                            <div class="notif-desc">Khám phá <strong>48 thiết kế mới</strong> với phong cách tối giản, chất liệu cao cấp. Ưu đãi đặc biệt cho 100 khách hàng đầu tiên.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn primary"><i class="ti ti-arrow-right"></i>Xem bộ sưu tập</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item" data-cat="system">
+                        <div class="notif-icon icon-system"><i class="ti ti-shield-check"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Đăng nhập từ thiết bị mới</div>
+                                <div class="notif-time">5 ngày trước</div>
+                            </div>
+                            <div class="notif-desc">Tài khoản của bạn vừa được đăng nhập từ <strong>Chrome trên Windows · TP. Hồ Chí Minh</strong>. Nếu không phải bạn, hãy đổi mật khẩu ngay.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn"><i class="ti ti-lock"></i>Đổi mật khẩu</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                </div>
+
+                <div class="notif-group">
+                    <div class="group-header">
+                        <div class="group-title"><i class="ti ti-clock-hour-4"></i>CŨ HƠN</div>
+                        <button class="group-action">Đánh dấu đã đọc</button>
+                    </div>
+
+                    <div class="notif-item" data-cat="news">
+                        <div class="notif-icon icon-news"><i class="ti ti-confetti"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">MONO.WEAR mở cửa hàng mới tại Đà Nẵng</div>
+                                <div class="notif-time">2 tuần trước</div>
+                            </div>
+                            <div class="notif-desc">Đến trải nghiệm tại cửa hàng số <strong>123 Bạch Đằng, Hải Châu, Đà Nẵng</strong>. Tặng voucher 200K cho 50 khách hàng đầu tiên.</div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                    <div class="notif-item" data-cat="system">
+                        <div class="notif-icon icon-system"><i class="ti ti-info-circle"></i></div>
+                        <div class="notif-body">
+                            <div class="notif-head">
+                                <div class="notif-title">Cập nhật chính sách bảo mật</div>
+                                <div class="notif-time">3 tuần trước</div>
+                            </div>
+                            <div class="notif-desc">Chúng tôi đã cập nhật <strong>Chính sách bảo mật</strong> và <strong>Điều khoản sử dụng</strong> để phù hợp với quy định mới.</div>
+                            <div class="notif-actions">
+                                <button class="notif-btn">Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <button class="notif-close" onclick="removeItem(event, this)"><i class="ti ti-x"></i></button>
+                    </div>
+
+                </div>
+                *@
+            </div>
+        </div>
+
+        <aside class="sidebar">
+
+            <div class="stats-card">
+                <div class="stats-head"><i class="ti ti-chart-bar"></i>Hoạt động thông báo</div>
+                <div class="stats-grid">
+                    <div class="stat-mini">
+                        <div class="stat-mini-num">@ntTotal</div>
+                        <div class="stat-mini-label">TỔNG CỘNG</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-num">@ntUnread</div>
+                        <div class="stat-mini-label">CHƯA ĐỌC</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-num">@ntOrder</div>
+                        <div class="stat-mini-label">ĐƠN HÀNG</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-num">@ntPromo</div>
+                        <div class="stat-mini-label">KHUYẾN MÃI</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title"><i class="ti ti-bell-cog"></i>Cài đặt nhanh</div>
+                <div class="settings-sub">Quản lý loại thông báo bạn muốn nhận</div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Đơn hàng</div>
+                        <div class="setting-desc">Xác nhận, vận chuyển, đã giao</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Khuyến mãi</div>
+                        <div class="setting-desc">Sale, voucher, deals</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Tin tức</div>
+                        <div class="setting-desc">Bộ sưu tập mới, sự kiện</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Email thông báo</div>
+                        <div class="setting-desc">Gửi vào email của bạn</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Âm thanh</div>
+                        <div class="setting-desc">Phát âm thanh khi có thông báo</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="quick-card">
+                <div class="settings-title"><i class="ti ti-link"></i>Truy cập nhanh</div>
+                <div class="settings-sub" style="margin-bottom: 12px;">Các trang liên quan</div>
+
+                <div class="quick-link">
+                    <i class="ti ti-package"></i>
+                    <span>Đơn hàng của tôi</span>
+                    <i class="ti ti-chevron-right arrow"></i>
+                </div>
+                <div class="quick-link">
+                    <i class="ti ti-ticket"></i>
+                    <span>Voucher của tôi</span>
+                    <i class="ti ti-chevron-right arrow"></i>
+                </div>
+                <div class="quick-link">
+                    <i class="ti ti-heart"></i>
+                    <span>Sản phẩm yêu thích</span>
+                    <i class="ti ti-chevron-right arrow"></i>
+                </div>
+                <div class="quick-link">
+                    <i class="ti ti-settings"></i>
+                    <span>Cài đặt tài khoản</span>
+                    <i class="ti ti-chevron-right arrow"></i>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Thời trang Nam</a></li>
+                        <li><a href="#">Thời trang Nữ</a></li>
+                        <li><a href="#">Sản phẩm mới về</a></li>
+                        <li><a href="#">Ưu đãi đặc biệt</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa Credit/Debit"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD khi nhận hàng"></i>
+                    <i class="ti ti-shield-check" title="Giao dịch bảo mật qua SSL"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        document.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (e.target.closest('.notif-close') || e.target.closest('.notif-btn')) return;
+                if (item.classList.contains('unread')) {
+                    item.classList.remove('unread');
+                    updateCounts();
+                }
+            });
+        });
+
+        function removeItem(e, btn) {
+            e.stopPropagation();
+            const item = btn.closest('.notif-item');
+            item.classList.add('removing');
+            setTimeout(() => {
+                item.remove();
+                cleanupEmptyGroups();
+                updateCounts();
+                showToast('info', 'Đã xóa thông báo', 'Thông báo đã được loại khỏi danh sách');
+            }, 400);
+        }
+
+        function cleanupEmptyGroups() {
+            document.querySelectorAll('.notif-group').forEach(g => {
+                if (g.querySelectorAll('.notif-item').length === 0) g.remove();
+            });
+            if (document.querySelectorAll('.notif-item').length === 0) {
+                document.getElementById('notifList').style.display = 'none';
+                document.getElementById('emptyState').classList.add('show');
+            }
+        }
+
+        document.querySelectorAll('.group-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const group = btn.closest('.notif-group');
+                const unread = group.querySelectorAll('.notif-item.unread');
+                if (unread.length === 0) {
+                    showToast('info', 'Đã đọc hết', 'Không còn thông báo chưa đọc trong nhóm này');
+                    return;
+                }
+                unread.forEach(item => item.classList.remove('unread'));
+                updateCounts();
+                showToast('success', 'Đã đánh dấu', `${unread.length} thông báo đã được đánh dấu đã đọc`);
+            });
+        });
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const filter = tab.dataset.filter;
+
+                document.querySelectorAll('.notif-item').forEach(item => {
+                    if (filter === 'all') {
+                        item.style.display = '';
+                    } else if (filter === 'unread') {
+                        item.style.display = item.classList.contains('unread') ? '' : 'none';
+                    } else {
+                        item.style.display = item.dataset.cat === filter ? '' : 'none';
+                    }
+                });
+
+                document.querySelectorAll('.notif-group').forEach(g => {
+                    const visible = Array.from(g.querySelectorAll('.notif-item')).filter(i => i.style.display !== 'none');
+                    g.style.display = visible.length > 0 ? '' : 'none';
+                });
+            });
+        });
+
+        function markAllRead() {
+            const unread = document.querySelectorAll('.notif-item.unread');
+            if (unread.length === 0) {
+                showToast('info', 'Đã đọc hết', 'Không còn thông báo chưa đọc');
+                return;
+            }
+            unread.forEach(item => item.classList.remove('unread'));
+            updateCounts();
+            showToast('success', 'Hoàn tất', `${unread.length} thông báo đã được đánh dấu đã đọc`);
+        }
+
+        async function clearAll() {
+            const items = document.querySelectorAll('.notif-item');
+            if (items.length === 0) {
+                showToast('info', 'Đang trống', 'Không có thông báo để xóa');
+                return;
+            }
+            if (!confirm('Xóa tất cả thông báo của bạn?')) return;
+            try {
+                const r = await fetch('/Home/DeleteAllNotifications', { method: 'POST' });
+                if (r.ok) {
+                    showToast('success', 'Đã xóa', 'Tất cả thông báo đã được xóa');
+                    setTimeout(() => location.reload(), 800);
+                } else if (r.status === 401) {
+                    showToast('info', 'Cần đăng nhập', 'Vui lòng đăng nhập lại');
+                } else showToast('error', 'Lỗi', 'Không xóa được, thử lại sau');
+            } catch { showToast('error', 'Lỗi', 'Thử lại sau'); }
+        }
+
+        function updateCounts() {
+            const total = document.querySelectorAll('.notif-item').length;
+            const unread = document.querySelectorAll('.notif-item.unread').length;
+            document.getElementById('unreadCount').textContent = unread + ' thông báo chưa đọc';
+            document.getElementById('totalNotif').textContent = total + ' thông báo';
+            const badge = document.getElementById('headerNotifBadge');
+            badge.textContent = unread;
+            badge.style.display = unread === 0 ? 'none' : '';
+
+            const allTab = document.querySelector('.tab[data-filter="all"] .tab-count');
+            const unreadTab = document.querySelector('.tab[data-filter="unread"] .tab-count');
+            if (allTab) allTab.textContent = total;
+            if (unreadTab) unreadTab.textContent = unread;
+        }
+
+        const header = document.getElementById('header');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        document.querySelectorAll('.toggle input').forEach(input => {
+            input.addEventListener('change', () => {
+                const label = input.closest('.setting-row').querySelector('.setting-label').textContent;
+                showToast('info', input.checked ? 'Đã bật' : 'Đã tắt', label);
+            });
+        });
+
+        document.querySelectorAll('.quick-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const name = link.querySelector('span').textContent;
+                showToast('info', 'Chuyển trang', `Đang mở: ${name}`);
+            });
+        });
+
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: 'ti-circle-check', info: 'ti-info-circle', warning: 'ti-alert-circle' };
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="ti ${icons[type] || 'ti-bell'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <button class="toast-close"><i class="ti ti-x"></i></button>
+            `;
+            container.appendChild(toast);
+            const closeBtn = toast.querySelector('.toast-close');
+            const removeToast = () => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            };
+            closeBtn.addEventListener('click', removeToast);
+            setTimeout(removeToast, 3500);
+        }
+    </script>
+
+    <script src="/js/search.js"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

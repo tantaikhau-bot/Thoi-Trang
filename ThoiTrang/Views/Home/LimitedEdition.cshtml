@@ -1,0 +1,1532 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Limited Edition - Dấu Ấn Lập Thể Tối Giản";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR · Dấu Ấn Lập Thể Tối Giản</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1a1a1a;
+            background: #ececec;
+            line-height: 1.6;
+            overflow-x: clip;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes drift {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0);
+            }
+
+            50% {
+                transform: translate(8px, -12px) rotate(2deg);
+            }
+        }
+
+        @@keyframes rotateSlow {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes pulseDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.6;
+            }
+        }
+
+        @@keyframes counterCount {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes scrollIndicator {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 22px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(236,236,236,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: padding 0.3s;
+        }
+
+            .top-bar.scrolled {
+                padding: 14px 60px;
+            }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+            .back-link:hover {
+                opacity: 0.5;
+            }
+
+            .back-link i {
+                font-size: 16px;
+            }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+        }
+
+            .logo span {
+                font-weight: 200;
+            }
+
+        .top-actions {
+            display: flex;
+            gap: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+            .top-actions a {
+                transition: opacity 0.3s;
+            }
+
+                .top-actions a:hover {
+                    opacity: 0.5;
+                }
+
+        /* HERO - architectural minimal */
+        .hero {
+            min-height: 100vh;
+            background: #ececec;
+            position: relative;
+            padding: 120px 60px 80px;
+            overflow: hidden;
+        }
+
+        .hero-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 80px;
+            align-items: end;
+            min-height: calc(100vh - 200px);
+        }
+
+        .hero-left {
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-meta-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 32px;
+        }
+
+            .hero-meta-top .dot {
+                width: 8px;
+                height: 8px;
+                background: #1a1a1a;
+                border-radius: 50%;
+                animation: pulseDot 1.5s ease infinite;
+            }
+
+            .hero-meta-top .num {
+                color: #1a1a1a;
+                font-weight: 700;
+            }
+
+        .hero-title {
+            font-size: clamp(56px, 9vw, 144px);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -4px;
+            margin-bottom: 0;
+        }
+
+            .hero-title .line2 {
+                font-style: italic;
+                color: #1a1a1a;
+                display: block;
+            }
+
+            .hero-title .num-label {
+                font-family: 'Playfair Display', Georgia, serif;
+                font-style: italic;
+                font-size: 0.45em;
+                vertical-align: super;
+                color: #888;
+            }
+
+        .hero-right {
+            animation: fadeInUp 1s ease 0.3s both;
+            padding-bottom: 20px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px 24px;
+            padding-bottom: 32px;
+            border-bottom: 1.5px solid #1a1a1a;
+            margin-bottom: 32px;
+        }
+
+        .hero-stat-num {
+            font-size: 48px;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 6px;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .hero-stat-label {
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .hero-desc {
+            font-size: 14px;
+            line-height: 1.85;
+            color: #555;
+            max-width: 380px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 36px;
+            left: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+            .scroll-indicator i {
+                font-size: 18px;
+                animation: scrollIndicator 1.6s ease infinite;
+            }
+
+        /* Floating sculptural element */
+        .hero-sculpture {
+            position: absolute;
+            top: 35%;
+            right: 8%;
+            width: 180px;
+            height: 180px;
+            pointer-events: none;
+            animation: drift 6s ease-in-out infinite;
+        }
+
+            .hero-sculpture::before, .hero-sculpture::after {
+                content: '';
+                position: absolute;
+                border: 1.5px solid #1a1a1a;
+            }
+
+            .hero-sculpture::before {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+
+            .hero-sculpture::after {
+                width: 70%;
+                height: 70%;
+                top: 30%;
+                left: 30%;
+                background: #1a1a1a;
+                transform: rotate(45deg);
+            }
+
+        /* SHOWCASE - large product centerpiece */
+        .showcase {
+            padding: 120px 60px;
+            background: #ddd9d0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-bg-text {
+            position: absolute;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-size: 24vw;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(0,0,0,0.04);
+            font-weight: 400;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -10px;
+        }
+
+        .showcase-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .showcase-side {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .showcase-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8a4a3a;
+            font-weight: 700;
+        }
+
+        .showcase-side h3 {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .showcase-side p {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .showcase-piece {
+            aspect-ratio: 3/4;
+            background: #1a1a1a;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.6s;
+        }
+
+            .showcase-piece:hover {
+                transform: scale(1.02);
+            }
+
+            .showcase-piece i {
+                font-size: 200px;
+                color: rgba(255,255,255,0.15);
+                transition: transform 0.6s;
+            }
+
+            .showcase-piece:hover i {
+                transform: rotate(-5deg) scale(1.1);
+            }
+
+        .showcase-piece-label {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: #c9a489;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .showcase-piece-bottom {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            color: #fff;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .showcase-piece-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .showcase-piece-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.6);
+            text-align: right;
+        }
+
+        /* SECTION HEADING REUSABLE */
+        .sec-head {
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            text-align: center;
+        }
+
+        .sec-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #8a4a3a;
+            margin-bottom: 16px;
+        }
+
+        .sec-title {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+            .sec-title em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .sec-desc {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.85;
+            max-width: 600px;
+            margin: 22px auto 0;
+        }
+
+        /* CONCEPT - 3 column with numbers */
+        .concept {
+            padding: 130px 60px;
+            background: #ececec;
+        }
+
+        .concept-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .concept-card {
+            border-top: 2px solid #1a1a1a;
+            padding-top: 28px;
+            position: relative;
+        }
+
+        .concept-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+
+        .concept-card h3 {
+            font-size: 26px;
+            font-weight: 400;
+            font-family: 'Playfair Display', Georgia, serif;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+            .concept-card h3 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .concept-card p {
+            font-size: 14px;
+            line-height: 1.85;
+            color: #555;
+            margin-bottom: 22px;
+        }
+
+        .concept-icon-large {
+            font-size: 56px;
+            color: #1a1a1a;
+            opacity: 0.85;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        /* DETAIL ZOOM - alternating detail shots */
+        .detail-zoom {
+            padding: 130px 60px;
+            background: #d8d3c6;
+        }
+
+        .detail-zoom-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .detail-img {
+            aspect-ratio: 1/1.15;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .detail-img.tall {
+                grid-row: span 2;
+                aspect-ratio: 3/5;
+            }
+
+        .detail-bg-1 {
+            background: #c9b8a4;
+        }
+
+        .detail-bg-2 {
+            background: #2c2c2a;
+        }
+
+        .detail-bg-3 {
+            background: #8a6a52;
+        }
+
+        .detail-img i {
+            font-size: 100px;
+            color: rgba(0,0,0,0.18);
+            transition: transform 0.6s ease;
+        }
+
+        .detail-img.detail-bg-2 i, .detail-img.detail-bg-3 i {
+            color: rgba(255,255,255,0.22);
+        }
+
+        .detail-img:hover i {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        .detail-cap {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.85);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .detail-bg-1 .detail-cap {
+            color: rgba(0,0,0,0.6);
+        }
+
+        /* TIMELINE - production process */
+        .timeline {
+            padding: 130px 60px;
+            background: #ececec;
+        }
+
+        .timeline-list {
+            max-width: 900px;
+            margin: 60px auto 0;
+        }
+
+        .timeline-row {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 40px;
+            padding: 32px 0;
+            border-bottom: 1.5px solid rgba(0,0,0,0.1);
+            align-items: start;
+        }
+
+            .timeline-row:first-child {
+                border-top: 1.5px solid rgba(0,0,0,0.1);
+            }
+
+        .timeline-step {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            color: #8a4a3a;
+            font-weight: 700;
+            padding-top: 4px;
+        }
+
+        .timeline-content h4 {
+            font-size: 24px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 400;
+            letter-spacing: -0.4px;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+            .timeline-content h4 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .timeline-content p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.85;
+        }
+
+        .timeline-content .duration {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #999;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* CINEMA */
+        .cinema-strip {
+            height: 65vh;
+            background: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .cinema-strip i {
+                font-size: 280px;
+                color: rgba(255,255,255,0.08);
+                animation: rotateSlow 25s linear infinite;
+            }
+
+        .cinema-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #c9a489;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            z-index: 2;
+        }
+
+            .cinema-text small {
+                display: block;
+                font-family: 'JetBrains Mono', monospace;
+                font-style: normal;
+                font-size: 11px;
+                letter-spacing: 5px;
+                color: rgba(201, 164, 137, 0.5);
+                margin-top: 20px;
+                text-transform: uppercase;
+            }
+
+        /* PIECES GRID - capsule items */
+        .pieces {
+            padding: 130px 60px;
+            background: #fff;
+        }
+
+        .pieces-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .piece-card {
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+            .piece-card:hover {
+                transform: translateY(-6px);
+            }
+
+        .piece-img {
+            aspect-ratio: 3/4;
+            background: #ececec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+            .piece-img.dark {
+                background: #2c2c2a;
+            }
+
+            .piece-img i {
+                font-size: 90px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.6s;
+            }
+
+            .piece-img.dark i {
+                color: rgba(255,255,255,0.22);
+            }
+
+        .piece-card:hover .piece-img i {
+            transform: scale(1.12);
+        }
+
+        .piece-tag {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.95);
+            color: #1a1a1a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            padding: 5px 10px;
+            font-weight: 600;
+        }
+
+        .piece-img.dark .piece-tag {
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+        }
+
+        .piece-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #8a4a3a;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .piece-name {
+            font-size: 16px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .piece-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #555;
+        }
+
+            .piece-meta .price {
+                font-weight: 500;
+                color: #1a1a1a;
+            }
+
+        /* RARITY - scarcity panel */
+        .rarity {
+            padding: 130px 60px;
+            background: #1a1a1a;
+            color: #ececec;
+            position: relative;
+        }
+
+        .rarity-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .rarity-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #c9a489;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .rarity h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+            .rarity h2 em {
+                color: #c9a489;
+                font-style: italic;
+            }
+
+        .rarity-desc {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.9;
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        .rarity-counters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .rcount-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 400;
+            line-height: 1;
+            color: #c9a489;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
+
+        .rcount-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 140px 60px;
+            text-align: center;
+            background: #d8d3c6;
+        }
+
+        .cta-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #8a4a3a;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 400;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            max-width: 1000px;
+            margin: 0 auto 28px;
+        }
+
+            .cta h2 em {
+                font-style: italic;
+                color: #8a4a3a;
+            }
+
+        .cta-desc {
+            font-size: 15px;
+            color: #555;
+            max-width: 540px;
+            margin: 0 auto 40px;
+            line-height: 1.85;
+        }
+
+        .cta-buttons {
+            display: inline-flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1.5px solid #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #d8d3c6;
+        }
+
+            .btn-primary:hover {
+                background: transparent;
+                color: #1a1a1a;
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a1a1a;
+        }
+
+            .btn-outline:hover {
+                background: #1a1a1a;
+                color: #d8d3c6;
+            }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        .cta-availability {
+            margin-top: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #888;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .cta-availability .dot {
+                width: 8px;
+                height: 8px;
+                background: #8a4a3a;
+                border-radius: 50%;
+                animation: pulseDot 1.5s ease infinite;
+            }
+
+        /* FOOTER */
+        .editorial-footer {
+            background: #1a1a1a;
+            color: #c9a489;
+            padding: 50px 60px 30px;
+            text-align: center;
+        }
+
+        .ef-marquee {
+            overflow: hidden;
+            padding-bottom: 36px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 36px;
+        }
+
+        .ef-marquee-track {
+            display: inline-flex;
+            gap: 50px;
+            white-space: nowrap;
+            animation: ticker 22s linear infinite;
+        }
+
+            .ef-marquee-track span {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-size: 22px;
+                color: rgba(201, 164, 137, 0.7);
+            }
+
+        .ef-bottom {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: #1a1a1a;
+            color: #d8d3c6;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+            }
+
+        @@media (max-width: 1024px) {
+            .top-bar, .top-bar.scrolled {
+                padding: 16px 20px;
+            }
+
+            .top-actions {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-sculpture {
+                display: none;
+            }
+
+            .scroll-indicator {
+                left: 20px;
+            }
+
+            .showcase, .concept, .detail-zoom, .timeline, .pieces, .rarity, .cta, .editorial-footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .showcase-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-zoom-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-img.tall {
+                grid-row: span 1;
+                aspect-ratio: 1;
+            }
+
+            .pieces-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .rarity-counters {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .timeline-row {
+                grid-template-columns: 60px 1fr;
+                gap: 20px;
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .pieces-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px 16px;
+            }
+
+            .hero-stat-num {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar" id="topBar">
+        <a href="/" class="back-link"><i class="ti ti-arrow-left"></i><span>Quay lại</span></a>
+        <a href="/" class="logo">MONO<span>.WEAR</span></a>
+        <div class="top-actions">
+            <a href="#">Capsule</a>
+            <a href="#">Shop</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-sculpture"></div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-meta-top">
+                    <span class="dot"></span>
+                    <span>LIMITED EDITION</span>
+                    <span class="num">N° 003 / 2026</span>
+                </div>
+                <h1 class="hero-title serif">
+                    Dấu Ấn<br />
+                    <span class="line2">Lập Thể</span>
+                    <span class="num-label">⁰³</span>
+                </h1>
+            </div>
+            <div class="hero-right">
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">120</div>
+                        <div class="hero-stat-label">PIECES TOTAL</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">7</div>
+                        <div class="hero-stat-label">SILHOUETTES</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">6</div>
+                        <div class="hero-stat-label">MONTHS R&amp;D</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">∞</div>
+                        <div class="hero-stat-label">UNIQUE FORMS</div>
+                    </div>
+                </div>
+                <p class="hero-desc">Bộ sưu tập viên mãn phá vỡ kết cấu đường may thông thường, kiến tạo cấu trúc hình khối độc lập trên bề mặt chất liệu organic thô mộc.</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="ti ti-chevron-down"></i>
+            <span>SCROLL TO EXPLORE</span>
+        </div>
+    </section>
+
+    <!-- SHOWCASE -->
+    <section class="showcase">
+        <div class="showcase-bg-text serif">Lập Thể</div>
+        <div class="showcase-inner">
+            <div class="showcase-side">
+                <div>
+                    <div class="showcase-label">— FORM N° 01</div>
+                    <h3>Asymmetric Drape</h3>
+                    <p>Đường cắt bất đối xứng tạo cảm giác chuyển động trong sự tĩnh lặng. Mỗi tấm vải được drape thủ công trên mannequin trong 4 giờ.</p>
+                </div>
+                <div>
+                    <div class="showcase-label">— FORM N° 02</div>
+                    <h3>Sculptural Volume</h3>
+                    <p>Phom dáng kiến trúc 3D với khối lượng được tính toán theo nguyên tắc Golden Ratio (1:1.618), giải phóng cơ thể khỏi giới hạn truyền thống.</p>
+                </div>
+            </div>
+
+            <div class="showcase-piece">
+                <span class="showcase-piece-label">CENTERPIECE · 001</span>
+                <i class="ti ti-shirt-sport"></i>
+                <div class="showcase-piece-bottom">
+                    <div class="showcase-piece-name serif">Áo Khoác<br />Lập Thể</div>
+                    <div class="showcase-piece-num">N° 001<br />OF 120</div>
+                </div>
+            </div>
+
+            <div class="showcase-side">
+                <div>
+                    <div class="showcase-label">— FORM N° 03</div>
+                    <h3>Origami Pleats</h3>
+                    <p>Kỹ thuật xếp ly lấy cảm hứng từ nghệ thuật origami Nhật Bản, mỗi nếp gấp đều cố định bằng phương pháp heat-press không cần đường chỉ.</p>
+                </div>
+                <div>
+                    <div class="showcase-label">— FORM N° 04</div>
+                    <h3>Organic Texture</h3>
+                    <p>Bề mặt vải linen thô mộc giữ nguyên dấu vết của quy trình dệt tay, mỗi mảnh có vân vải riêng biệt — không bao giờ trùng lặp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONCEPT -->
+    <section class="concept">
+        <div class="sec-head">
+            <div class="sec-label">— CONCEPT</div>
+            <h2 class="sec-title">Ba <em>triết lý</em> sáng tạo</h2>
+            <p class="sec-desc">Mỗi mảnh trong capsule này được thiết kế dựa trên ba nguyên tắc cốt lõi — không khoan nhượng.</p>
+        </div>
+        <div class="concept-grid">
+            <div class="concept-card">
+                <div class="concept-num">N° 01</div>
+                <i class="ti ti-shape concept-icon-large"></i>
+                <h3>Hình khối <em>độc lập</em></h3>
+                <p>Mỗi mảnh quần áo là một tác phẩm điêu khắc — đứng vững trong không gian khi không có cơ thể nâng đỡ. Đây là kết quả của 6 tháng thử nghiệm với cấu trúc bên trong.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-num">N° 02</div>
+                <i class="ti ti-droplet concept-icon-large"></i>
+                <h3>Chất liệu <em>nguyên bản</em></h3>
+                <p>100% sợi tự nhiên — không pha trộn, không xử lý hóa học. Vải linen Bỉ, len Merino Úc và bông Pima Peru, được nhuộm bằng vỏ óc chó và rễ cây madder.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-num">N° 03</div>
+                <i class="ti ti-tools concept-icon-large"></i>
+                <h3>Thủ công <em>tinh xảo</em></h3>
+                <p>Mỗi piece được hoàn thiện bởi 1 nghệ nhân duy nhất, mất từ 18 đến 42 giờ làm việc. Tay nghề được truyền qua 3 thế hệ tại xưởng MONO.STUDIO Quận 3, Sài Gòn.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DETAIL ZOOM -->
+    <section class="detail-zoom">
+        <div class="sec-head">
+            <div class="sec-label">— DETAIL STUDY</div>
+            <h2 class="sec-title">Chi tiết <em>chính là</em><br />tất cả mọi thứ</h2>
+        </div>
+        <div class="detail-zoom-inner">
+            <div class="detail-img detail-bg-1 tall">
+                <i class="ti ti-shirt"></i>
+                <div class="detail-cap">— TEXTURE · LINEN WEAVE</div>
+            </div>
+            <div class="detail-img detail-bg-2">
+                <i class="ti ti-hanger"></i>
+                <div class="detail-cap">— SEAM · INVISIBLE STITCH</div>
+            </div>
+            <div class="detail-img detail-bg-3">
+                <i class="ti ti-needle-thread"></i>
+                <div class="detail-cap">— HAND-FINISHED · 42HRS</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="timeline">
+        <div class="sec-head">
+            <div class="sec-label">— THE MAKING OF</div>
+            <h2 class="sec-title">Hành trình của <em>một mảnh</em></h2>
+            <p class="sec-desc">Từ ý tưởng đến sản phẩm hoàn chỉnh, mỗi piece đi qua 6 giai đoạn thủ công.</p>
+        </div>
+
+        <div class="timeline-list">
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 01</div>
+                <div class="timeline-content">
+                    <h4>Sketch &amp; <em>Concept</em></h4>
+                    <p>Phác thảo bằng tay trên giấy washi Nhật Bản, mỗi ý tưởng được xem xét bởi 3 designer trước khi được phê duyệt vào dòng sản xuất.</p>
+                    <div class="duration">3 - 7 NGÀY</div>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 02</div>
+                <div class="timeline-content">
+                    <h4>Pattern <em>Making</em></h4>
+                    <p>Tạo rập từ vải mockup 100% cotton thô, drape trực tiếp trên mannequin để kiểm tra phom dáng 3D, điều chỉnh trong 4-6 lần thử.</p>
+                    <div class="duration">5 - 12 NGÀY</div>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 03</div>
+                <div class="timeline-content">
+                    <h4>Fabric <em>Selection</em></h4>
+                    <p>Lựa chọn vải nhập khẩu từ Bỉ, Ý, Nhật Bản. Kiểm định 8 chỉ tiêu chất lượng: GSM, độ bền màu, độ co rút, độ thấm hút...</p>
+                    <div class="duration">2 - 4 NGÀY</div>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 04</div>
+                <div class="timeline-content">
+                    <h4>Hand <em>Cutting</em></h4>
+                    <p>Cắt thủ công bằng kéo Nhật, không sử dụng máy laser. Đảm bảo chuẩn xác từng milimet với độ sai số dưới 0.5mm.</p>
+                    <div class="duration">1 - 2 NGÀY</div>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 05</div>
+                <div class="timeline-content">
+                    <h4>Sewing &amp; <em>Construction</em></h4>
+                    <p>1 nghệ nhân duy nhất phụ trách từ A đến Z. Mỗi piece có chữ ký riêng của người làm, đính kèm trong nhãn nội bộ.</p>
+                    <div class="duration">18 - 42 GIỜ</div>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-step">STEP 06</div>
+                <div class="timeline-content">
+                    <h4>Quality <em>Control</em></h4>
+                    <p>Kiểm định 24 điểm chất lượng — từ độ thẳng đường may đến độ đều của nhuộm. Chỉ 92% sản phẩm đạt chuẩn được phát hành.</p>
+                    <div class="duration">FINAL CHECK</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMA STRIP -->
+    <section class="cinema-strip">
+        <i class="ti ti-shirt"></i>
+        <div class="cinema-text serif">
+            120 Pieces
+            <small>SỐ LƯỢNG SẢN XUẤT GIỚI HẠN</small>
+        </div>
+    </section>
+
+    <!-- PIECES -->
+    <section class="pieces">
+        <div class="sec-head">
+            <div class="sec-label">— THE CAPSULE</div>
+            <h2 class="sec-title">Khám phá <em>7 silhouettes</em></h2>
+            <p class="sec-desc">7 phom dáng đặc trưng, 120 mảnh duy nhất. Mỗi piece được đánh số riêng, không tái sản xuất.</p>
+        </div>
+
+        <div class="pieces-grid">
+            <div class="piece-card">
+                <div class="piece-img">
+                    <span class="piece-tag">001 / 120</span>
+                    <i class="ti ti-shirt-sport"></i>
+                </div>
+                <div class="piece-num">N° 01 SILHOUETTE</div>
+                <div class="piece-name serif">Áo Khoác Lập Thể</div>
+                <div class="piece-meta">
+                    <span>Linen · Wool</span>
+                    <span class="price">4.250.000₫</span>
+                </div>
+            </div>
+            <div class="piece-card">
+                <div class="piece-img dark">
+                    <span class="piece-tag">015 / 120</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="piece-num">N° 02 SILHOUETTE</div>
+                <div class="piece-name serif">Áo Drape Bất Đối Xứng</div>
+                <div class="piece-meta">
+                    <span>Silk · Linen</span>
+                    <span class="price">3.180.000₫</span>
+                </div>
+            </div>
+            <div class="piece-card">
+                <div class="piece-img">
+                    <span class="piece-tag">042 / 120</span>
+                    <i class="ti ti-hanger"></i>
+                </div>
+                <div class="piece-num">N° 03 SILHOUETTE</div>
+                <div class="piece-name serif">Quần Origami Pleats</div>
+                <div class="piece-meta">
+                    <span>Wool Italian</span>
+                    <span class="price">2.890.000₫</span>
+                </div>
+            </div>
+            <div class="piece-card">
+                <div class="piece-img dark">
+                    <span class="piece-tag">068 / 120</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="piece-num">N° 04 SILHOUETTE</div>
+                <div class="piece-name serif">Áo Volume Sculptural</div>
+                <div class="piece-meta">
+                    <span>Cotton Peru</span>
+                    <span class="price">3.560.000₫</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RARITY -->
+    <section class="rarity">
+        <div class="rarity-inner">
+            <div class="rarity-label">— SCARCITY BY DESIGN</div>
+            <h2 class="serif">Sản xuất giới hạn,<br /><em>vĩnh viễn không tái bản</em></h2>
+            <p class="rarity-desc">Mỗi piece được đánh số riêng, đi kèm chứng nhận xuất xứ và chữ ký nghệ nhân. Khi capsule sold-out, MONO.WEAR cam kết không sản xuất lại — đây là cam kết về tính độc bản.</p>
+
+            <div class="rarity-counters">
+                <div>
+                    <div class="rcount-num serif">120</div>
+                    <div class="rcount-label">PIECES PRODUCED</div>
+                </div>
+                <div>
+                    <div class="rcount-num serif">87</div>
+                    <div class="rcount-label">REMAINING NOW</div>
+                </div>
+                <div>
+                    <div class="rcount-num serif">N° 003</div>
+                    <div class="rcount-label">EDITION CODE</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-label">— BUY THE EDITION</div>
+        <h2 class="serif">Sở hữu một <em>mảnh</em><br />của lịch sử thiết kế</h2>
+        <p class="cta-desc">Capsule N° 003 sẽ ngừng phát hành khi 120 pieces được bán hết. Còn 87 piece có sẵn tại thời điểm này.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">
+                Mua capsule <i class="ti ti-arrow-right"></i>
+            </a>
+            <a href="#" class="btn btn-outline">
+                Tải lookbook PDF
+            </a>
+        </div>
+        <div class="cta-availability">
+            <span class="dot"></span>
+            <span>87 / 120 PIECES AVAILABLE · UPDATED LIVE</span>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="editorial-footer">
+        <div class="ef-marquee">
+            <div class="ef-marquee-track">
+                <span>Limited Edition</span><span>·</span>
+                <span>Dấu Ấn Lập Thể</span><span>·</span>
+                <span>N° 003 / 2026</span><span>·</span>
+                <span>120 Pieces Only</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+                <span>Limited Edition</span><span>·</span>
+                <span>Dấu Ấn Lập Thể</span><span>·</span>
+                <span>N° 003 / 2026</span><span>·</span>
+                <span>120 Pieces Only</span><span>·</span>
+                <span>MONO.WEAR</span><span>·</span>
+            </div>
+        </div>
+        <div class="ef-bottom">© 2026 MONO.WEAR · CAPSULE N° 003 · ALL RIGHTS RESERVED</div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <script>
+        const topBar = document.getElementById('topBar');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) topBar.classList.add('scrolled');
+            else topBar.classList.remove('scrolled');
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.9s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.concept-card, .detail-img, .timeline-row, .piece-card, .rcount-num').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>

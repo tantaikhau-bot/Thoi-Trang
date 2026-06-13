@@ -1,0 +1,3879 @@
+﻿@model List<ThoiTrang.Models.Entities.Product>
+@{
+    ViewData["Title"] = "Siêu Sale Bùng Nổ";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MONO.WEAR - Đại Tiệc Sale Lớn Nhất Năm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@2.47.0/tabler-icons.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: clip; /* Chặn tuyệt đối việc tràn viền ngang */
+            position: relative;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f3;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @@keyframes pulseNeon {
+            0%, 100% {
+                box-shadow: 0 0 5px #e63946, 0 0 12px rgba(230,57,70,0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 18px #ff758c, 0 0 30px rgba(255,117,140,0.7);
+            }
+        }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @@keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes confettiFall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes ring {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            10%, 30% {
+                transform: rotate(-15deg);
+            }
+
+            20%, 40% {
+                transform: rotate(15deg);
+            }
+
+            50% {
+                transform: rotate(0);
+            }
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @@keyframes pulseRing {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(230,57,70,0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 12px rgba(230,57,70,0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(230,57,70,0);
+            }
+        }
+
+        @@keyframes wobble {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-8deg);
+            }
+
+            75% {
+                transform: rotate(8deg);
+            }
+        }
+
+        @@keyframes glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 4px rgba(255,117,140,0.6));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 14px rgba(255,117,140,1));
+            }
+        }
+
+        @@keyframes slideInRightToast {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOutRightToast {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.3);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            75% {
+                transform: scale(1.2);
+            }
+        }
+
+        @@keyframes highlight {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(230,57,70,0);
+            }
+
+            20%, 80% {
+                box-shadow: 0 0 0 6px rgba(230,57,70,0.25);
+            }
+
+            50% {
+                box-shadow: 0 0 0 12px rgba(230,57,70,0.4);
+            }
+        }
+
+        /* LIVE ADS */
+        .live-ads-bar {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 9px 0;
+            font-size: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .marquee-inner {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+
+            .marquee-inner span {
+                margin-right: 60px;
+                color: #ff758c;
+                font-weight: 600;
+            }
+
+                .marquee-inner span i {
+                    color: #fff;
+                    margin-right: 6px;
+                }
+
+        .announce {
+            background: linear-gradient(90deg, #e63946, #ff758c, #e63946);
+            background-size: 200% auto;
+            color: #fff;
+            text-align: center;
+            padding: 12px 16px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            animation: shimmer 4s linear infinite;
+        }
+
+        /* HEADER */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            transition: transform 0.3s;
+        }
+
+            .logo:hover {
+                transform: scale(1.05);
+            }
+
+            .logo span {
+                font-weight: 300;
+            }
+
+        .search-box {
+            flex: 1;
+            max-width: 480px;
+            margin: 0 60px;
+            display: flex;
+            align-items: center;
+            background: #fff5f5;
+            border-radius: 12px;
+            padding: 11px 16px;
+            border: 1px solid #ffe0e0;
+        }
+
+            .search-box i {
+                font-size: 18px;
+                color: #e63946;
+            }
+
+            .search-box input {
+                border: none;
+                background: transparent;
+                outline: none;
+                flex: 1;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 22px;
+        }
+
+            .header-icons a {
+                position: relative;
+                color: #1a1a1a;
+                transition: transform 0.3s;
+            }
+
+                .header-icons a:hover {
+                    transform: translateY(-3px);
+                }
+
+        .bell-icon {
+            animation: ring 4s ease infinite;
+            transform-origin: top center;
+        }
+
+        .cart-badge, .notif-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #e63946;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-family: sans-serif;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            padding: 14px 60px;
+            border-top: 1px solid #f5f5f5;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+            .nav a {
+                color: #666;
+                position: relative;
+                padding: 4px 0;
+                transition: color 0.3s;
+            }
+
+                .nav a.active {
+                    color: #e63946;
+                    font-weight: 600;
+                }
+
+                .nav a::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: #e63946;
+                    transition: all 0.3s;
+                    transform: translateX(-50%);
+                }
+
+                .nav a.active::after, .nav a:hover::after {
+                    width: 100%;
+                }
+
+                .nav a:hover {
+                    color: #e63946;
+                }
+
+            .nav .sale-badge {
+                background: #e63946;
+                color: #fff;
+                font-size: 9px;
+                padding: 2px 6px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: super;
+                animation: pulse 1.5s infinite;
+            }
+
+        /* HERO */
+        .page-hero {
+            background: radial-gradient(circle at top right, #3a0ca3 0%, #111 40%, #e63946 100%);
+            color: #fff;
+            padding: 70px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .page-hero::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0);
+                background-size: 24px 24px;
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            .page-hero::before {
+                content: '';
+                position: absolute;
+                bottom: -100px;
+                left: -100px;
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(circle, rgba(255,117,140,0.3), transparent 70%);
+                filter: blur(40px);
+                animation: float 6s ease-in-out infinite;
+            }
+
+        .page-hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 7px 16px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 0.8s ease;
+        }
+
+            .hero-tag .dot {
+                width: 7px;
+                height: 7px;
+                background: #ff758c;
+                border-radius: 50%;
+                animation: pulseRing 1.5s infinite;
+            }
+
+        .page-hero h1 {
+            font-size: clamp(38px, 5vw, 58px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+            .page-hero h1 span {
+                color: #ff758c;
+                text-shadow: 0 0 20px rgba(255,117,140,0.6);
+                animation: glow 2s ease-in-out infinite;
+                display: inline-block;
+            }
+
+        .hero-desc {
+            font-size: 15px;
+            color: rgba(255,255,255,0.75);
+            max-width: 480px;
+            margin-bottom: 28px;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat-num {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff, #ff758c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .hero-stat-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* COUNTDOWN */
+        .countdown-box {
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(15px);
+            padding: 28px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.15);
+            text-align: center;
+            animation: pulseNeon 3s infinite, fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .countdown-title {
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ff758c;
+            margin-bottom: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+            .countdown-title i {
+                font-size: 16px;
+            }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .time-segment {
+            background: #fff;
+            color: #1a1a1a;
+            min-width: 70px;
+            padding: 14px 6px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .time-num {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+            color: #e63946;
+        }
+
+        .time-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .countdown-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* BANNER COMBO */
+        .ads-combo-section {
+            padding: 40px 60px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .banner-adv {
+            position: relative;
+            border-radius: 18px;
+            padding: 32px;
+            color: #fff;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(230,57,70,0.12);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+            .banner-adv:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px rgba(230,57,70,0.2);
+            }
+
+        .adv-1 {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .adv-2 {
+            background: linear-gradient(135deg, #111111, #434343);
+            border: 2px solid #e63946;
+        }
+
+        .banner-adv h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-adv p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .adv-btn {
+            background: #fff;
+            color: #1a1a1a;
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            border: none;
+            cursor: pointer;
+        }
+
+        .adv-2 .adv-btn {
+            background: #e63946;
+            color: #fff;
+        }
+
+        .banner-adv:hover .adv-btn {
+            transform: scale(1.05);
+        }
+
+        .adv-icon-bg {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            font-size: 160px;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .banner-mini-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(6px);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        /* HIGHLIGHT (khi scroll tới) */
+        .highlight-flash {
+            animation: highlight 1.6s ease;
+        }
+
+        /* LUCKY WHEEL */
+        .lucky-zone {
+            padding: 36px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 36px;
+            background: #fff;
+            border-radius: 24px;
+            margin: 0 60px 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            align-items: center;
+        }
+
+        .wheel-side h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .wheel-side h2 i {
+                color: #e63946;
+                font-size: 28px;
+                animation: wobble 3s ease-in-out infinite;
+            }
+
+        .wheel-side p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .wheel-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .wheel-perk {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #555;
+        }
+
+            .wheel-perk i {
+                width: 28px;
+                height: 28px;
+                background: #fff5f5;
+                color: #e63946;
+                border-radius: 8px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+                flex-shrink: 0;
+            }
+
+        .wheel-result {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 500;
+            padding: 12px 14px;
+            background: linear-gradient(135deg, #fff5f5, #ffe0e8);
+            border-radius: 10px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            border: 1px dashed #e63946;
+        }
+
+            .wheel-result.empty {
+                color: #999;
+                font-weight: 400;
+            }
+
+        .wheel-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.15, 0.85, 0.35, 1);
+            box-shadow: 0 0 25px rgba(0,0,0,0.18), inset 0 0 30px rgba(0,0,0,0.1);
+            background: conic-gradient( #e63946 0deg 60deg, #ffd6dc 60deg 120deg, #ff758c 120deg 180deg, #ffd6dc 180deg 240deg, #1a1a1a 240deg 300deg, #ffd6dc 300deg 360deg );
+        }
+
+        .wheel-segment {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+            transform-origin: 0% 100%;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a1a1a;
+            padding-top: 24px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+            .wheel-segment.dark-bg {
+                color: #fff;
+            }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 28px solid #1a1a1a;
+            z-index: 10;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .wheel-center-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e63946, #ff758c);
+            border-radius: 50%;
+            border: 4px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            z-index: 11;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(230,57,70,0.4);
+            transition: all 0.3s;
+        }
+
+            .wheel-center-btn:hover {
+                transform: translate(-50%, -50%) scale(1.08);
+                box-shadow: 0 8px 22px rgba(230,57,70,0.6);
+            }
+
+            .wheel-center-btn:disabled {
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+        /* VOUCHERS */
+        .vouchers-section {
+            padding: 16px 60px 24px;
+            scroll-margin-top: 130px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .section-title i {
+                color: #e63946;
+                font-size: 26px;
+            }
+
+            .section-title .badge-soon {
+                background: #e63946;
+                color: #fff;
+                font-size: 10px;
+                padding: 3px 10px;
+                border-radius: 999px;
+                letter-spacing: 1px;
+                margin-left: auto;
+                animation: pulse 1.8s infinite;
+            }
+
+        .voucher-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .voucher-card {
+            background: #fff;
+            border: 1px solid #ffccd5;
+            border-radius: 14px;
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 6px 18px rgba(230,57,70,0.04);
+            transition: all 0.3s;
+        }
+
+            .voucher-card::before, .voucher-card::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                background: #fff5f5;
+                border-radius: 50%;
+                left: 110px;
+                transform: translateX(-50%);
+            }
+
+            .voucher-card::before {
+                top: -8px;
+            }
+
+            .voucher-card::after {
+                bottom: -8px;
+            }
+
+            .voucher-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 28px rgba(230,57,70,0.12);
+            }
+
+        .v-left {
+            background: linear-gradient(135deg, #e63946, #ff758c);
+            color: #fff;
+            padding: 22px 18px;
+            text-align: center;
+            min-width: 110px;
+            max-width: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 2px dashed rgba(255,255,255,0.4);
+        }
+
+            .v-left .value {
+                font-size: 24px;
+                font-weight: 800;
+                line-height: 1;
+            }
+
+            .v-left .unit {
+                font-size: 10px;
+                opacity: 0.95;
+                text-transform: uppercase;
+                font-weight: 600;
+                margin-top: 4px;
+                letter-spacing: 0.5px;
+            }
+
+            .v-left .v-icon {
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+
+        .v-right {
+            padding: 16px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .v-title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: #1a1a1a;
+        }
+
+        .v-desc {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .v-bar {
+            height: 4px;
+            background: #fff5f5;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .v-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e63946, #ff758c);
+            border-radius: 999px;
+        }
+
+        .v-bar-text {
+            font-size: 10px;
+            color: #e63946;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .v-copy-btn {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            width: fit-content;
+        }
+
+            .v-copy-btn:hover {
+                background: #e63946;
+                transform: scale(1.05);
+            }
+
+            .v-copy-btn i {
+                font-size: 13px;
+            }
+
+            .v-copy-btn.copied {
+                background: #2eb872;
+            }
+
+        /* ============ COMBO SECTION (Mua 2 Tặng 1) ============ */
+        .combo-section {
+            padding: 16px 60px 24px;
+            scroll-margin-top: 130px;
+        }
+
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .combo-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #ffe0e0;
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .combo-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 16px 36px rgba(230,57,70,0.12);
+                border-color: transparent;
+            }
+
+        .combo-ribbon {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 3;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .combo-ribbon.fire {
+                background: linear-gradient(135deg, #e63946, #ff758c);
+            }
+
+            .combo-ribbon i {
+                font-size: 14px;
+            }
+
+        .combo-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            background: #fff;
+        }
+
+        .combo-img {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+            .combo-img i {
+                font-size: 38px;
+                color: rgba(0,0,0,0.18);
+            }
+
+            .combo-img.dark i {
+                color: rgba(255,255,255,0.18);
+            }
+
+        .combo-plus {
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border: 2px solid #e63946;
+            color: #e63946;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            z-index: 2;
+            font-weight: 700;
+        }
+
+        .combo-info {
+            padding: 16px;
+        }
+
+        .combo-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .combo-meta {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            flex-wrap: wrap;
+        }
+
+        .combo-meta-tag {
+            padding: 3px 8px;
+            background: #fff5f5;
+            color: #e63946;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .combo-price-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .combo-price-current {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e63946;
+        }
+
+        .combo-price-old {
+            font-size: 12px;
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        .combo-saving {
+            background: #ffe0e8;
+            color: #e63946;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .combo-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #e63946, #ff758c);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+            .combo-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(230,57,70,0.3);
+            }
+
+            .combo-btn i {
+                font-size: 15px;
+            }
+
+        /* ============ DONG GIA SECTION ============ */
+        .donggia-section {
+            padding: 16px 60px 24px;
+            scroll-margin-top: 130px;
+        }
+
+        .donggia-tabs {
+            display: flex;
+            gap: 8px;
+            background: #fff;
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ffe0e0;
+            width: fit-content;
+        }
+
+        .donggia-tab {
+            padding: 10px 22px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: #777;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .donggia-tab:hover {
+                background: #fff5f5;
+                color: #e63946;
+            }
+
+            .donggia-tab.active {
+                background: linear-gradient(135deg, #e63946, #ff758c);
+                color: #fff;
+            }
+
+        .donggia-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .dg-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #ffe0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+            .dg-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 28px rgba(230,57,70,0.1);
+                border-color: transparent;
+            }
+
+        .dg-img {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+            .dg-img i {
+                font-size: 64px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.4s;
+            }
+
+            .dg-img.dark i {
+                color: rgba(255,255,255,0.18);
+            }
+
+        .dg-card:hover .dg-img i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .dg-fixed-price {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+            .dg-fixed-price.red {
+                background: linear-gradient(135deg, #e63946, #ff758c);
+            }
+
+        .dg-info {
+            padding: 14px;
+        }
+
+        .dg-cat {
+            font-size: 10px;
+            color: #999;
+            letter-spacing: 1.5px;
+            margin-bottom: 5px;
+        }
+
+        .dg-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .dg-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .dg-sold {
+            color: #888;
+        }
+
+        .dg-add {
+            width: 30px;
+            height: 30px;
+            background: #fff5f5;
+            color: #e63946;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+            .dg-add:hover {
+                background: #e63946;
+                color: #fff;
+                transform: scale(1.1);
+            }
+
+        /* ============ FLASH SALE ============ */
+        .flash-section {
+            padding: 24px 60px 60px;
+            scroll-margin-top: 130px;
+        }
+
+        .flash-header {
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            color: #fff;
+            border-radius: 16px;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .flash-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 280px;
+                height: 280px;
+                background: radial-gradient(circle, rgba(230,57,70,0.4), transparent 60%);
+                filter: blur(30px);
+                pointer-events: none;
+            }
+
+        .flash-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .flash-bolt {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #e63946, #ff758c);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: wobble 2s ease-in-out infinite;
+            box-shadow: 0 8px 22px rgba(230,57,70,0.5);
+        }
+
+        .flash-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .flash-header-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 3px;
+        }
+
+        .flash-mini-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+            font-size: 13px;
+        }
+
+            .flash-mini-timer .label {
+                color: rgba(255,255,255,0.7);
+            }
+
+        .mini-time {
+            background: #fff;
+            color: #e63946;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 8px;
+            min-width: 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 28px;
+        }
+
+        .filter-sidebar {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid #ffe0e0;
+            position: sticky;
+            top: 130px;
+            height: fit-content;
+        }
+
+            .filter-sidebar h3 {
+                font-size: 14px;
+                font-weight: 700;
+                margin-bottom: 4px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+                .filter-sidebar h3 i {
+                    color: #e63946;
+                    font-size: 18px;
+                }
+
+        .filter-sub {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+
+        .filter-group {
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #fff0f0;
+        }
+
+            .filter-group:last-of-type {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+
+            .filter-group h4 {
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 12px;
+                color: #555;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+            }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #555;
+            transition: color 0.25s;
+            user-select: none;
+        }
+
+            .filter-check:hover {
+                color: #e63946;
+            }
+
+            .filter-check input {
+                display: none;
+            }
+
+        .filter-check-box {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #d0c8c8;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .filter-check input:checked ~ .filter-check-box {
+            background: #e63946;
+            border-color: #e63946;
+        }
+
+        .filter-check-box::after {
+            content: '';
+            width: 9px;
+            height: 5px;
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(-45deg) scale(0);
+            margin-top: -2px;
+            transition: transform 0.2s;
+        }
+
+        .filter-check input:checked ~ .filter-check-box::after {
+            transform: rotate(-45deg) scale(1);
+        }
+
+        .filter-count {
+            margin-left: auto;
+            font-size: 11px;
+            color: #999;
+            background: #fff5f5;
+            padding: 1px 7px;
+            border-radius: 999px;
+        }
+
+        .filter-clear {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            background: #fff5f5;
+            color: #e63946;
+            border: 1px dashed #e63946;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+            .filter-clear:hover {
+                background: #e63946;
+                color: #fff;
+                border-style: solid;
+            }
+
+        .content-area {
+            min-width: 0;
+        }
+
+        .list-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ffe0e0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .list-info {
+            font-size: 13px;
+            color: #666;
+        }
+
+            .list-info strong {
+                color: #e63946;
+            }
+
+        .sort-select {
+            padding: 7px 28px 7px 12px;
+            border: 1px solid #ffe0e0;
+            border-radius: 8px;
+            font-size: 12px;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e63946' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 9px center;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .product {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #ffe0e0;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+            .product:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 16px 36px rgba(230,57,70,0.12);
+                border-color: transparent;
+            }
+
+        .product-image {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .product-image i.product-icon {
+                font-size: 80px;
+                color: rgba(0,0,0,0.18);
+                transition: transform 0.5s;
+            }
+
+            .product-image.dark i.product-icon {
+                color: rgba(255,255,255,0.2);
+            }
+
+        .product:hover .product-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .bg-cream {
+            background: #f1efe8;
+        }
+
+        .bg-dark {
+            background: #2c2c2a;
+        }
+
+        .bg-gray {
+            background: #d3d1c7;
+        }
+
+        .bg-blue {
+            background: #2c3e5e;
+        }
+
+        .bg-brown {
+            background: #6b4423;
+        }
+
+        .bg-green {
+            background: #4a5d3a;
+        }
+
+        .badge-sale {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #e63946, #ff758c);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(230,57,70,0.4);
+        }
+
+            .badge-sale.hot {
+                background: linear-gradient(135deg, #1a1a1a, #2c2c2a);
+            }
+
+        .icon-heart {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.95);
+            color: #888;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            z-index: 2;
+            border: none;
+        }
+
+        .product-image.dark .icon-heart {
+            background: rgba(255,255,255,0.92);
+        }
+
+        .icon-heart:hover {
+            color: #e63946;
+            transform: scale(1.1);
+        }
+
+        .icon-heart.active {
+            color: #e63946;
+            animation: heartBeat 0.5s;
+        }
+
+        .product-info {
+            padding: 14px;
+        }
+
+        .product-cat {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: #999;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            min-height: 36px;
+        }
+
+        .product-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .price-current {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e63946;
+        }
+
+        .price-old {
+            font-size: 12px;
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        .stock-progress {
+            background: linear-gradient(90deg, #fff5f5, #fff);
+            border-radius: 10px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: #ffe0e0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e63946, #ff758c);
+            border-radius: 999px;
+            position: relative;
+            transition: width 0.6s;
+        }
+
+            .progress-bar-fill::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+                background-size: 200% 100%;
+                animation: shimmer 1.8s infinite;
+            }
+
+        .stock-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #666;
+        }
+
+            .stock-text strong {
+                color: #e63946;
+            }
+
+            .stock-text .danger {
+                color: #e63946;
+                font-weight: 700;
+            }
+
+        .product-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-quick {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ffe0e0;
+            background: #fff;
+            color: #555;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+            .btn-quick:hover {
+                background: #fff5f5;
+                color: #e63946;
+                border-color: #e63946;
+            }
+
+            .btn-quick.primary {
+                background: linear-gradient(135deg, #e63946, #ff758c);
+                color: #fff;
+                border-color: transparent;
+            }
+
+                .btn-quick.primary:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 14px rgba(230,57,70,0.3);
+                }
+
+            .btn-quick i {
+                font-size: 13px;
+            }
+
+        /* SCROLL TOP */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+            .scroll-top.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(-4px);
+                background: #000;
+            }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 12px 32px rgba(230,57,70,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 320px;
+            max-width: 380px;
+            border-left: 4px solid #e63946;
+            animation: slideInRightToast 0.4s ease forwards;
+            pointer-events: auto;
+        }
+
+            .toast.success {
+                border-left-color: #2eb872;
+            }
+
+            .toast.info {
+                border-left-color: #378add;
+            }
+
+            .toast.warning {
+                border-left-color: #d18800;
+            }
+
+            .toast.hide {
+                animation: slideOutRightToast 0.4s ease forwards;
+            }
+
+        .toast-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fff5f5, #ffe0e8);
+            color: #e63946;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon-wrap {
+            background: #e6f7ef;
+            color: #2eb872;
+        }
+
+        .toast.info .toast-icon-wrap {
+            background: #e8f3fc;
+            color: #378add;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111111;
+            color: #ffffff;
+            padding: 70px 0 0 0; /* Bỏ padding đáy để thanh marquee bám sát khít */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Lưới chia 4 cột */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        /* Cột 1: Logo & Giới thiệu */
+        .footer-brand .footer-logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Các cột Link danh mục */
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .footer-links-list a {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.5);
+                transition: all 0.25s ease;
+                display: inline-block;
+            }
+
+                .footer-links-list a:hover {
+                    color: #ffffff;
+                    transform: translateX(4px);
+                }
+
+        /* Cột Newsletter */
+        .footer-newsletter p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+            .newsletter-form:focus-within {
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .newsletter-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .newsletter-input::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+        .newsletter-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+            .newsletter-btn:hover {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        /* Dòng thông tin bản quyền ở giữa */
+        .footer-mid-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* ============ THANH MARQUEE ĐEN TUYỀN CHẠY ĐÁY TRANG (FULL-WIDTH) ============ */
+        .footer-bottom-marquee {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            background: #090909; /* Đen sẫm hơn hẳn tạo khối tương phản chân trang */
+            padding: 14px 0;
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            animation: footerMarqueeScroll 28s linear infinite;
+        }
+
+        .footer-bottom-marquee:hover .marquee-wrapper {
+            animation-play-state: paused; /* Rê chuột vào sẽ tạm dừng để đọc */
+        }
+
+        .marquee-text-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+            .marquee-text-item i {
+                color: #e2856b; /* Icon màu cam ấm tinh tế */
+                font-size: 13px;
+            }
+
+        @@keyframes footerMarqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-33.333%);
+            }
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .footer {
+                padding-top: 50px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-mid-row {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 1280px) {
+            .header-top, .nav, .page-hero, .ads-combo-section, .lucky-zone, .vouchers-section, .combo-section, .donggia-section, .flash-section, .footer {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+
+            .lucky-zone {
+                margin: 0 32px 24px;
+            }
+
+            .voucher-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .combo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .donggia-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .page-hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ads-combo-section {
+                grid-template-columns: 1fr;
+            }
+
+            .lucky-zone {
+                grid-template-columns: 1fr;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-sidebar {
+                position: static;
+            }
+
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .voucher-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .combo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .donggia-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .page-hero h1 {
+                font-size: 36px;
+            }
+        }
+
+        @@media (max-width: 720px) {
+            .header-top, .nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .nav {
+                gap: 18px;
+                overflow-x: auto;
+            }
+
+            .page-hero {
+                padding: 40px 16px;
+            }
+
+            .ads-combo-section, .vouchers-section, .combo-section, .donggia-section, .flash-section, .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .lucky-zone {
+                margin: 0 16px 24px;
+                padding: 24px 18px;
+            }
+
+            .wheel-container {
+                width: 240px;
+                height: 240px;
+            }
+
+            .products {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .donggia-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .timer {
+                gap: 8px;
+            }
+
+            .time-segment {
+                min-width: 56px;
+                padding: 10px 4px;
+            }
+
+            .time-num {
+                font-size: 24px;
+            }
+
+            .flash-header {
+                padding: 16px 18px;
+            }
+
+                .flash-header h2 {
+                    font-size: 18px;
+                }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+                top: 80px;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: 100%;
+            }
+        }
+
+        /* ===== Override thẻ sản phẩm dùng chung (_ProductCard) ===== */
+        .products .product { display: block; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #ececec; transition: transform .3s, box-shadow .3s; }
+        .products .product:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,.08); }
+        .products .product-image { aspect-ratio: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .products .product-image i.product-icon { font-size: 100px; color: rgba(0,0,0,.15); transition: transform .6s ease; }
+        .products .product:hover .product-icon { transform: scale(1.15) rotate(5deg); }
+        .products .bg-cream { background: #f1efe8; } .products .bg-dark { background: #2c2c2a; } .products .bg-gray { background: #d3d1c7; } .products .bg-blue { background: #2c3e5e; } .products .bg-brown { background: #6b4423; }
+        .products .bg-dark .product-icon, .products .bg-blue .product-icon, .products .bg-brown .product-icon { color: rgba(255,255,255,.15); }
+        .products .quick-actions { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; transition: bottom .4s ease; }
+        .products .product:hover .quick-actions { bottom: 16px; }
+        .products .quick-btn { background: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .products .badge-product { position: absolute; top: 14px; left: 14px; font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 6px; z-index: 3; }
+        .products .badge-new { background: #1a1a1a; color: #fff; } .products .badge-sale { background: #d4537e; color: #fff; } .products .badge-bestseller { background: #fff; color: #1a1a1a; border: 1px solid #eee; }
+        .products .icon-heart { position: absolute; top: 14px; right: 14px; font-size: 18px; cursor: pointer; color: #1a1a1a; z-index: 3; background: rgba(255,255,255,.85); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .products .bg-dark .icon-heart, .products .bg-blue .icon-heart, .products .bg-brown .icon-heart { background: rgba(0,0,0,.3); color: #fff; }
+        .products .product-info { padding: 18px; }
+        .products .product-cat { font-size: 11px; color: #888; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+        .products .product-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; color: #1a1a1a; }
+        .products .product-colors { display: flex; gap: 4px; margin-bottom: 10px; }
+        .products .mini-color { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #eee; }
+        .products .product-price-row { display: flex; align-items: baseline; gap: 8px; justify-content: space-between; }
+        .products .price-left { display: flex; align-items: baseline; gap: 6px; }
+        .products .price-current { font-size: 17px; font-weight: 600; color: #1a1a1a; }
+        .products .price-old { font-size: 13px; color: #aaa; text-decoration: line-through; }
+        .products .rating-mini { display: flex; align-items: center; gap: 3px; font-size: 12px; color: #666; }
+        .products .rating-mini i { color: #f0b400; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="live-ads-bar">
+        <div class="marquee-inner">
+            <span><i class="ti ti-bolt"></i>FLASH SALE 12H mỗi ngày — giảm đến 70%</span>
+            <span><i class="ti ti-gift"></i>Nhập mã <strong>MONO150K</strong> giảm 150K cho đơn từ 800K</span>
+            <span><i class="ti ti-truck-delivery"></i>FREESHIP toàn quốc cho đơn từ 500K</span>
+            <span><i class="ti ti-flame"></i>Đại tiệc 5.5 — 800+ sản phẩm đang giảm sốc</span>
+            <span><i class="ti ti-confetti"></i>Quay vòng may mắn nhận voucher mỗi ngày</span>
+            <span><i class="ti ti-bolt"></i>FLASH SALE 12H mỗi ngày — giảm đến 70%</span>
+            <span><i class="ti ti-gift"></i>Nhập mã <strong>MONO150K</strong> giảm 150K cho đơn từ 800K</span>
+        </div>
+    </div>
+
+    <div class="announce">
+        🔥 ĐẠI TIỆC SALE 5.5 — GIẢM SỐC ĐẾN 70% · KÉO DÀI ĐẾN HẾT TUẦN 🔥
+    </div>
+
+    <header class="header">
+        <div class="header-top">
+            <a href="/" class="logo">MONO<span>.WEAR</span></a>
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Tìm sản phẩm sale..." />
+            </div>
+            <div class="header-icons">
+                <a asp-controller="Home" asp-action="ThongBao" aria-label="Thông báo">
+                    <i class="ti ti-bell bell-icon"></i>
+                    <span class="notif-badge">5</span>
+                </a>
+
+                <a asp-controller="Home" asp-action="TaiKhoan" aria-label="Tài khoản">
+                    <i class="ti ti-user"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="YeuThich" aria-label="Yêu thích">
+                    <i class="ti ti-heart"></i>
+                </a>
+
+                <a asp-controller="Home" asp-action="GioHang" aria-label="Giỏ hàng">
+                    <i class="ti ti-shopping-bag"></i>
+                    <span class="cart-badge">3</span>
+                </a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a asp-controller="Home" asp-action="Index" >Trang chủ</a>
+
+            <a asp-controller="Home" asp-action="Nam" asp-route-id="nam">Nam</a>
+
+            <a asp-controller="Home" asp-action="Nu" asp-route-id="nu">Nữ</a>
+
+            <a asp-controller="Home" asp-action="MoiVe">Mới về</a>
+
+            <a asp-controller="Home" asp-action="BoSuuTap">Bộ sưu tập</a>
+
+            <a asp-controller="Home" asp-action="Sale" class="active">Sale</a>
+
+            <a asp-controller="Home" asp-action="GioiThieu">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="page-hero-grid">
+            <div>
+                <div class="hero-tag">
+                    <span class="dot"></span>
+                    Đang diễn ra · Live event
+                </div>
+                <h1>Đại Tiệc Sale <span>5.5</span><br />Bùng Nổ Đầu Hè</h1>
+                <p class="hero-desc">
+                    Hơn <strong style="color:#fff;">800 sản phẩm</strong> giảm sốc đến 70%, voucher tích lũy, freeship toàn quốc và vòng quay may mắn mỗi ngày. Đừng bỏ lỡ — sự kiện chỉ kéo dài đến hết tuần này!
+                </p>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">800+</div>
+                        <div class="hero-stat-label">SẢN PHẨM SALE</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">70%</div>
+                        <div class="hero-stat-label">GIẢM TỐI ĐA</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">12K+</div>
+                        <div class="hero-stat-label">ĐÃ MUA HÔM NAY</div>
+                    </div>
+                </div>
+            </div>
+
+            @{
+                var nextEvent = ViewBag.NextSaleEvent as ThoiTrang.Models.Entities.ScheduledEvent;
+                var currentEvent = ViewBag.CurrentSaleEvent as ThoiTrang.Models.Entities.ScheduledEvent;
+            }
+            <div class="countdown-box" id="countdownBox" data-target="@(nextEvent != null ? nextEvent.EventDate.ToString("yyyy-MM-ddTHH:mm:ss") : "")">
+                @if (nextEvent != null)
+                {
+                    <div class="countdown-title">
+                        <i class="ti ti-calendar-event"></i><span id="cdTitle">@nextEvent.Title.ToUpper()</span> — BẮT ĐẦU SAU
+                    </div>
+                }
+                else
+                {
+                    <div class="countdown-title">
+                        <i class="ti ti-flame"></i>@(currentEvent != null ? currentEvent.Title.ToUpper() + " — ĐANG DIỄN RA" : "SALE ĐANG DIỄN RA")
+                    </div>
+                }
+                <div class="timer">
+                    <div class="time-segment">
+                        <div class="time-num" id="hours">--</div>
+                        <div class="time-label">GIỜ</div>
+                    </div>
+                    <div class="time-segment">
+                        <div class="time-num" id="minutes">--</div>
+                        <div class="time-label">PHÚT</div>
+                    </div>
+                    <div class="time-segment">
+                        <div class="time-num" id="seconds">--</div>
+                        <div class="time-label">GIÂY</div>
+                    </div>
+                </div>
+                <div class="countdown-sub">
+                    @if (nextEvent != null)
+                    {
+                        <text>Sự kiện sale mới sẽ tự động mở khi đếm ngược về 0</text>
+                    }
+                    else if (currentEvent != null)
+                    {
+                        @($"Ưu đãi {currentEvent.Title} đang áp dụng — chốt đơn ngay!")
+                    }
+                    else
+                    {
+                        <text>Chốt đơn ngay để không bỏ lỡ ưu đãi sốc</text>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2 BANNER COMBO - click scroll tới section -->
+    <section class="ads-combo-section">
+        <a href="#donggia-section" class="banner-adv adv-1" id="bannerDongGia">
+            <div class="banner-mini-badge">⚡ HOT TODAY</div>
+            <div>
+                <h3>Đồng giá<br />99K - 199K</h3>
+                <p>Hơn 200 sản phẩm chất lượng cao đồng giá siêu hời</p>
+            </div>
+            <button class="adv-btn">Xem ngay <i class="ti ti-arrow-down"></i></button>
+            <i class="ti ti-tag adv-icon-bg"></i>
+        </a>
+
+        <a href="#combo-section" class="banner-adv adv-2" id="bannerCombo">
+            <div class="banner-mini-badge" style="background: rgba(230,57,70,0.3); border-color: #e63946;">🎁 COMBO DEAL</div>
+            <div>
+                <h3>Mua 2 Tặng 1<br />Combo Đại Hạ Giá</h3>
+                <p>Áp dụng cho 50+ bộ sưu tập đặc biệt</p>
+            </div>
+            <button class="adv-btn">Khám phá combo <i class="ti ti-arrow-down"></i></button>
+            <i class="ti ti-shirt adv-icon-bg"></i>
+        </a>
+    </section>
+
+    <!-- LUCKY WHEEL -->
+    <section class="lucky-zone">
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div class="wheel" id="wheel">
+                <div class="wheel-segment dark-bg" style="transform: rotate(0deg);">150K</div>
+                <div class="wheel-segment" style="transform: rotate(60deg);">FREESHIP</div>
+                <div class="wheel-segment dark-bg" style="transform: rotate(120deg);">50K</div>
+                <div class="wheel-segment" style="transform: rotate(180deg);">VOUCHER</div>
+                <div class="wheel-segment dark-bg" style="transform: rotate(240deg);">100K</div>
+                <div class="wheel-segment" style="transform: rotate(300deg);">10%</div>
+            </div>
+            <button class="wheel-center-btn" id="spinBtn">QUAY!</button>
+        </div>
+
+        <div class="wheel-side">
+            <h2><i class="ti ti-confetti"></i>Vòng Quay May Mắn</h2>
+            <p>Quay 1 lần miễn phí mỗi ngày, có cơ hội nhận voucher giảm giá lên đến 150.000₫ vào tài khoản của bạn.</p>
+            <div class="wheel-perks">
+                <div class="wheel-perk"><i class="ti ti-coin"></i>Voucher tiền mặt 50K - 150K</div>
+                <div class="wheel-perk"><i class="ti ti-truck-delivery"></i>Mã miễn phí vận chuyển</div>
+                <div class="wheel-perk"><i class="ti ti-percentage"></i>Giảm 10% toàn bộ đơn hàng</div>
+                <div class="wheel-perk"><i class="ti ti-gift"></i>Quà tặng bí ẩn từ MONO.WEAR</div>
+            </div>
+            <div class="wheel-result empty" id="wheelResult">
+                Nhấn nút QUAY ở giữa để bắt đầu — chúc bạn may mắn!
+            </div>
+        </div>
+    </section>
+
+    <!-- VOUCHERS -->
+    <section class="vouchers-section">
+        <div class="section-title">
+            <i class="ti ti-ticket"></i>Kho Voucher Hot — Sưu Tầm Ngay
+            <span class="badge-soon">SẮP HẾT</span>
+        </div>
+        <div class="voucher-grid">
+            @{
+                var saleVouchers = ViewBag.ActiveVouchers as List<ThoiTrang.Models.Entities.Voucher>;
+                var savedVIds = (ViewBag.SavedVoucherIds as List<int>) ?? new List<int>();
+            }
+            @if (saleVouchers != null && saleVouchers.Count > 0)
+            {
+                foreach (var v in saleVouchers)
+                {
+                    var saved = savedVIds.Contains(v.VoucherId);
+                    var vbig = v.DiscountType == "percent" ? $"{v.DiscountValue:#,##0}%" : (v.DiscountValue >= 1000 ? $"{v.DiscountValue / 1000:#,##0}K" : $"{v.DiscountValue:#,##0}");
+                    <div class="voucher-card">
+                        <div class="v-left">
+                            <div class="v-icon"><i class="ti ti-discount-2"></i></div>
+                            <div class="value">@vbig</div>
+                            <div class="unit">@(v.DiscountType == "percent" ? "GIẢM %" : "GIẢM GIÁ")</div>
+                        </div>
+                        <div class="v-right">
+                            <div>
+                                <div class="v-title">@v.Code</div>
+                                <div class="v-desc">@(v.Description ?? $"Đơn từ {v.MinOrder:#,##0}₫")@(v.EndDate.HasValue ? " · HSD " + v.EndDate.Value.ToString("dd/MM") : "")</div>
+                                <div class="v-bar"><div class="v-bar-fill" style="width: 60%;"></div></div>
+                                <div class="v-bar-text">Còn @v.Quantity lượt</div>
+                            </div>
+                            <button class="v-copy-btn" data-vid="@v.VoucherId" onclick="saveSaleVoucher(@v.VoucherId, this)">
+                                <i class="ti ti-@(saved ? "check" : "ticket")"></i>@(saved ? "Đã lưu" : "Săn mã")
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            @*
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-discount-2"></i></div>
+                    <div class="value">150K</div>
+                    <div class="unit">GIẢM GIÁ</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">MONO150K</div>
+                        <div class="v-desc">Đơn từ 800.000₫ · HSD 31/05</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 78%;"></div></div>
+                        <div class="v-bar-text">Còn 22% · Sắp hết!</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'MONO150K')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-truck-delivery"></i></div>
+                    <div class="value">FREE</div>
+                    <div class="unit">SHIP TOÀN QUỐC</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">FREESHIP</div>
+                        <div class="v-desc">Đơn từ 300.000₫ · HSD 30/06</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 45%;"></div></div>
+                        <div class="v-bar-text">Còn 55%</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'FREESHIP')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-percentage"></i></div>
+                    <div class="value">15%</div>
+                    <div class="unit">VIP MEMBER</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">VIP15</div>
+                        <div class="v-desc">Toàn bộ đơn · HSD 15/06</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 92%;"></div></div>
+                        <div class="v-bar-text">Còn 8% · Cháy hàng!</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'VIP15')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-coin"></i></div>
+                    <div class="value">100K</div>
+                    <div class="unit">SUMMER DEAL</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">SUMMER100</div>
+                        <div class="v-desc">Đơn từ 500K · HSD 15/06</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 60%;"></div></div>
+                        <div class="v-bar-text">Còn 40%</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'SUMMER100')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-bolt"></i></div>
+                    <div class="value">50K</div>
+                    <div class="unit">FLASH SALE</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">FLASH50</div>
+                        <div class="v-desc">Đơn từ 200K · HSD 25/05</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 30%;"></div></div>
+                        <div class="v-bar-text">Còn 70%</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'FLASH50')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+
+            <div class="voucher-card">
+                <div class="v-left">
+                    <div class="v-icon"><i class="ti ti-crown"></i></div>
+                    <div class="value">25%</div>
+                    <div class="unit">VIP GOLD</div>
+                </div>
+                <div class="v-right">
+                    <div>
+                        <div class="v-title">GOLD25</div>
+                        <div class="v-desc">Riêng VIP Gold · HSD 30/06</div>
+                        <div class="v-bar"><div class="v-bar-fill" style="width: 88%;"></div></div>
+                        <div class="v-bar-text">Còn 12% · Sắp hết!</div>
+                    </div>
+                    <button class="v-copy-btn" onclick="copyVoucher(this, 'GOLD25')">
+                        <i class="ti ti-copy"></i>Lưu mã
+                    </button>
+                </div>
+            </div>
+            *@
+        </div>
+    </section>
+
+    <!-- ============ ĐỒNG GIÁ SECTION ============ -->
+    <section class="donggia-section" id="donggia-section">
+        <div class="section-title">
+            <i class="ti ti-tag"></i>Mua Sắm Theo Tầm Giá
+            <span class="badge-soon">HOT</span>
+        </div>
+
+        <div class="donggia-tabs">
+            <button class="donggia-tab active" data-pg="1">Dưới 400K</button>
+            <button class="donggia-tab" data-pg="2">400K – 700K</button>
+            <button class="donggia-tab" data-pg="3">Trên 700K</button>
+        </div>
+
+        <div class="donggia-grid" id="priceGrid">
+            @{
+                var priceProds = ViewBag.PriceProducts as List<ThoiTrang.Models.Entities.Product> ?? new List<ThoiTrang.Models.Entities.Product>();
+                string[] dgBgs = { "bg-cream", "bg-dark dark", "bg-gray", "bg-blue dark", "bg-brown dark" };
+                string DgIcon(string? name) {
+                    var n = (name ?? "").ToLower();
+                    if (n.Contains("giày") || n.Contains("sneaker")) return "ti-shoe";
+                    if (n.Contains("quần") || n.Contains("jean") || n.Contains("kaki") || n.Contains("váy") || n.Contains("đầm")) return "ti-hanger";
+                    if (n.Contains("túi")) return "ti-shopping-bag";
+                    if (n.Contains("kính")) return "ti-sunglasses";
+                    if (n.Contains("mũ") || n.Contains("nón")) return "ti-hat";
+                    return "ti-shirt";
+                }
+                int dgIdx = 0;
+            }
+            @foreach (var pp in priceProds)
+            {
+                int pg = pp.Price < 400000 ? 1 : (pp.Price <= 700000 ? 2 : 3);
+                var firstVariant = pp.Variants?.FirstOrDefault(v => v.Stock > 0) ?? pp.Variants?.FirstOrDefault();
+                <div class="dg-card" data-pg="@pg" style="@(pg == 1 ? "" : "display:none;")">
+                    <div class="dg-img @dgBgs[dgIdx % 5]" style="cursor:pointer;" onclick="location.href='/Home/CTSP/@pp.ProductId'">
+                        <span class="dg-fixed-price@(dgIdx % 2 == 1 ? " red" : "")">@((pp.Price/1000).ToString("#,##0"))K</span>
+                        <i class="ti @DgIcon(pp.Name)"></i>
+                    </div>
+                    <div class="dg-info">
+                        <div class="dg-cat">@(pp.Category?.Name?.ToUpper())</div>
+                        <div class="dg-name">@pp.Name</div>
+                        <div class="dg-bottom">
+                            <span class="dg-sold">Đã bán @pp.SoldCount</span>
+                            <button class="dg-add" onclick="quickAddProduct(@pp.ProductId, this)" title="Thêm vào giỏ"><i class="ti ti-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                dgIdx++;
+            }
+            <div id="priceEmpty" style="display:none;padding:30px;color:#999;width:100%;text-align:center;">Không có sản phẩm trong tầm giá này.</div>
+
+            @* ===== Đồng giá tĩnh cũ (đã thay bằng tầm giá thật) =====
+            <div class="dg-card">
+                <div class="dg-img bg-cream">
+                    <span class="dg-fixed-price">99K</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">ÁO THUN</div>
+                    <div class="dg-name">Áo thun basic cotton</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 124</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Áo thun basic 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-dark dark">
+                    <span class="dg-fixed-price red">99K</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">ÁO THUN</div>
+                    <div class="dg-name">Áo thun đen unisex</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 218</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Áo thun đen 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-gray">
+                    <span class="dg-fixed-price">99K</span>
+                    <i class="ti ti-shopping-bag"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">PHỤ KIỆN</div>
+                    <div class="dg-name">Túi tote canvas mini</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 88</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Túi tote 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-blue dark">
+                    <span class="dg-fixed-price red">99K</span>
+                    <i class="ti ti-sunglasses"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">PHỤ KIỆN</div>
+                    <div class="dg-name">Kính mát classic</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 65</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Kính mát 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-cream">
+                    <span class="dg-fixed-price">99K</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">ÁO POLO</div>
+                    <div class="dg-name">Polo basic kem</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 142</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Polo basic 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-brown dark">
+                    <span class="dg-fixed-price red">99K</span>
+                    <i class="ti ti-tag"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">PHỤ KIỆN</div>
+                    <div class="dg-name">Thắt lưng da nâu</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 56</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Thắt lưng 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-green dark">
+                    <span class="dg-fixed-price">99K</span>
+                    <i class="ti ti-shirt"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">ÁO THUN</div>
+                    <div class="dg-name">Áo thun rêu cotton</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 96</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Áo thun rêu 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dg-card">
+                <div class="dg-img bg-dark dark">
+                    <span class="dg-fixed-price red">99K</span>
+                    <i class="ti ti-cap"></i>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-cat">PHỤ KIỆN</div>
+                    <div class="dg-name">Mũ lưỡi trai đen</div>
+                    <div class="dg-bottom">
+                        <span class="dg-sold">Đã bán 178</span>
+                        <button class="dg-add" onclick="addToCart(this, 'Mũ lưỡi trai 99K')"><i class="ti ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+            *@
+        </div>
+    </section>
+
+    <!-- ============ COMBO MUA 2 TẶNG 1 SECTION ============ -->
+    <section class="combo-section" id="combo-section">
+        <div class="section-title">
+            <i class="ti ti-gift"></i>Combo Mua 2 Tặng 1 — Deal Hời Mỗi Ngày
+            <span class="badge-soon">DEAL HOT</span>
+        </div>
+        <div class="combo-grid">
+            @{
+                var combos = ViewBag.Combos as List<ThoiTrang.Models.Entities.Combo> ?? new List<ThoiTrang.Models.Entities.Combo>();
+                string[] comboBgs = { "bg-cream", "bg-dark dark", "bg-blue dark", "bg-gray", "bg-brown dark" };
+                string ComboIcon(string? name) {
+                    var n = (name ?? "").ToLower();
+                    if (n.Contains("giày") || n.Contains("sneaker")) return "ti-shoe";
+                    if (n.Contains("quần") || n.Contains("jean") || n.Contains("kaki") || n.Contains("váy") || n.Contains("đầm")) return "ti-hanger";
+                    if (n.Contains("túi")) return "ti-shopping-bag";
+                    if (n.Contains("hoodie") || n.Contains("khoác") || n.Contains("bomber")) return "ti-shirt-sport";
+                    return "ti-shirt";
+                }
+            }
+            @foreach (var cb in combos)
+            {
+                var oldP = cb.OldPrice > 0 ? cb.OldPrice : cb.Items.Sum(i => (i.Product?.Price ?? 0) * i.Quantity);
+                int savePct = oldP > 0 ? (int)Math.Round((1 - (double)(cb.ComboPrice / oldP)) * 100) : 0;
+                var ribbonCls = cb.Badge == "fire" ? "combo-ribbon fire" : "combo-ribbon";
+                var ribbonIc = cb.Badge == "fire" ? "ti-flame" : "ti-gift";
+                var ribbonTxt = cb.Badge == "fire" ? "BÁN CHẠY" : (cb.Badge == "new" ? "COMBO MỚI" : "ƯU ĐÃI");
+                var itemsList = cb.Items.ToList();
+                <div class="combo-card">
+                    <div class="@ribbonCls"><i class="ti @ribbonIc"></i>@ribbonTxt</div>
+                    <div class="combo-images">
+                        @for (int ii = 0; ii < itemsList.Count; ii++)
+                        {
+                            var it = itemsList[ii];
+                            <div class="combo-img @comboBgs[ii % 5]">
+                                <i class="ti @ComboIcon(it.Product?.Name)"></i>
+                                @if (ii < itemsList.Count - 1)
+                                {
+                                    <div class="combo-plus">+</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="combo-info">
+                        <div class="combo-title">@cb.Name</div>
+                        <div class="combo-meta">
+                            @foreach (var it in itemsList)
+                            {
+                                <span class="combo-meta-tag">@it.Product?.Name</span>
+                            }
+                        </div>
+                        <div class="combo-price-row">
+                            <span class="combo-price-current">@cb.ComboPrice.ToString("#,##0")₫</span>
+                            <span class="combo-price-old">@oldP.ToString("#,##0")₫</span>
+                            @if (savePct > 0)
+                            {
+                                <span class="combo-saving">-@savePct%</span>
+                            }
+                        </div>
+                        <button class="combo-btn" onclick="buyCombo(this, @cb.ComboId)">
+                            <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                        </button>
+                    </div>
+                </div>
+            }
+            @if (combos.Count == 0)
+            {
+                <div style="padding:30px;color:#999;">Chưa có combo nào.</div>
+            }
+            @* ===== Combo tĩnh cũ (đã thay bằng data thật) =====
+            <div class="combo-card">
+                <div class="combo-ribbon fire"><i class="ti ti-flame"></i>BÁN CHẠY</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-cream">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-dark dark">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-gray">
+                        <i class="ti ti-shirt"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo 3 áo thun Essential</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">Mua 2 Tặng 1</span>
+                        <span class="combo-meta-tag">Tự chọn màu</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">480.000₫</span>
+                        <span class="combo-price-old">720.000₫</span>
+                        <span class="combo-saving">-33%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo 3 áo thun Essential')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+
+            <div class="combo-card">
+                <div class="combo-ribbon"><i class="ti ti-gift"></i>COMBO MỚI</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-blue dark">
+                        <i class="ti ti-hanger"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-cream">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-brown dark">
+                        <i class="ti ti-shopping-bag"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo Smart Casual</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">Quần + Áo + Túi</span>
+                        <span class="combo-meta-tag">Tặng túi</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">990.000₫</span>
+                        <span class="combo-price-old">1.500.000₫</span>
+                        <span class="combo-saving">-34%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo Smart Casual')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+
+            <div class="combo-card">
+                <div class="combo-ribbon fire"><i class="ti ti-flame"></i>SALE SÂU</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-gray">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-dark dark">
+                        <i class="ti ti-shirt-sport"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-cream">
+                        <i class="ti ti-shirt-sport"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo 3 áo polo cao cấp</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">Mua 2 Tặng 1</span>
+                        <span class="combo-meta-tag">Đa size</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">770.000₫</span>
+                        <span class="combo-price-old">1.155.000₫</span>
+                        <span class="combo-saving">-33%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo 3 áo polo')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+
+            <div class="combo-card">
+                <div class="combo-ribbon"><i class="ti ti-crown"></i>VIP CHỌN</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-dark dark">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-blue dark">
+                        <i class="ti ti-hanger"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-gray">
+                        <i class="ti ti-shoe"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo Office Outfit</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">Áo + Quần + Giày</span>
+                        <span class="combo-meta-tag">Tặng giày</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">1.480.000₫</span>
+                        <span class="combo-price-old">2.250.000₫</span>
+                        <span class="combo-saving">-34%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo Office Outfit')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+
+            <div class="combo-card">
+                <div class="combo-ribbon fire"><i class="ti ti-flame"></i>HÈ 2026</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-cream">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-cream">
+                        <i class="ti ti-shirt"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-gray">
+                        <i class="ti ti-sunglasses"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo Summer Beach</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">2 áo + kính</span>
+                        <span class="combo-meta-tag">Tặng kính</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">550.000₫</span>
+                        <span class="combo-price-old">835.000₫</span>
+                        <span class="combo-saving">-34%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo Summer Beach')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+
+            <div class="combo-card">
+                <div class="combo-ribbon"><i class="ti ti-gift"></i>QUÀ TẶNG</div>
+                <div class="combo-images">
+                    <div class="combo-img bg-brown dark">
+                        <i class="ti ti-shopping-bag"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-dark dark">
+                        <i class="ti ti-tag"></i>
+                        <div class="combo-plus">+</div>
+                    </div>
+                    <div class="combo-img bg-gray">
+                        <i class="ti ti-sunglasses"></i>
+                    </div>
+                </div>
+                <div class="combo-info">
+                    <div class="combo-title">Combo phụ kiện hoàn hảo</div>
+                    <div class="combo-meta">
+                        <span class="combo-meta-tag">Túi + Thắt lưng + Kính</span>
+                        <span class="combo-meta-tag">Mua 2 Tặng 1</span>
+                    </div>
+                    <div class="combo-price-row">
+                        <span class="combo-price-current">420.000₫</span>
+                        <span class="combo-price-old">630.000₫</span>
+                        <span class="combo-saving">-33%</span>
+                    </div>
+                    <button class="combo-btn" onclick="addToCart(this, 'Combo phụ kiện')">
+                        <i class="ti ti-shopping-bag-plus"></i>Mua combo
+                    </button>
+                </div>
+            </div>
+            *@
+        </div>
+    </section>
+
+    <!-- FLASH SALE -->
+    <section class="flash-section" id="flash-section">
+        <div class="flash-header">
+            <div class="flash-header-left">
+                <div class="flash-bolt"><i class="ti ti-bolt"></i></div>
+                <div>
+                    <h2>Flash Sale 12H</h2>
+                    <div class="flash-header-sub">Sản phẩm cháy hàng đang giảm sốc — số lượng có hạn</div>
+                </div>
+            </div>
+            <div class="flash-mini-timer">
+                <span class="label">Kết thúc sau:</span>
+                <span class="mini-time" id="miniHours">08</span>
+                <span style="color:#fff;">:</span>
+                <span class="mini-time" id="miniMinutes">19</span>
+                <span style="color:#fff;">:</span>
+                <span class="mini-time" id="miniSeconds">40</span>
+            </div>
+        </div>
+
+        <div class="main-grid">
+
+            <aside class="filter-sidebar">
+                <h3><i class="ti ti-adjustments-horizontal"></i>Bộ lọc</h3>
+                <div class="filter-sub">Tìm sản phẩm sale phù hợp</div>
+
+                <div class="filter-group">
+                    <h4>Mức giảm giá</h4>
+                    <div class="filter-options">
+                        <label class="filter-check">
+                            <input type="checkbox" checked />
+                            <span class="filter-check-box"></span>
+                            <span>Giảm trên 50%</span>
+                            <span class="filter-count">128</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Giảm 30 - 50%</span>
+                            <span class="filter-count">245</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Giảm 10 - 30%</span>
+                            <span class="filter-count">320</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Danh mục</h4>
+                    <div class="filter-options">
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Áo thun</span>
+                            <span class="filter-count">86</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Áo sơ mi</span>
+                            <span class="filter-count">42</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Áo khoác</span>
+                            <span class="filter-count">38</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Quần dài</span>
+                            <span class="filter-count">52</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Phụ kiện</span>
+                            <span class="filter-count">68</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Tình trạng kho</h4>
+                    <div class="filter-options">
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Sắp cháy hàng</span>
+                            <span class="filter-count">28</span>
+                        </label>
+                        <label class="filter-check">
+                            <input type="checkbox" />
+                            <span class="filter-check-box"></span>
+                            <span>Còn nhiều hàng</span>
+                            <span class="filter-count">186</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="filter-clear" onclick="clearFilters()">
+                    <i class="ti ti-refresh"></i> Đặt lại bộ lọc
+                </button>
+            </aside>
+
+            <div class="content-area">
+
+                <div class="list-toolbar">
+                    <div class="list-info">Tìm thấy <strong>6 sản phẩm</strong> đang Flash Sale</div>
+                    <select class="sort-select">
+                        <option>Chiết khấu giảm sâu nhất</option>
+                        <option>Giá: Thấp đến Cao</option>
+                        <option>Giá: Cao đến Thấp</option>
+                        <option>Bán chạy nhất</option>
+                    </select>
+                </div>
+
+                <div class="products">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var p in Model)
+                        {
+                            @await Html.PartialAsync("_ProductCard", p)
+                        }
+                    }
+                    @*
+                    <div class="product">
+                        <div class="product-image bg-cream">
+                            <span class="badge-sale">-50%</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-shirt product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">ÁO THUN NAM</div>
+                            <div class="product-name">Áo thun cotton Essential oversize</div>
+                            <div class="product-price-row">
+                                <span class="price-current">175.000₫</span>
+                                <span class="price-old">350.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 85%;"></div></div>
+                                <div class="stock-text">
+                                    <span>Đã bán <strong>42</strong></span>
+                                    <span class="danger">Còn 8 cái</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Áo thun cotton Essential')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product">
+                        <div class="product-image bg-dark dark">
+                            <span class="badge-sale">-40%</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-shirt-sport product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">ÁO KHOÁC</div>
+                            <div class="product-name">Áo khoác windbreaker tối giản</div>
+                            <div class="product-price-row">
+                                <span class="price-current">450.000₫</span>
+                                <span class="price-old">750.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 50%;"></div></div>
+                                <div class="stock-text">
+                                    <span>Đã bán <strong>20</strong></span>
+                                    <span>Còn 20 cái</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Áo khoác windbreaker')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product">
+                        <div class="product-image bg-blue dark">
+                            <span class="badge-sale hot">BÁN CHẠY</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-hanger product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">QUẦN DÀI</div>
+                            <div class="product-name">Quần tailored khaki relaxed-fit</div>
+                            <div class="product-price-row">
+                                <span class="price-current">434.000₫</span>
+                                <span class="price-old">620.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 95%;"></div></div>
+                                <div class="stock-text">
+                                    <span class="danger">SẮP CHÁY: <strong>57</strong></span>
+                                    <span class="danger">Còn 3 cái!</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Quần tailored khaki')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product">
+                        <div class="product-image bg-gray">
+                            <span class="badge-sale">-35%</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-shoe product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">GIÀY</div>
+                            <div class="product-name">Sneakers minimal da thật</div>
+                            <div class="product-price-row">
+                                <span class="price-current">748.000₫</span>
+                                <span class="price-old">1.150.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 65%;"></div></div>
+                                <div class="stock-text">
+                                    <span>Đã bán <strong>28</strong></span>
+                                    <span>Còn 14 cái</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Sneakers minimal')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product">
+                        <div class="product-image bg-brown dark">
+                            <span class="badge-sale">-45%</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-shopping-bag product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">PHỤ KIỆN</div>
+                            <div class="product-name">Túi tote canvas Limited</div>
+                            <div class="product-price-row">
+                                <span class="price-current">162.000₫</span>
+                                <span class="price-old">295.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 72%;"></div></div>
+                                <div class="stock-text">
+                                    <span>Đã bán <strong>36</strong></span>
+                                    <span>Còn 14 cái</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Túi tote canvas')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product">
+                        <div class="product-image bg-green dark">
+                            <span class="badge-sale">-60%</span>
+                            <button class="icon-heart" onclick="toggleHeart(event, this)"><i class="ti ti-heart"></i></button>
+                            <i class="ti ti-shirt product-icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-cat">ÁO POLO</div>
+                            <div class="product-name">Áo polo xanh rêu cao cấp</div>
+                            <div class="product-price-row">
+                                <span class="price-current">168.000₫</span>
+                                <span class="price-old">420.000₫</span>
+                            </div>
+                            <div class="stock-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 88%;"></div></div>
+                                <div class="stock-text">
+                                    <span class="danger">Đã bán <strong>44</strong></span>
+                                    <span class="danger">Còn 6 cái!</span>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-quick"><i class="ti ti-eye"></i>Xem</button>
+                                <button class="btn-quick primary" onclick="addToCart(this, 'Áo polo xanh rêu')"><i class="ti ti-shopping-bag-plus"></i>Thêm giỏ</button>
+                            </div>
+                        </div>
+                    </div>
+                    *@
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">MONO.WEAR</div>
+                    <p>Thương hiệu thời trang tối giản, mang lại sự tự tin và định hình phong cách sống hiện đại qua từng sợi vải tinh tế.</p>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Mua sắm</div>
+                    <ul class="footer-links-list">
+                        <li><a href="/Products">Tất cả sản phẩm</a></li>
+                        <li><a href="#">Bộ sưu tập mới</a></li>
+                        <li><a href="#">Áo thun & Polo</a></li>
+                        <li><a href="#">Quần & Accessories</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Hỗ trợ chăm sóc</div>
+                    <ul class="footer-links-list">
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+                        <li><a href="#">Hướng dẫn chọn Size</a></li>
+                        <li><a href="#">Liên hệ phản hồi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-newsletter">
+                    <div class="footer-col-title">Đăng ký nhận tin</div>
+                    <p>Để lại email của bạn để cập nhật sớm nhất các ưu đãi đặc quyền và bộ sưu tập mới độc quyền.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Địa chỉ email của bạn..." />
+                        <button class="newsletter-btn" type="button" aria-label="Đăng ký">
+                            <i class="ti ti-arrow-narrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-mid-row">
+                <div class="footer-text">
+                    &copy; 2026 MONO.WEAR · Phát triển trên nền tảng ASP.NET Core
+                </div>
+                <div class="footer-payments">
+                    <i class="ti ti-brand-visa" title="Visa"></i>
+                    <i class="ti ti-brand-mastercard" title="Mastercard"></i>
+                    <i class="ti ti-credit-card" title="Thanh toán COD"></i>
+                    <i class="ti ti-shield-check" title="Bảo mật"></i>
+                </div>
+            </div>
+        </div>
+
+
+    </footer>
+
+    <button class="scroll-top" id="scrollTop"><i class="ti ti-arrow-up"></i></button>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ===== Banner click - scroll tới section + highlight =====
+        document.getElementById('bannerDongGia').addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.getElementById('donggia-section');
+            target.scrollIntoView({ behavior: 'smooth' });
+            // Highlight section title sau khi scroll
+            setTimeout(() => {
+                const title = target.querySelector('.section-title');
+                title.classList.add('highlight-flash');
+                setTimeout(() => title.classList.remove('highlight-flash'), 1800);
+            }, 600);
+            showToast('info', 'Chuyển đến Đồng giá 99K', 'Tham khảo hơn 200 sản phẩm đồng giá siêu hời');
+        });
+
+        document.getElementById('bannerCombo').addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.getElementById('combo-section');
+            target.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const title = target.querySelector('.section-title');
+                title.classList.add('highlight-flash');
+                setTimeout(() => title.classList.remove('highlight-flash'), 1800);
+            }, 600);
+            showToast('info', 'Chuyển đến Combo Mua 2 Tặng 1', 'Khám phá 50+ combo siêu hời');
+        });
+
+        // ===== Countdown đếm tới sự kiện sale đã lên lịch =====
+        function startTimer() {
+            const box = document.getElementById('countdownBox');
+            const target = box ? box.dataset.target : '';
+            const setAll = (hh, mm, ss) => {
+                ['hours','minutes','seconds'].forEach((id, i) => {
+                    const el = document.getElementById(id); if (el) el.textContent = [hh,mm,ss][i];
+                });
+                [['miniHours',hh],['miniMinutes',mm],['miniSeconds',ss]].forEach(([id,v]) => {
+                    const el = document.getElementById(id); if (el) el.textContent = v;
+                });
+            };
+            const pad = n => (n < 10 ? '0' + n : '' + n);
+
+            if (target) {
+                // Đếm ngược tới EventDate của sự kiện sale kế tiếp
+                const targetTime = new Date(target).getTime();
+                const tick = () => {
+                    let diff = Math.floor((targetTime - Date.now()) / 1000);
+                    if (diff <= 0) {
+                        setAll('00','00','00');
+                        showToast('success', 'Sự kiện sale mới bắt đầu! 🎉', 'Đang tải ưu đãi mới...');
+                        setTimeout(() => location.reload(), 1500);
+                        return false;
+                    }
+                    const h = Math.floor(diff / 3600);
+                    const m = Math.floor((diff % 3600) / 60);
+                    const s = diff % 60;
+                    setAll(pad(h), pad(m), pad(s));
+                    return true;
+                };
+                if (tick()) {
+                    const iv = setInterval(() => { if (!tick()) clearInterval(iv); }, 1000);
+                }
+            } else {
+                // Không có sự kiện sắp tới — đồng hồ ưu đãi thường (24h lặp)
+                let s = 40, m = 19, h = 8;
+                setInterval(() => {
+                    s--; if (s < 0) { s = 59; m--; } if (m < 0) { m = 59; h--; } if (h < 0) { h = 23; }
+                    setAll(pad(h), pad(m), pad(s));
+                }, 1000);
+            }
+        }
+        startTimer();
+
+        // ===== Lucky Wheel =====
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const wheelResult = document.getElementById('wheelResult');
+        let hasSpun = false;
+
+        spinBtn.addEventListener('click', () => {
+            if (hasSpun) {
+                showToast('warning', 'Hết lượt', 'Bạn đã quay hết lượt hôm nay. Quay lại vào ngày mai nhé!');
+                return;
+            }
+            spinBtn.disabled = true;
+            spinBtn.textContent = '...';
+
+            // Gọi server: mỗi tài khoản 1 lần/ngày
+            fetch('/Home/SpinWheel', { method: 'POST' })
+                .then(r => {
+                    if (r.status === 401) { showToast('warning', 'Cần đăng nhập', 'Đăng nhập để quay thưởng'); setTimeout(() => location.href = '/Home/DangNhap', 800); return null; }
+                    return r.ok ? r.json() : Promise.reject(r);
+                })
+                .then(d => {
+                    if (!d) { spinBtn.disabled = false; spinBtn.textContent = 'QUAY'; return; }
+                    if (!d.success) {
+                        spinBtn.disabled = false; spinBtn.textContent = 'QUAY';
+                        showToast('warning', 'Không thể quay', d.message || 'Hôm nay bạn đã quay rồi');
+                        return;
+                    }
+                    hasSpun = true;
+                    const totalDeg = 360 * 5 + Math.floor(Math.random() * 360);
+                    wheel.style.transform = `rotate(${totalDeg}deg)`;
+                    setTimeout(() => {
+                        wheelResult.classList.remove('empty');
+                        wheelResult.innerHTML = `🎉 Chúc mừng! Bạn trúng mã <strong style="color:#e63946;">${d.code}</strong> giảm ${d.value}!`;
+                        showToast('success', 'Trúng thưởng!', `Mã ${d.code} đã lưu vào kho voucher của bạn.`);
+                        triggerConfetti();
+                        spinBtn.textContent = 'XONG';
+                    }, 4000);
+                })
+                .catch(() => { spinBtn.disabled = false; spinBtn.textContent = 'QUAY'; showToast('error', 'Lỗi', 'Thử lại sau'); });
+        });
+
+        // ===== Săn voucher (lưu vào tài khoản) =====
+        function saveSaleVoucher(voucherId, btn) {
+            const fd = new FormData(); fd.append('voucherId', voucherId);
+            fetch('/Home/SaveUserVoucher', { method: 'POST', body: fd })
+                .then(r => { if (r.status === 401) { showToast('warning', 'Cần đăng nhập', 'Đăng nhập để săn voucher'); setTimeout(() => location.href = '/Home/DangNhap', 800); return null; } return r.ok ? r.json() : Promise.reject(r); })
+                .then(d => {
+                    if (!d) return;
+                    btn.innerHTML = '<i class="ti ti-check"></i>Đã lưu';
+                    if (d.success) { showToast('success', 'Săn voucher thành công', 'Voucher đã vào kho của bạn'); triggerConfetti(); }
+                    else showToast('info', 'Đã lưu trước đó', d.message || 'Bạn đã có voucher này');
+                })
+                .catch(() => showToast('error', 'Lỗi', 'Không lưu được voucher'));
+        }
+
+        // ===== Confetti =====
+        function triggerConfetti() {
+            const colors = ['#e63946', '#ff758c', '#ffccd5', '#1a1a1a', '#f0b400'];
+            for (let i = 0; i < 50; i++) {
+                const c = document.createElement('div');
+                c.style.position = 'fixed';
+                c.style.width = (Math.random() * 8 + 6) + 'px';
+                c.style.height = (Math.random() * 8 + 6) + 'px';
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.top = '-20px';
+                c.style.zIndex = '9999';
+                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                c.style.pointerEvents = 'none';
+                c.style.animation = `confettiFall ${Math.random() * 2 + 1.5}s linear forwards`;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 3500);
+            }
+        }
+
+        // ===== Copy voucher =====
+        function copyVoucher(btn, code) {
+            const doCopy = () => {
+                btn.classList.add('copied');
+                btn.innerHTML = '<i class="ti ti-check"></i>Đã lưu';
+                showToast('success', 'Lưu mã thành công', `Bạn đã copy mã ${code}. Dùng ngay khi thanh toán!`);
+                triggerConfetti();
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<i class="ti ti-copy"></i>Lưu mã';
+                }, 2500);
+            };
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(code).then(doCopy).catch(doCopy);
+            } else {
+                doCopy();
+            }
+        }
+
+        // ===== Tabs tầm giá (lọc sản phẩm thật) =====
+        document.querySelectorAll('.donggia-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.donggia-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const pg = btn.dataset.pg;
+                let shown = 0;
+                document.querySelectorAll('#priceGrid .dg-card').forEach(card => {
+                    const ok = card.dataset.pg === pg;
+                    card.style.display = ok ? '' : 'none';
+                    if (ok) shown++;
+                });
+                const empty = document.getElementById('priceEmpty');
+                if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+            });
+        });
+
+        // ===== Thêm nhanh sản phẩm vào giỏ (theo productId) =====
+        function quickAddProduct(productId, btn) {
+            const fd = new FormData(); fd.append('productId', productId);
+            fetch('/Home/AddProductToCart', { method: 'POST', body: fd })
+                .then(async r => {
+                    if (r.status === 401) { showToast('warning', 'Cần đăng nhập', 'Vui lòng đăng nhập để mua hàng'); setTimeout(() => window.location.href = '/Home/DangNhap', 1000); return null; }
+                    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || 'Không thêm được'); }
+                    return r.json();
+                })
+                .then(d => {
+                    if (!d) return;
+                    const badge = document.getElementById('headerCartBadge');
+                    if (badge) { badge.textContent = d.count; }
+                    btn.innerHTML = '<i class="ti ti-check"></i>';
+                    setTimeout(() => btn.innerHTML = '<i class="ti ti-plus"></i>', 1200);
+                    showToast('success', 'Đã thêm vào giỏ', 'Sản phẩm đã vào giỏ hàng');
+                })
+                .catch(err => showToast('warning', 'Không thêm được', err.message || 'Thử lại sau'));
+        }
+
+        // ===== Add to cart =====
+        function addToCart(btn, name) {
+            // Combo = nhiều món; deal lẻ = 1 món
+            const isCombo = (name || '').toLowerCase().indexOf('combo') === 0;
+            const count = isCombo ? 3 : 1;
+            const fd = new FormData(); fd.append('count', count);
+            fetch('/Home/AddComboToCart', { method: 'POST', body: fd })
+                .then(r => {
+                    if (r.status === 401) { showToast('warning', 'Cần đăng nhập', 'Vui lòng đăng nhập để mua hàng'); setTimeout(() => window.location.href = '/Home/DangNhap', 900); return null; }
+                    return r.ok ? r.json() : Promise.reject(r);
+                })
+                .then(d => {
+                    if (!d) return;
+                    const badge = document.getElementById('headerCartBadge');
+                    if (badge) { badge.textContent = d.count; badge.style.animation = 'none'; void badge.offsetWidth; badge.style.animation = 'heartBeat 0.6s ease, pulse 2s infinite 0.6s'; }
+                    showToast('success', 'Đã thêm vào giỏ', `${name} đã vào giỏ hàng của bạn.`);
+                })
+                .catch(() => showToast('error', 'Lỗi', 'Không thể thêm vào giỏ'));
+        }
+
+        // ===== Mua combo thật (theo comboId) =====
+        function buyCombo(btn, comboId) {
+            const fd = new FormData(); fd.append('comboId', comboId);
+            btn.disabled = true;
+            fetch('/Home/AddComboToCart', { method: 'POST', body: fd })
+                .then(async r => {
+                    if (r.status === 401) { showToast('warning', 'Cần đăng nhập', 'Vui lòng đăng nhập để mua hàng'); setTimeout(() => window.location.href = '/Home/DangNhap', 1000); return null; }
+                    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || 'Không thêm được combo'); }
+                    return r.json();
+                })
+                .then(d => {
+                    btn.disabled = false;
+                    if (!d) return;
+                    const badge = document.getElementById('headerCartBadge');
+                    if (badge) { badge.textContent = d.count; badge.style.animation = 'none'; void badge.offsetWidth; badge.style.animation = 'heartBeat 0.6s ease, pulse 2s infinite 0.6s'; }
+                    showToast('success', 'Đã thêm combo', `${d.added} sản phẩm trong combo đã vào giỏ hàng.`);
+                })
+                .catch(err => { btn.disabled = false; showToast('warning', 'Không thêm được', err.message || 'Thử lại sau'); });
+        }
+
+        // ===== Toggle heart =====
+        function toggleHeart(e, btn) {
+            e.stopPropagation();
+            btn.classList.toggle('active');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('active')) {
+                icon.classList.remove('ti-heart');
+                icon.classList.add('ti-heart-filled');
+                showToast('success', 'Đã yêu thích', 'Sản phẩm đã được lưu vào danh sách');
+            } else {
+                icon.classList.remove('ti-heart-filled');
+                icon.classList.add('ti-heart');
+            }
+        }
+
+        // ===== Clear filters =====
+        function clearFilters() {
+            document.querySelectorAll('.filter-check input').forEach(cb => cb.checked = false);
+            showToast('info', 'Đã đặt lại', 'Tất cả bộ lọc đã được xóa');
+        }
+
+        // ===== Scroll top =====
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ===== Toast =====
+        function showToast(type, title, desc) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type || ''}`;
+            const icons = {
+                success: 'ti-circle-check',
+                info: 'ti-info-circle',
+                warning: 'ti-alert-circle'
+            };
+            toast.innerHTML = `
+                <div class="toast-icon-wrap"><i class="ti ${icons[type] || 'ti-gift'}"></i></div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+    </script>
+
+    <script src="~/js/filter.js" asp-append-version="true"></script>
+
+    <script src="/js/search.js"></script>
+    @await Html.PartialAsync("_ChatWidget")
+</body>
+</html>
